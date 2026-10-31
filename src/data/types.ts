@@ -31,6 +31,56 @@ export interface BeatCloseReading {
   thematicResonance: string;
 }
 
+export type StudyLensMode = "primer" | "revision" | "deep";
+
+export interface ScenePrimer {
+  whoIsInTheScene: string[];
+  storySoFar: string;
+  plainEnglishSummary: string[];
+  glossary: { term: string; modernMeaning: string }[];
+}
+
+export interface PreLessonBriefing {
+  thirtySecondRecap: string;
+  mustKnowQuote: {
+    quote: string;
+    speaker: string;
+    line: string;
+    whyItMatters: string;
+  };
+  teacherPopQuiz: {
+    question: string;
+    answer: string;
+  };
+  keyStagecraftVector: string;
+}
+
+export interface FlashcardItem {
+  id: string;
+  category: "Quote" | "Plot & Context" | "Theme & Device" | "Character Arc";
+  actSceneRef: string;
+  question: string;
+  answer: string;
+  keyQuote?: string;
+  examTip: string;
+  themeId?: ThemeId;
+}
+
+export interface ExamPromptItem {
+  id: string;
+  title: string;
+  examBoards: string;
+  prompt: string;
+  thesisFormula: string;
+  jacobeanContext: string;
+  paragraphs: {
+    topicSentence: string;
+    sceneReference: string;
+    keyQuotes: { quote: string; line: string; analysisSnippet: string }[];
+    criticalArgument: string;
+  }[];
+}
+
 export interface ChapterSubSection {
   id: string;
   title: string;
@@ -98,6 +148,8 @@ export interface ChapterData {
   quotes: QuoteItem[];
   themeTracking: ThemeTrackItem[];
   examPromptTakeaway: string;
+  primer?: ScenePrimer;
+  briefing?: PreLessonBriefing;
 }
 
 export interface BookPart {

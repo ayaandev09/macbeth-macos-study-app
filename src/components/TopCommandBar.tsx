@@ -16,6 +16,7 @@ import {
   Zap,
   X,
   QrCode,
+  GraduationCap,
 } from "lucide-react";
 import { QrCodeModal } from "./QrCodeModal";
 
@@ -48,6 +49,12 @@ const VIEW_MODES: {
     label: "Symbols & Dramatis Personae",
     shortLabel: "Lexicon",
     icon: <Library className="w-4 h-4" />,
+  },
+  {
+    id: "revision",
+    label: "Revision & Cram Hub",
+    shortLabel: "Cram",
+    icon: <GraduationCap className="w-4 h-4" />,
   },
 ];
 

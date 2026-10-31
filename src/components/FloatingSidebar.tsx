@@ -19,6 +19,7 @@ import {
   Crown,
   Flame,
   RotateCcw,
+  GraduationCap,
 } from "lucide-react";
 
 export function FloatingSidebar() {
@@ -148,6 +149,25 @@ export function FloatingSidebar() {
               </span>
             </div>
           </div>
+        </div>
+
+        {/* Quick Launch into Cram & Revision Hub */}
+        <div className="mb-3 shrink-0">
+          <button
+            onClick={() => {
+              setViewMode("revision");
+              window.scrollTo({ top: 0, behavior: "smooth" });
+            }}
+            className="w-full flex items-center justify-between px-3 py-2 rounded-2xl bg-gradient-to-r from-amber-500/20 via-rose-500/20 to-purple-500/20 border border-amber-300/40 text-xs font-bold text-amber-200 active:scale-95 cursor-pointer shadow-sm hover:border-amber-300 transition-all"
+          >
+            <span className="flex items-center gap-2">
+              <GraduationCap className="w-4 h-4 text-amber-300" />
+              <span>5-Min Cram &amp; Flashcards</span>
+            </span>
+            <span className="text-[10px] font-mono px-2 py-0.5 rounded-lg bg-amber-400/25 text-amber-200 border border-amber-400/40">
+              REVISE
+            </span>
+          </button>
         </div>
 
         {/* Scrollable 5-Act & 31-Scene Tree */}

@@ -4,7 +4,8 @@ import { create } from "zustand";
 import { persist, createJSONStorage } from "zustand/middleware";
 import { ALL_CHAPTERS, BOOK_PARTS, ThemeId, ActId } from "@/data";
 
-export type ViewMode = "focus" | "stream" | "matrix" | "lexicon";
+export type ViewMode = "focus" | "stream" | "matrix" | "lexicon" | "revision";
+export type StudyLensMode = "primer" | "revision" | "deep";
 
 interface StudyStoreState {
   // Navigation & View State
@@ -12,6 +13,7 @@ interface StudyStoreState {
   activePartFilter: "all" | ActId;
   activeThemeFilter: ThemeId | "all";
   viewMode: ViewMode;
+  studyLensMode: StudyLensMode;
   speedReadMode: boolean;
   searchQuery: string;
   sidebarCollapsed: boolean;
@@ -22,12 +24,14 @@ interface StudyStoreState {
   completedSubSections: Record<string, boolean>;
   bookmarkedQuotes: Record<string, boolean>;
   chapterNotes: Record<string, string>;
+  flashcardScores: Record<string, "known" | "learning">;
 
   // Actions
   setActiveChapter: (chapterId: string) => void;
   setActivePartFilter: (partId: "all" | ActId) => void;
   setActiveThemeFilter: (themeId: ThemeId | "all") => void;
   setViewMode: (mode: ViewMode) => void;
+  setStudyLensMode: (mode: StudyLensMode) => void;
   toggleSpeedReadMode: () => void;
   setSearchQuery: (query: string) => void;
   toggleSidebar: () => void;
@@ -39,6 +43,8 @@ interface StudyStoreState {
   togglePartComplete: (partId: ActId) => void;
   toggleBookmarkQuote: (quoteId: string) => void;
   setChapterNote: (chapterId: string, note: string) => void;
+  setFlashcardScore: (cardId: string, status: "known" | "learning") => void;
+  resetFlashcardScores: () => void;
   resetAllProgress: () => void;
   goToNextChapter: () => void;
   goToPrevChapter: () => void;
@@ -51,6 +57,7 @@ export const useStudyStore = create<StudyStoreState>()(
       activePartFilter: "all",
       activeThemeFilter: "all",
       viewMode: "focus",
+      studyLensMode: "primer",
       speedReadMode: false,
       searchQuery: "",
       sidebarCollapsed: false,
@@ -60,6 +67,7 @@ export const useStudyStore = create<StudyStoreState>()(
       completedSubSections: {},
       bookmarkedQuotes: {},
       chapterNotes: {},
+      flashcardScores: {},
 
       setActiveChapter: (chapterId) =>
         set({
@@ -79,6 +87,24 @@ export const useStudyStore = create<StudyStoreState>()(
       setViewMode: (mode) =>
         set({
           viewMode: mode,
+        }),
+
+      setStudyLensMode: (mode) =>
+        set({
+          studyLensMode: mode,
+        }),
+
+      setFlashcardScore: (cardId, status) =>
+        set((state) => ({
+          flashcardScores: {
+            ...state.flashcardScores,
+            [cardId]: status,
+          },
+        })),
+
+      resetFlashcardScores: () =>
+        set({
+          flashcardScores: {},
         }),
 
       toggleSpeedReadMode: () =>
@@ -195,6 +221,8 @@ export const useStudyStore = create<StudyStoreState>()(
           completedChapters: {},
           completedSubSections: {},
           bookmarkedQuotes: {},
+          chapterNotes: {},
+          flashcardScores: {},
         }),
 
       goToNextChapter: () => {

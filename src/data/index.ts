@@ -6,6 +6,7 @@ import { ACT_4_SCENES } from "./act4Scenes";
 import { ACT_5_SCENES } from "./act5Scenes";
 export * from "./types";
 export * from "./metadata";
+export * from "./revisionData";
 
 export const BOOK_PARTS: BookPart[] = [
   {

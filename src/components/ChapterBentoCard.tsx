@@ -1,7 +1,13 @@
 "use client";
 
 import React, { useState } from "react";
-import { ChapterData, BOOK_PARTS, THEMES_TAXONOMY } from "@/data";
+import {
+  ChapterData,
+  BOOK_PARTS,
+  THEMES_TAXONOMY,
+  SCENE_PRIMERS,
+  PRE_LESSON_BRIEFINGS,
+} from "@/data";
 import { useStudyStore } from "@/store/useStudyStore";
 import {
   CheckCircle2,
@@ -21,6 +27,10 @@ import {
   ScrollText,
   Bookmark,
   GraduationCap,
+  Zap,
+  HelpCircle,
+  Users,
+  BookOpen,
 } from "lucide-react";
 
 interface ChapterBentoCardProps {
@@ -56,7 +66,12 @@ export function ChapterBentoCard({
     setActiveThemeFilter,
     chapterNotes,
     setChapterNote,
+    studyLensMode,
+    setStudyLensMode,
   } = useStudyStore();
+
+  const scenePrimer = SCENE_PRIMERS[chapter.id];
+  const sceneBriefing = PRE_LESSON_BRIEFINGS[chapter.id];
 
   const [showScratchpad, setShowScratchpad] = useState(false);
   const isCompleted = !!completedChapters[chapter.id];
@@ -211,6 +226,263 @@ export function ChapterBentoCard({
           </div>
         )}
       </div>
+
+      {/* =====================================================================
+          STUDY LENS SELECTOR: NEW LEARNER vs PRE-LESSON CRAM vs FULL FOLIO
+          ===================================================================== */}
+      <div className="liquid-glass-bento rounded-2xl p-2.5 flex flex-wrap items-center justify-between gap-2.5">
+        <div className="flex flex-wrap items-center gap-1.5 p-1 rounded-xl bg-black/40 border border-white/10">
+          <button
+            onClick={() => setStudyLensMode("primer")}
+            className={`px-3 py-1.5 rounded-lg text-xs font-mono font-semibold flex items-center gap-1.5 transition-all cursor-pointer ${
+              studyLensMode === "primer"
+                ? "bg-emerald-500/25 text-emerald-200 border border-emerald-400/40 shadow-sm"
+                : "text-slate-400 hover:text-white"
+            }`}
+          >
+            <GraduationCap className="w-3.5 h-3.5" />
+            <span>Study as New (Primer)</span>
+          </button>
+          <button
+            onClick={() => setStudyLensMode("revision")}
+            className={`px-3 py-1.5 rounded-lg text-xs font-mono font-semibold flex items-center gap-1.5 transition-all cursor-pointer ${
+              studyLensMode === "revision"
+                ? "bg-amber-500/25 text-amber-200 border border-amber-400/40 shadow-sm"
+                : "text-slate-400 hover:text-white"
+            }`}
+          >
+            <Zap className="w-3.5 h-3.5" />
+            <span>5-Min Pre-Lesson Cram</span>
+          </button>
+          <button
+            onClick={() => setStudyLensMode("deep")}
+            className={`px-3 py-1.5 rounded-lg text-xs font-mono font-semibold flex items-center gap-1.5 transition-all cursor-pointer ${
+              studyLensMode === "deep"
+                ? "bg-purple-500/25 text-purple-200 border border-purple-400/40 shadow-sm"
+                : "text-slate-400 hover:text-white"
+            }`}
+          >
+            <Layers className="w-3.5 h-3.5" />
+            <span>Deep Folio Analysis</span>
+          </button>
+        </div>
+
+        <span className="font-mono text-[10px] text-slate-400 pr-2 hidden md:inline">
+          {studyLensMode === "primer"
+            ? "✦ Plain modern English • Story context • Key archaic glossary"
+            : studyLensMode === "revision"
+            ? "✦ 30-sec plot recap • #1 quote • Teacher pop-quiz reveal"
+            : "✦ Quad-source critical analysis • Scansion & close reading"}
+        </span>
+      </div>
+
+      {/* =====================================================================
+          LENS A: "STUDY AS NEW" — SCENE PRIMER FOR FIRST-TIME READERS
+          ===================================================================== */}
+      {studyLensMode === "primer" && scenePrimer && (
+        <section className="liquid-glass-bento rounded-3xl p-6 lg:p-7 space-y-5 border-emerald-400/30">
+          <div className="flex flex-wrap items-center justify-between gap-2 border-b border-white/10 pb-3">
+            <div className="flex items-center gap-2">
+              <span className="font-mono text-xs px-2.5 py-1 rounded-xl bg-emerald-500/20 text-emerald-300 border border-emerald-400/30 font-bold flex items-center gap-1.5">
+                <GraduationCap className="w-3.5 h-3.5 text-emerald-400" />
+                FIRST-TIME READER'S GUIDE
+              </span>
+              <h3 className="text-sm font-semibold uppercase tracking-wider text-white font-mono">
+                Plain English Primer ({chapter.displayCode})
+              </h3>
+            </div>
+            <span className="text-xs font-mono text-emerald-300/80">
+              Read this before reading the Shakespearean text
+            </span>
+          </div>
+
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-4">
+            {/* Story So Far & Character Roll Call (5 cols) */}
+            <div className="lg:col-span-5 space-y-3.5">
+              {/* Who's in the scene */}
+              <div className="p-4 rounded-2xl bg-slate-950/60 border border-white/10">
+                <span className="font-mono text-[10px] uppercase tracking-wider text-amber-300 font-bold flex items-center gap-1.5 mb-2">
+                  <Users className="w-3.5 h-3.5 text-amber-400" />
+                  Who Is In This Scene:
+                </span>
+                <div className="flex flex-wrap gap-1.5">
+                  {scenePrimer.whoIsInTheScene.map((char, i) => (
+                    <span
+                      key={i}
+                      className="font-mono text-xs px-2.5 py-1 rounded-xl bg-white/[0.06] text-slate-200 border border-white/10"
+                    >
+                      {char}
+                    </span>
+                  ))}
+                </div>
+              </div>
+
+              {/* Story So Far */}
+              <div className="p-4 rounded-2xl bg-slate-950/60 border border-white/10">
+                <span className="font-mono text-[10px] uppercase tracking-wider text-sky-300 font-bold flex items-center gap-1.5 mb-2">
+                  <BookOpen className="w-3.5 h-3.5 text-sky-400" />
+                  Where We Are in the Story:
+                </span>
+                <p className="text-xs lg:text-sm text-slate-200 leading-relaxed">
+                  {scenePrimer.storySoFar}
+                </p>
+              </div>
+
+              {/* Archaic Words Glossed */}
+              {scenePrimer.glossary.length > 0 && (
+                <div className="p-4 rounded-2xl bg-purple-500/[0.08] border border-purple-400/25">
+                  <span className="font-mono text-[10px] uppercase tracking-wider text-purple-300 font-bold block mb-2">
+                    Tricky Words Translated:
+                  </span>
+                  <div className="space-y-1.5">
+                    {scenePrimer.glossary.map((g, idx) => (
+                      <div
+                        key={idx}
+                        className="p-2 rounded-xl bg-black/25 border border-white/[0.06] text-xs"
+                      >
+                        <span className="font-mono font-bold text-amber-300 mr-1.5">
+                          {g.term}:
+                        </span>
+                        <span className="text-slate-200">{g.modernMeaning}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </div>
+
+            {/* Plain Modern English Walkthrough (7 cols) */}
+            <div className="lg:col-span-7 p-5 rounded-2xl bg-emerald-950/20 border border-emerald-400/25 flex flex-col justify-between">
+              <div>
+                <span className="font-mono text-[11px] uppercase tracking-wider text-emerald-300 font-bold flex items-center gap-1.5 mb-3">
+                  <Sparkles className="w-3.5 h-3.5 text-emerald-400" />
+                  What Actually Happens (Modern English Walkthrough):
+                </span>
+                <div className="space-y-3">
+                  {scenePrimer.plainEnglishSummary.map((para, idx) => (
+                    <div key={idx} className="flex items-start gap-2.5">
+                      <span className="font-mono text-[10px] px-1.5 py-0.5 rounded bg-emerald-500/20 text-emerald-300 border border-emerald-400/30 shrink-0 mt-0.5">
+                        0{idx + 1}
+                      </span>
+                      <p className="text-xs lg:text-sm text-slate-100 leading-relaxed">
+                        {para}
+                      </p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              <div className="pt-4 mt-4 border-t border-emerald-400/20 flex items-center justify-between">
+                <span className="text-[11px] font-mono text-emerald-200/80">
+                  Ready for the poetry? Scroll down to explore the First Folio verses and dramatic beats.
+                </span>
+                <button
+                  onClick={() => setStudyLensMode("deep")}
+                  className="px-2.5 py-1 rounded-lg bg-emerald-500/20 text-emerald-200 text-xs font-mono border border-emerald-400/30 hover:bg-emerald-500/30 cursor-pointer shrink-0 ml-2"
+                >
+                  View Folio Analysis
+                </button>
+              </div>
+            </div>
+          </div>
+        </section>
+      )}
+
+      {/* =====================================================================
+          LENS B: "5-MINUTE PRE-LESSON CRAM" — HIGH-YIELD REVISION BRIEFING
+          ===================================================================== */}
+      {studyLensMode === "revision" && sceneBriefing && (
+        <section className="liquid-glass-bento rounded-3xl p-6 lg:p-7 space-y-4 border-amber-400/35">
+          <div className="flex flex-wrap items-center justify-between gap-2 border-b border-white/10 pb-3">
+            <div className="flex items-center gap-2">
+              <span className="font-mono text-xs px-2.5 py-1 rounded-xl bg-amber-500/25 text-amber-300 border border-amber-400/40 font-bold flex items-center gap-1.5">
+                <Zap className="w-3.5 h-3.5 text-amber-400" />
+                5-MINUTE PRE-LESSON CRAM
+              </span>
+              <h3 className="text-sm font-semibold uppercase tracking-wider text-white font-mono">
+                Quick Test Takeaways ({chapter.displayCode})
+              </h3>
+            </div>
+            <button
+              onClick={() => setViewMode("revision")}
+              className="text-xs font-mono text-amber-300 hover:text-amber-100 underline decoration-amber-400/40 cursor-pointer"
+            >
+              Open Full Flashcard Deck ➔
+            </button>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {/* 30-Second Plot Recap */}
+            <div className="p-4 rounded-2xl bg-amber-500/[0.08] border border-amber-400/25">
+              <span className="font-mono text-[10px] uppercase tracking-wider text-amber-300 font-bold flex items-center gap-1.5 mb-2">
+                <Zap className="w-3.5 h-3.5" />
+                30-Second Plot Takeaway
+              </span>
+              <p className="text-xs lg:text-sm text-slate-100 leading-relaxed">
+                {sceneBriefing.thirtySecondRecap}
+              </p>
+            </div>
+
+            {/* Must-Know Quote */}
+            <div className="p-4 rounded-2xl bg-rose-500/[0.08] border border-rose-400/25">
+              <div className="flex items-center justify-between gap-2 mb-2">
+                <span className="font-mono text-[10px] uppercase tracking-wider text-rose-300 font-bold flex items-center gap-1.5">
+                  <QuoteIcon className="w-3.5 h-3.5" />
+                  The #1 Quote To Memorize
+                </span>
+                <span className="font-mono text-[10px] px-1.5 py-0.5 rounded bg-rose-500/20 text-rose-200 border border-rose-400/30">
+                  Line {sceneBriefing.mustKnowQuote.line}
+                </span>
+              </div>
+              <blockquote className="font-serif italic text-xs lg:text-sm text-amber-100 leading-relaxed mb-1.5">
+                “{sceneBriefing.mustKnowQuote.quote}”
+              </blockquote>
+              <p className="text-[11px] font-mono text-amber-300/80 mb-2">
+                — {sceneBriefing.mustKnowQuote.speaker}
+              </p>
+              <p className="text-xs text-slate-300 border-t border-white/[0.08] pt-2">
+                <strong className="text-slate-200">Why It Matters:</strong> {sceneBriefing.mustKnowQuote.whyItMatters}
+              </p>
+            </div>
+
+            {/* Teacher Pop-Quiz */}
+            <div className="p-4 rounded-2xl bg-purple-500/[0.08] border border-purple-400/25">
+              <span className="font-mono text-[10px] uppercase tracking-wider text-purple-300 font-bold flex items-center gap-1.5 mb-2">
+                <HelpCircle className="w-3.5 h-3.5" />
+                Teacher Pop-Quiz Question:
+              </span>
+              <p className="text-xs lg:text-sm font-semibold text-white mb-2.5">
+                {sceneBriefing.teacherPopQuiz.question}
+              </p>
+              <details className="group text-xs pt-1.5 border-t border-white/[0.08]">
+                <summary className="font-mono text-[10px] text-purple-300 hover:text-purple-200 cursor-pointer list-none select-none flex items-center justify-between py-1">
+                  <span className="flex items-center gap-1">
+                    <Sparkles className="w-3 h-3 text-purple-400" />
+                    Reveal Model Answer
+                  </span>
+                  <span className="text-[10px] text-slate-400 group-open:rotate-180 transition-transform">
+                    ▼
+                  </span>
+                </summary>
+                <div className="mt-2 p-2.5 rounded-xl bg-purple-950/40 border border-purple-400/20 text-slate-200 text-xs leading-relaxed">
+                  {sceneBriefing.teacherPopQuiz.answer}
+                </div>
+              </details>
+            </div>
+
+            {/* Stagecraft Vector */}
+            <div className="p-4 rounded-2xl bg-emerald-500/[0.08] border border-emerald-400/25">
+              <span className="font-mono text-[10px] uppercase tracking-wider text-emerald-300 font-bold flex items-center gap-1.5 mb-2">
+                <Theater className="w-3.5 h-3.5" />
+                What to Watch For on Stage:
+              </span>
+              <p className="text-xs lg:text-sm text-slate-200 leading-relaxed">
+                {sceneBriefing.keyStagecraftVector}
+              </p>
+            </div>
+          </div>
+        </section>
+      )}
 
       {/* =====================================================================
           BENTO ROW 1: EXECUTIVE SUMMARY + SPEED-READ BULLETS + THEME TRACKER

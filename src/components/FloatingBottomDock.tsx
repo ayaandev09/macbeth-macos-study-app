@@ -11,6 +11,7 @@ import {
   Zap,
   Compass,
   ArrowUp,
+  GraduationCap,
 } from "lucide-react";
 
 export function FloatingBottomDock() {
@@ -144,6 +145,26 @@ export function FloatingBottomDock() {
               }`}
             >
               <Zap className="w-4 h-4" />
+            </button>
+
+            {/* Quick Revision & Cram Hub */}
+            <button
+              onClick={() => {
+                if (viewMode === "revision") {
+                  setViewMode("focus");
+                } else {
+                  setViewMode("revision");
+                }
+              }}
+              title="Open 5-Min Cram, Flashcards & Essay Plans"
+              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-bold transition-all cursor-pointer ${
+                viewMode === "revision"
+                  ? "bg-purple-500/35 text-purple-200 border border-purple-400/60 shadow-md shadow-purple-500/25"
+                  : "liquid-glass-pill text-amber-300 hover:text-white"
+              }`}
+            >
+              <GraduationCap className="w-4 h-4 text-amber-400" />
+              <span>Cram</span>
             </button>
 
             <button

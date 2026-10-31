@@ -6,6 +6,7 @@ import { TopCommandBar } from "@/components/TopCommandBar";
 import { ChapterBentoCard } from "@/components/ChapterBentoCard";
 import { ThemeMatrixView } from "@/components/ThemeMatrixView";
 import { LexiconDossierView } from "@/components/LexiconDossierView";
+import { RevisionCramView } from "@/components/RevisionCramView";
 import { FloatingBottomDock } from "@/components/FloatingBottomDock";
 import { ALL_CHAPTERS, BOOK_PARTS, ActId } from "@/data";
 import { useStudyStore } from "@/store/useStudyStore";
@@ -263,6 +264,11 @@ export default function MacbethStudyDashboardMacPage() {
                 MODE 4: SYMBOLS, DRAMATIS PERSONAE & RHETORIC LEXICON
                 =============================================================== */}
             {viewMode === "lexicon" && <LexiconDossierView />}
+
+            {/* ===============================================================
+                MODE 5: REVISION MATERIAL, FLASHCARDS & EXAM ESSAYS
+                =============================================================== */}
+            {viewMode === "revision" && <RevisionCramView />}
           </main>
         </div>
       </div>
