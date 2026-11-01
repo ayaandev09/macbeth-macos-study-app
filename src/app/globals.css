@@ -286,13 +286,47 @@ button:active, summary:active, a[role="button"]:active {
   will-change: transform;
 }
 
+@keyframes literary-fade-in {
+  0% {
+    opacity: 0;
+    transform: translate3d(0, 10px, 0);
+  }
+  100% {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+.literary-fade-in {
+  animation: literary-fade-in 0.32s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  will-change: transform, opacity;
+}
+
+@keyframes literary-fade-out {
+  0% {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+  100% {
+    opacity: 0;
+    transform: translate3d(0, -8px, 0);
+  }
+}
+
+.literary-fade-out {
+  animation: literary-fade-out 0.24s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  will-change: transform, opacity;
+}
+
 /* Reduced motion accessibility */
 @media (prefers-reduced-motion: reduce) {
   .view-enter-smooth,
   .sheet-enter-smooth,
   .backdrop-fade-smooth,
   .live-pulse-emerald,
-  .diagnostic-scanline {
+  .diagnostic-scanline,
+  .literary-fade-in,
+  .literary-fade-out {
     animation: none !important;
     transition: none !important;
   }
