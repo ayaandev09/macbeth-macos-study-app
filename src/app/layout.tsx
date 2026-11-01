@@ -1,23 +1,24 @@
 import type { Metadata } from "next";
-import { Inter, JetBrains_Mono, Newsreader } from "next/font/google";
+import { Kalam, Patrick_Hand, Caveat } from "next/font/google";
 import "./globals.css";
 
-const inter = Inter({
-  variable: "--font-sans",
+const kalam = Kalam({
+  weight: ["300", "400", "700"],
   subsets: ["latin"],
+  variable: "--font-kalam",
   display: "swap",
 });
 
-const jetbrainsMono = JetBrains_Mono({
-  variable: "--font-mono",
+const patrickHand = Patrick_Hand({
+  weight: "400",
   subsets: ["latin"],
+  variable: "--font-patrick-hand",
   display: "swap",
 });
 
-const newsreader = Newsreader({
-  variable: "--font-serif",
+const caveat = Caveat({
   subsets: ["latin"],
-  style: ["normal", "italic"],
+  variable: "--font-caveat",
   display: "swap",
 });
 
@@ -35,9 +36,21 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${inter.variable} ${jetbrainsMono.variable} ${newsreader.variable} dark`}
+      className={`${kalam.variable} ${patrickHand.variable} ${caveat.variable} dark`}
     >
-      <body className="font-sans antialiased selection:bg-rose-500/30 selection:text-rose-100">
+      <head>
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link
+          rel="preconnect"
+          href="https://fonts.gstatic.com"
+          crossOrigin="anonymous"
+        />
+        <link
+          href="https://fonts.googleapis.com/css2?family=Kalam:wght@300;400;700&family=Patrick+Hand&family=Caveat:wght@400..700&display=swap"
+          rel="stylesheet"
+        />
+      </head>
+      <body className="antialiased selection:bg-rose-500/30 selection:text-rose-100 font-handwritten">
         {children}
       </body>
     </html>
