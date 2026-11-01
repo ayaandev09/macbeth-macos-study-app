@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useMemo, useState } from "react";
+import React, { useMemo, useState, useEffect } from "react";
 import { FloatingSidebar } from "@/components/FloatingSidebar";
 import { TopCommandBar } from "@/components/TopCommandBar";
 import { ChapterBentoCard } from "@/components/ChapterBentoCard";
@@ -24,9 +24,34 @@ export default function MacbethStudyDashboardMacPage() {
     setActivePartFilter,
     diagnosticsModalOpen,
     setDiagnosticsModalOpen,
+    academicStyle,
+    deviceMode,
+    setDeviceMode,
   } = useStudyStore();
 
   const [showStartupIntro, setShowStartupIntro] = useState(true);
+
+  // Synchronize universal academic professional font attribute
+  useEffect(() => {
+    if (typeof document !== "undefined") {
+      const activeFont = academicStyle || "newsreader";
+      document.documentElement.setAttribute("data-academic-font", activeFont);
+      document.documentElement.setAttribute("data-handwritten-style", activeFont);
+    }
+  }, [academicStyle]);
+
+  // Detect URL parameter ?view=mac or ?view=iphone
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const params = new URLSearchParams(window.location.search);
+      const viewParam = params.get("view");
+      if (viewParam === "mac") {
+        setDeviceMode("mac");
+      } else if (viewParam === "iphone" || viewParam === "iphone16e") {
+        setDeviceMode("iphone16e");
+      }
+    }
+  }, [setDeviceMode]);
 
   const activeChapter = useMemo(
     () =>
@@ -73,7 +98,13 @@ export default function MacbethStudyDashboardMacPage() {
   }, [searchQuery, activePartFilter]);
 
   return (
-    <div className="relative min-h-screen pb-28">
+    <div
+      className={
+        deviceMode === "iphone16e"
+          ? "iphone-16e-shell"
+          : "mac-dashboard-shell"
+      }
+    >
       {/* =====================================================================
           CINEMATIC STARTUP DIAGNOSTICS & TELEMETRY
           ===================================================================== */}
@@ -113,12 +144,12 @@ export default function MacbethStudyDashboardMacPage() {
       />
 
       {/* =====================================================================
-          MAIN LIQUID GLASS SHELL WORKSPACE (MAC DESKTOP)
+          MAIN LIQUID GLASS SHELL WORKSPACE (MAC & IPHONE 16e HARMONIZED)
           ===================================================================== */}
-      <div className="relative z-10 max-w-[1680px] mx-auto px-4 sm:px-6 lg:px-8 pt-6">
+      <div className="relative z-10 w-full mx-auto">
         <div className="flex flex-col lg:flex-row items-start gap-6">
-          {/* Left Sticky Liquid Glass Navigation Sidebar */}
-          <FloatingSidebar />
+          {/* Left Sticky Liquid Glass Navigation Sidebar (Only on Mac Desktop Mode) */}
+          {deviceMode !== "iphone16e" && <FloatingSidebar />}
 
           {/* Main Content Column */}
           <main className="flex-1 min-w-0 w-full">

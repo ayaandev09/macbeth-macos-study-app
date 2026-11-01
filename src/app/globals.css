@@ -14,16 +14,21 @@
   --accent-amber: #fbbf24;
   --accent-emerald: #34d399;
 
-  /* Universal Academic & Professional Typography System */
-  --font-academic-sans: "Inter", -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", Roboto, sans-serif;
-  --font-academic-serif: "Cormorant Garamond", "Georgia", "Cambria", "Times New Roman", serif;
-  --font-academic-display: "Cinzel", "Times New Roman", serif;
+  /* Academic & Professional Scholarly Typography Stacks */
+  --font-newsreader: "Newsreader", "EB Garamond", "Georgia", "Times New Roman", serif;
+  --font-garamond: "EB Garamond", "Cormorant Garamond", "Georgia", "Times New Roman", serif;
+  --font-jakarta: "Plus Jakarta Sans", "Inter", system-ui, -apple-system, sans-serif;
+  --font-cinzel: "Cinzel", "Newsreader", serif;
   --font-academic-mono: "JetBrains Mono", "SF Mono", Menlo, Consolas, monospace;
 
-  --font-sans: var(--font-academic-sans);
-  --font-serif: var(--font-academic-serif);
+  /* Universal Default Font (Oxford / Cambridge Scholarly Academic) */
+  --active-academic-font: var(--font-newsreader);
+  --active-academic-sans: var(--font-jakarta);
+
+  --font-sans: var(--active-academic-sans);
+  --font-serif: var(--active-academic-font);
   --font-mono: var(--font-academic-mono);
-  --font-display: var(--font-academic-display);
+  --font-display: var(--font-cinzel);
 
   /* Uniswap DEX Elastic Jelly Physics Curves */
   --spring-easing: linear(
@@ -44,23 +49,51 @@
   --jelly-spring-soft: cubic-bezier(0.16, 1.3, 0.3, 1);
 }
 
+html[data-academic-font="newsreader"],
+:root[data-academic-font="newsreader"],
+html[data-handwritten-style="newsreader"],
+:root[data-handwritten-style="newsreader"] {
+  --active-academic-font: var(--font-newsreader);
+}
+
+html[data-academic-font="garamond"],
+:root[data-academic-font="garamond"],
+html[data-handwritten-style="garamond"],
+:root[data-handwritten-style="garamond"] {
+  --active-academic-font: var(--font-garamond);
+}
+
+html[data-academic-font="jakarta"],
+:root[data-academic-font="jakarta"],
+html[data-handwritten-style="jakarta"],
+:root[data-handwritten-style="jakarta"] {
+  --active-academic-font: var(--font-jakarta);
+}
+
+html[data-academic-font="cinzel"],
+:root[data-academic-font="cinzel"],
+html[data-handwritten-style="cinzel"],
+:root[data-handwritten-style="cinzel"] {
+  --active-academic-font: var(--font-cinzel);
+}
+
 @theme {
-  --font-sans: var(--font-academic-sans);
-  --font-serif: var(--font-academic-serif);
+  --font-sans: var(--active-academic-sans);
+  --font-serif: var(--active-academic-font);
   --font-mono: var(--font-academic-mono);
-  --font-display: var(--font-academic-display);
+  --font-display: var(--font-cinzel);
 }
 
 .font-display {
-  font-family: var(--font-academic-display) !important;
+  font-family: var(--font-cinzel) !important;
 }
 
 .font-serif {
-  font-family: var(--font-academic-serif) !important;
+  font-family: var(--active-academic-font) !important;
 }
 
 .font-sans {
-  font-family: var(--font-academic-sans) !important;
+  font-family: var(--active-academic-sans) !important;
 }
 
 .font-mono {
@@ -92,6 +125,31 @@ body {
 
 button, input, textarea, select {
   font-family: inherit;
+}
+
+/* ==================== MAC WIDESCREEN & IPHONE 16e VIEWPORT SHELLS ==================== */
+.mac-dashboard-shell {
+  width: 100%;
+  max-width: 1720px;
+  min-height: 100vh;
+  margin-inline: auto;
+  padding: 1rem 1.25rem 7rem;
+  position: relative;
+}
+
+.iphone-16e-shell {
+  width: 100%;
+  max-width: 420px;
+  min-height: 100dvh;
+  margin-inline: auto;
+  background-color: var(--bg-obsidian);
+  padding-top: max(0.75rem, env(safe-area-inset-top));
+  padding-bottom: calc(5.75rem + env(safe-area-inset-bottom, 0px));
+  padding-inline: 0.75rem;
+  position: relative;
+  overflow-x: clip;
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.12),
+    0 30px 90px rgba(0, 0, 0, 0.9);
 }
 
 /* ============================================================================

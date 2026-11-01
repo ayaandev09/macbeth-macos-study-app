@@ -6,6 +6,9 @@ import { ALL_CHAPTERS, BOOK_PARTS, ThemeId, ActId } from "@/data";
 
 export type ViewMode = "focus" | "stream" | "matrix" | "lexicon" | "revision";
 export type StudyLensMode = "primer" | "revision" | "deep";
+export type StudyGoal = "learn" | "revise";
+export type AcademicStyle = "newsreader" | "garamond" | "jakarta" | "cinzel";
+export type DeviceMode = "mac" | "iphone16e";
 
 interface StudyStoreState {
   // Navigation & View State
@@ -14,6 +17,9 @@ interface StudyStoreState {
   activeThemeFilter: ThemeId | "all";
   viewMode: ViewMode;
   studyLensMode: StudyLensMode;
+  studyGoal: StudyGoal;
+  academicStyle: AcademicStyle;
+  deviceMode: DeviceMode;
   speedReadMode: boolean;
   searchQuery: string;
   sidebarCollapsed: boolean;
@@ -33,6 +39,9 @@ interface StudyStoreState {
   setActiveThemeFilter: (themeId: ThemeId | "all") => void;
   setViewMode: (mode: ViewMode) => void;
   setStudyLensMode: (mode: StudyLensMode) => void;
+  setStudyGoal: (goal: StudyGoal) => void;
+  setAcademicStyle: (style: AcademicStyle) => void;
+  setDeviceMode: (device: DeviceMode) => void;
   toggleSpeedReadMode: () => void;
   setSearchQuery: (query: string) => void;
   toggleSidebar: () => void;
@@ -60,6 +69,9 @@ export const useStudyStore = create<StudyStoreState>()(
       activeThemeFilter: "all",
       viewMode: "focus",
       studyLensMode: "primer",
+      studyGoal: "revise",
+      academicStyle: "newsreader",
+      deviceMode: "mac",
       speedReadMode: false,
       searchQuery: "",
       sidebarCollapsed: false,
@@ -95,6 +107,24 @@ export const useStudyStore = create<StudyStoreState>()(
       setStudyLensMode: (mode) =>
         set({
           studyLensMode: mode,
+        }),
+
+      setStudyGoal: (goal) =>
+        set({
+          studyGoal: goal,
+        }),
+
+      setAcademicStyle: (style) => {
+        if (typeof document !== "undefined") {
+          document.documentElement.setAttribute("data-academic-font", style);
+          document.documentElement.setAttribute("data-handwritten-style", style);
+        }
+        set({ academicStyle: style });
+      },
+
+      setDeviceMode: (device) =>
+        set({
+          deviceMode: device,
         }),
 
       setFlashcardScore: (cardId, status) =>
@@ -267,6 +297,9 @@ export const useStudyStore = create<StudyStoreState>()(
         chapterNotes: state.chapterNotes,
         activeChapterId: state.activeChapterId,
         speedReadMode: state.speedReadMode,
+        studyGoal: state.studyGoal,
+        academicStyle: state.academicStyle,
+        deviceMode: state.deviceMode,
       }),
     }
   )

@@ -23,6 +23,8 @@ import {
   StickyNote,
   ChevronDown,
   ChevronUp,
+  ChevronLeft,
+  ChevronRight,
   Theater,
   ScrollText,
   Bookmark,
@@ -68,6 +70,9 @@ export const ChapterBentoCard = React.memo(function ChapterBentoCard({
     setChapterNote,
     studyLensMode,
     setStudyLensMode,
+    studyGoal,
+    goToPrevChapter,
+    goToNextChapter,
   } = useStudyStore();
 
   const scenePrimer = SCENE_PRIMERS[chapter.id];
@@ -145,7 +150,25 @@ export const ChapterBentoCard = React.memo(function ChapterBentoCard({
           </div>
 
           {/* Action Buttons */}
-          <div className="flex items-center gap-2.5 self-start lg:self-center shrink-0">
+          <div className="flex items-center gap-2 self-start lg:self-center shrink-0">
+            {/* Prev/Next Scene Arrows (Orwell 1984 Style) */}
+            <div className="flex items-center gap-1 mr-1">
+              <button
+                onClick={goToPrevChapter}
+                title="Previous Scene"
+                className="p-2 rounded-2xl liquid-glass-pill text-slate-300 hover:text-white cursor-pointer"
+              >
+                <ChevronLeft className="w-4 h-4" />
+              </button>
+              <button
+                onClick={goToNextChapter}
+                title="Next Scene"
+                className="p-2 rounded-2xl liquid-glass-pill text-slate-300 hover:text-white cursor-pointer"
+              >
+                <ChevronRight className="w-4 h-4" />
+              </button>
+            </div>
+
             <button
               onClick={() => setShowScratchpad((prev) => !prev)}
               className="liquid-glass-pill px-3.5 py-2.5 rounded-2xl text-xs font-medium text-slate-200 flex items-center gap-2 cursor-pointer"
