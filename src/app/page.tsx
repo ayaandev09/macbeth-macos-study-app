@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useMemo } from "react";
+import React, { useMemo, useState } from "react";
 import { FloatingSidebar } from "@/components/FloatingSidebar";
 import { TopCommandBar } from "@/components/TopCommandBar";
 import { ChapterBentoCard } from "@/components/ChapterBentoCard";
@@ -8,6 +8,7 @@ import { ThemeMatrixView } from "@/components/ThemeMatrixView";
 import { LexiconDossierView } from "@/components/LexiconDossierView";
 import { RevisionCramView } from "@/components/RevisionCramView";
 import { FloatingBottomDock } from "@/components/FloatingBottomDock";
+import { StartupDiagnosticIntro } from "@/components/StartupDiagnosticIntro";
 import { ALL_CHAPTERS, BOOK_PARTS, ActId } from "@/data";
 import { useStudyStore } from "@/store/useStudyStore";
 import { Sparkles, Layers, SearchX } from "lucide-react";
@@ -21,7 +22,11 @@ export default function MacbethStudyDashboardMacPage() {
     setSearchQuery,
     activePartFilter,
     setActivePartFilter,
+    diagnosticsModalOpen,
+    setDiagnosticsModalOpen,
   } = useStudyStore();
+
+  const [showStartupIntro, setShowStartupIntro] = useState(true);
 
   const activeChapter = useMemo(
     () =>
@@ -69,6 +74,19 @@ export default function MacbethStudyDashboardMacPage() {
 
   return (
     <div className="relative min-h-screen pb-28">
+      {/* =====================================================================
+          CINEMATIC STARTUP DIAGNOSTICS & TELEMETRY
+          ===================================================================== */}
+      {showStartupIntro && (
+        <StartupDiagnosticIntro onComplete={() => setShowStartupIntro(false)} />
+      )}
+      {diagnosticsModalOpen && (
+        <StartupDiagnosticIntro
+          isManualTelemetry={true}
+          onClose={() => setDiagnosticsModalOpen(false)}
+        />
+      )}
+
       {/* =====================================================================
           GPU-ACCELERATED LIQUID AMBIENT ORBS (ZERO BLUR REPAINT OVERHEAD)
           ===================================================================== */}
@@ -150,14 +168,16 @@ export default function MacbethStudyDashboardMacPage() {
                 MODE 1: SINGLE SCENE BENTO FOCUS VIEW
                 =============================================================== */}
             {viewMode === "focus" && (
-              <ChapterBentoCard chapter={activeChapter} isDeferred={false} />
+              <div key="view-focus" className="view-enter-smooth">
+                <ChapterBentoCard chapter={activeChapter} isDeferred={false} />
+              </div>
             )}
 
             {/* ===============================================================
                 MODE 2: CONTINUOUS ALL-31-SCENES SPEED-READ FLOW
                 =============================================================== */}
             {viewMode === "stream" && (
-              <div className="space-y-8">
+              <div key="view-stream" className="space-y-8 view-enter-smooth">
                 {/* Act Filter Bar & Narrative Arc Overviews */}
                 <div className="liquid-glass-bento rounded-3xl p-5">
                   <div className="flex flex-wrap items-center justify-between gap-4 mb-4">
@@ -259,17 +279,29 @@ export default function MacbethStudyDashboardMacPage() {
             {/* ===============================================================
                 MODE 3: THEME & QUOTE MATRIX VIEW
                 =============================================================== */}
-            {viewMode === "matrix" && <ThemeMatrixView />}
+            {viewMode === "matrix" && (
+              <div key="view-matrix" className="view-enter-smooth">
+                <ThemeMatrixView />
+              </div>
+            )}
 
             {/* ===============================================================
                 MODE 4: SYMBOLS, DRAMATIS PERSONAE & RHETORIC LEXICON
                 =============================================================== */}
-            {viewMode === "lexicon" && <LexiconDossierView />}
+            {viewMode === "lexicon" && (
+              <div key="view-lexicon" className="view-enter-smooth">
+                <LexiconDossierView />
+              </div>
+            )}
 
             {/* ===============================================================
                 MODE 5: REVISION MATERIAL, FLASHCARDS & EXAM ESSAYS
                 =============================================================== */}
-            {viewMode === "revision" && <RevisionCramView />}
+            {viewMode === "revision" && (
+              <div key="view-revision" className="view-enter-smooth">
+                <RevisionCramView />
+              </div>
+            )}
           </main>
         </div>
       </div>

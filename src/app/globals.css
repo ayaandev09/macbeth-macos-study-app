@@ -209,3 +209,91 @@ button:active, summary:active, a[role="button"]:active {
 ::-webkit-scrollbar-thumb:hover {
   background: rgba(255, 255, 255, 0.28);
 }
+
+/* ============================================================================
+   BUTTER-SMOOTH GPU COMPOSITED ANIMATIONS & HARDWARE TRANSITIONS (ZERO JANK)
+   ============================================================================ */
+
+@keyframes view-enter-smooth {
+  0% {
+    opacity: 0.01;
+    transform: translate3d(0, 8px, 0);
+  }
+  100% {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+.view-enter-smooth {
+  animation: view-enter-smooth 0.18s cubic-bezier(0.16, 1, 0.3, 1) both;
+  will-change: transform, opacity;
+}
+
+@keyframes sheet-enter-smooth {
+  0% {
+    transform: translate3d(0, 100%, 0);
+  }
+  100% {
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+.sheet-enter-smooth {
+  animation: sheet-enter-smooth 0.28s cubic-bezier(0.16, 1, 0.3, 1) both;
+  will-change: transform;
+}
+
+@keyframes backdrop-fade-smooth {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+.backdrop-fade-smooth {
+  animation: backdrop-fade-smooth 0.2s ease-out both;
+}
+
+@keyframes live-pulse {
+  0%, 100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.35;
+    transform: scale(0.85);
+  }
+}
+
+.live-pulse-emerald {
+  animation: live-pulse 1.8s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+@keyframes diagnostic-scanline {
+  0% {
+    transform: translate3d(0, -100%, 0);
+  }
+  100% {
+    transform: translate3d(0, 500%, 0);
+  }
+}
+
+.diagnostic-scanline {
+  animation: diagnostic-scanline 3s linear infinite;
+  will-change: transform;
+}
+
+/* Reduced motion accessibility */
+@media (prefers-reduced-motion: reduce) {
+  .view-enter-smooth,
+  .sheet-enter-smooth,
+  .backdrop-fade-smooth,
+  .live-pulse-emerald,
+  .diagnostic-scanline {
+    animation: none !important;
+    transition: none !important;
+  }
+}

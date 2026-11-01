@@ -17,6 +17,7 @@ import {
   X,
   QrCode,
   GraduationCap,
+  Activity,
 } from "lucide-react";
 import { QrCodeModal } from "./QrCodeModal";
 
@@ -66,6 +67,7 @@ export function TopCommandBar() {
     setSearchQuery,
     speedReadMode,
     toggleSpeedReadMode,
+    setDiagnosticsModalOpen,
   } = useStudyStore();
 
   const [qrModalOpen, setQrModalOpen] = useState(false);
@@ -117,6 +119,16 @@ export function TopCommandBar() {
                 </button>
               )}
             </div>
+
+            {/* Live Diagnostics & Telemetry Modal Trigger */}
+            <button
+              onClick={() => setDiagnosticsModalOpen(true)}
+              title="Open Live Diagnostics & Hardware Telemetry Console"
+              className="liquid-glass-pill flex items-center gap-1.5 px-3 py-2 rounded-2xl text-xs font-mono font-medium text-emerald-300 cursor-pointer border border-emerald-400/35 hover:border-emerald-400/60"
+            >
+              <Activity className="w-3.5 h-3.5 text-emerald-400 live-pulse-emerald shrink-0" />
+              <span>120 FPS // DIAGNOSTICS</span>
+            </button>
 
             {/* iPhone 16e QR Code / Link Modal Trigger */}
             <button

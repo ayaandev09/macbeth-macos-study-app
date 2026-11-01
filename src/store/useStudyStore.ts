@@ -18,6 +18,7 @@ interface StudyStoreState {
   searchQuery: string;
   sidebarCollapsed: boolean;
   chapterSheetOpen: boolean;
+  diagnosticsModalOpen: boolean;
 
   // Persisted Study Progress State
   completedChapters: Record<string, boolean>;
@@ -36,6 +37,7 @@ interface StudyStoreState {
   setSearchQuery: (query: string) => void;
   toggleSidebar: () => void;
   setChapterSheetOpen: (open: boolean) => void;
+  setDiagnosticsModalOpen: (open: boolean) => void;
 
   // Progress Tracker Actions
   toggleChapterComplete: (chapterId: string) => void;
@@ -62,6 +64,7 @@ export const useStudyStore = create<StudyStoreState>()(
       searchQuery: "",
       sidebarCollapsed: false,
       chapterSheetOpen: false,
+      diagnosticsModalOpen: false,
 
       completedChapters: {},
       completedSubSections: {},
@@ -125,6 +128,11 @@ export const useStudyStore = create<StudyStoreState>()(
       setChapterSheetOpen: (open) =>
         set({
           chapterSheetOpen: open,
+        }),
+
+      setDiagnosticsModalOpen: (open) =>
+        set({
+          diagnosticsModalOpen: open,
         }),
 
       toggleChapterComplete: (chapterId) =>
