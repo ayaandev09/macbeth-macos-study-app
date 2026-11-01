@@ -70,28 +70,29 @@ export default function MacbethStudyDashboardMacPage() {
   return (
     <div className="relative min-h-screen pb-28">
       {/* =====================================================================
-          AMBIENT SCOTTISH HIGHLAND & DUNSINANE LIGHT BLOBS
+          GPU-ACCELERATED LIQUID AMBIENT ORBS (ZERO BLUR REPAINT OVERHEAD)
           ===================================================================== */}
-      <div className="pointer-events-none fixed inset-0 overflow-hidden z-0">
-        <div
-          className="absolute -top-36 left-1/4 w-[700px] h-[700px] rounded-full blur-[145px] opacity-28"
-          style={{
-            background: "radial-gradient(circle, #f43f5e 0%, rgba(244,63,94,0.4) 45%, transparent 75%)",
-          }}
-        />
-        <div
-          className="absolute top-1/3 -right-28 w-[650px] h-[650px] rounded-full blur-[155px] opacity-26"
-          style={{
-            background: "radial-gradient(circle, #fbbf24 0%, rgba(251,191,36,0.35) 45%, transparent 75%)",
-          }}
-        />
-        <div
-          className="absolute -bottom-44 left-1/3 w-[720px] h-[720px] rounded-full blur-[165px] opacity-22"
-          style={{
-            background: "radial-gradient(circle, #34d399 0%, rgba(52,211,153,0.3) 45%, transparent 75%)",
-          }}
-        />
-      </div>
+      <div
+        className="liquid-ambient-orb w-[700px] h-[700px] -top-36 left-1/4"
+        style={{
+          background:
+            "radial-gradient(circle, rgba(244,63,94,0.2) 0%, rgba(244,63,94,0.03) 65%, transparent 100%)",
+        }}
+      />
+      <div
+        className="liquid-ambient-orb w-[650px] h-[650px] top-1/3 -right-28"
+        style={{
+          background:
+            "radial-gradient(circle, rgba(251,191,36,0.18) 0%, rgba(251,191,36,0.03) 65%, transparent 100%)",
+        }}
+      />
+      <div
+        className="liquid-ambient-orb w-[720px] h-[720px] -bottom-44 left-1/3"
+        style={{
+          background:
+            "radial-gradient(circle, rgba(52,211,153,0.15) 0%, rgba(52,211,153,0.02) 65%, transparent 100%)",
+        }}
+      />
 
       {/* =====================================================================
           MAIN LIQUID GLASS SHELL WORKSPACE (MAC DESKTOP)

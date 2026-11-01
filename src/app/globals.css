@@ -40,7 +40,6 @@ html {
   font-feature-settings: "cv02", "cv03", "cv04", "cv11";
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  scroll-behavior: smooth;
   text-rendering: optimizeLegibility;
 }
 
@@ -57,6 +56,19 @@ button, input, textarea, select {
 }
 
 /* ============================================================================
+   STATIC GPU AMBIENT ORBS (ZERO BLUR REPAINT OVERHEAD, STRICT CONTAINMENT)
+   ============================================================================ */
+.liquid-ambient-orb {
+  position: fixed;
+  border-radius: 9999px;
+  pointer-events: none;
+  z-index: 0;
+  contain: strict;
+  transform: translateZ(0);
+  -webkit-transform: translateZ(0);
+}
+
+/* ============================================================================
    macOS & iOS 26 "LIQUID GLASS" SPECULAR REFRACTION ENGINE (FAST & REACTIVE)
    ============================================================================ */
 
@@ -67,13 +79,15 @@ button, input, textarea, select {
     rgba(22, 29, 52, 0.76) 0%,
     rgba(11, 15, 29, 0.84) 100%
   );
-  backdrop-filter: blur(24px) saturate(190%);
-  -webkit-backdrop-filter: blur(24px) saturate(190%);
+  backdrop-filter: blur(14px) saturate(180%);
+  -webkit-backdrop-filter: blur(14px) saturate(180%);
   border: 1px solid rgba(255, 255, 255, 0.15);
   box-shadow:
     0 20px 50px -12px rgba(0, 0, 0, 0.75),
     inset 0 1px 0 0 rgba(255, 255, 255, 0.24),
     inset 1px 0 0 0 rgba(255, 255, 255, 0.08);
+  transform: translateZ(0);
+  -webkit-transform: translateZ(0);
 }
 
 /* 2. Bento Study Card Surface */
@@ -83,14 +97,16 @@ button, input, textarea, select {
     rgba(25, 34, 60, 0.65) 0%,
     rgba(13, 18, 36, 0.75) 100%
   );
-  backdrop-filter: blur(20px) saturate(175%);
-  -webkit-backdrop-filter: blur(20px) saturate(175%);
+  backdrop-filter: blur(12px) saturate(160%);
+  -webkit-backdrop-filter: blur(12px) saturate(160%);
   border: 1px solid rgba(255, 255, 255, 0.13);
   box-shadow:
     0 16px 38px -10px rgba(0, 0, 0, 0.65),
     inset 0 1px 0 0 rgba(255, 255, 255, 0.2),
     inset 0 -1px 0 0 rgba(255, 255, 255, 0.04);
-  transition: transform 0.15s ease-out, border-color 0.15s ease, box-shadow 0.15s ease;
+  transform: translateZ(0);
+  -webkit-transform: translateZ(0);
+  transition: border-color 0.12s ease, box-shadow 0.12s ease;
 }
 
 .liquid-glass-bento:hover {
@@ -108,13 +124,15 @@ button, input, textarea, select {
     rgba(26, 36, 66, 0.85) 0%,
     rgba(12, 17, 32, 0.94) 100%
   );
-  backdrop-filter: blur(28px) saturate(200%);
-  -webkit-backdrop-filter: blur(28px) saturate(200%);
+  backdrop-filter: blur(14px) saturate(180%);
+  -webkit-backdrop-filter: blur(14px) saturate(180%);
   border: 1px solid rgba(255, 255, 255, 0.2);
   box-shadow:
     0 22px 55px -10px rgba(0, 0, 0, 0.85),
     0 0 35px -10px rgba(244, 63, 94, 0.25),
     inset 0 1.5px 0 0 rgba(255, 255, 255, 0.3);
+  transform: translateZ(0);
+  -webkit-transform: translateZ(0);
 }
 
 /* 4. Interactive Specular Pill Button (Fast & Snappy Haptic Touch) */

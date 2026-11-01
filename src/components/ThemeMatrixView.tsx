@@ -53,7 +53,7 @@ export function ThemeMatrixView() {
   const jumpToScene = (chapterId: string) => {
     setActiveChapter(chapterId);
     setViewMode("focus");
-    window.scrollTo({ top: 0, behavior: "smooth" });
+    window.scrollTo(0, 0);
   };
 
   return (

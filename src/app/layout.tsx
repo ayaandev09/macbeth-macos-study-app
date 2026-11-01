@@ -1,26 +1,5 @@
 import type { Metadata } from "next";
-import { Kalam, Patrick_Hand, Caveat } from "next/font/google";
 import "./globals.css";
-
-const kalam = Kalam({
-  weight: ["300", "400", "700"],
-  subsets: ["latin"],
-  variable: "--font-kalam",
-  display: "swap",
-});
-
-const patrickHand = Patrick_Hand({
-  weight: "400",
-  subsets: ["latin"],
-  variable: "--font-patrick-hand",
-  display: "swap",
-});
-
-const caveat = Caveat({
-  subsets: ["latin"],
-  variable: "--font-caveat",
-  display: "swap",
-});
 
 export const metadata: Metadata = {
   title: "DUNSINANE // MACBETH — macOS Liquid Glass Study Database",
@@ -34,10 +13,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html
-      lang="en"
-      className={`${kalam.variable} ${patrickHand.variable} ${caveat.variable} dark`}
-    >
+    <html lang="en" className="dark">
       <head>
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link

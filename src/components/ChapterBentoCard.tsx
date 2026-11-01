@@ -90,20 +90,20 @@ export const ChapterBentoCard = React.memo(function ChapterBentoCard({
           HERO SCENE BANNER
           ===================================================================== */}
       <div className="liquid-glass-bento rounded-3xl p-6 lg:p-7 relative overflow-hidden">
-        {/* Specular Radial Glow */}
+        {/* Specular Radial Glow (Zero Filter Overhead) */}
         <div
-          className="pointer-events-none absolute -top-24 -right-24 w-72 h-72 rounded-full blur-3xl opacity-25"
+          className="pointer-events-none absolute -top-24 -right-24 w-72 h-72 rounded-full opacity-25"
           style={{
             background:
               chapter.partNumber === 1
-                ? "radial-gradient(circle, #fbbf24, transparent 70%)"
+                ? "radial-gradient(circle, #fbbf24 0%, transparent 70%)"
                 : chapter.partNumber === 2
-                  ? "radial-gradient(circle, #f43f5e, transparent 70%)"
+                  ? "radial-gradient(circle, #f43f5e 0%, transparent 70%)"
                   : chapter.partNumber === 3
-                    ? "radial-gradient(circle, #a855f7, transparent 70%)"
+                    ? "radial-gradient(circle, #a855f7 0%, transparent 70%)"
                     : chapter.partNumber === 4
-                      ? "radial-gradient(circle, #34d399, transparent 70%)"
-                      : "radial-gradient(circle, #ef4444, transparent 70%)",
+                      ? "radial-gradient(circle, #34d399 0%, transparent 70%)"
+                      : "radial-gradient(circle, #ef4444 0%, transparent 70%)",
           }}
         />
 

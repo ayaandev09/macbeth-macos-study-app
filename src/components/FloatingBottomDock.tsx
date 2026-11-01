@@ -44,9 +44,9 @@ export function FloatingBottomDock() {
     }
     if (viewMode === "stream") {
       const el = document.getElementById(`chapter-card-${id}`);
-      if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
+      if (el) el.scrollIntoView({ block: "start" });
     } else {
-      window.scrollTo({ top: 0, behavior: "smooth" });
+      window.scrollTo(0, 0);
     }
   };
 
@@ -67,7 +67,7 @@ export function FloatingBottomDock() {
           tabIndex={0}
           role="region"
           aria-label="Mac navigation dock"
-          className="flex items-center justify-between gap-2 w-full overflow-x-auto no-scrollbar touch-pan-x scroll-smooth overscroll-x-contain"
+          className="flex items-center justify-between gap-2 w-full overflow-x-auto no-scrollbar touch-pan-x overscroll-x-contain"
         >
           {/* Previous Scene */}
           <button
@@ -168,7 +168,7 @@ export function FloatingBottomDock() {
             </button>
 
             <button
-              onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+              onClick={() => window.scrollTo(0, 0)}
               title="Scroll to top"
               className="p-2 rounded-full liquid-glass-pill text-slate-400 hover:text-white transition-all cursor-pointer"
             >

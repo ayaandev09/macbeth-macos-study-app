@@ -74,10 +74,10 @@ export function FloatingSidebar() {
     if (viewMode === "stream") {
       const el = document.getElementById(`chapter-card-${chapterId}`);
       if (el) {
-        el.scrollIntoView({ behavior: "smooth", block: "start" });
+        el.scrollIntoView({ block: "start" });
       }
     } else {
-      window.scrollTo({ top: 0, behavior: "smooth" });
+      window.scrollTo(0, 0);
     }
   };
 
@@ -156,7 +156,7 @@ export function FloatingSidebar() {
           <button
             onClick={() => {
               setViewMode("revision");
-              window.scrollTo({ top: 0, behavior: "smooth" });
+              window.scrollTo(0, 0);
             }}
             className="w-full flex items-center justify-between px-3 py-2 rounded-2xl bg-gradient-to-r from-amber-500/20 via-rose-500/20 to-purple-500/20 border border-amber-300/40 text-xs font-bold text-amber-200 active:scale-95 cursor-pointer shadow-sm hover:border-amber-300 transition-all"
           >
