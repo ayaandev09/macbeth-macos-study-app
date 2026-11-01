@@ -136,7 +136,7 @@ export const ChapterBentoCard = React.memo(function ChapterBentoCard({
               </span>
             </div>
 
-            <h2 className="text-2xl lg:text-3xl font-bold tracking-tight text-white">
+            <h2 className="text-2xl lg:text-3xl font-bold tracking-tight text-white font-display">
               {chapter.title}
             </h2>
             <p className="text-sm lg:text-base text-slate-300 mt-1 font-serif italic">

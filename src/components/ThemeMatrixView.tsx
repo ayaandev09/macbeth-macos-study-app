@@ -66,7 +66,7 @@ export function ThemeMatrixView() {
           <div>
             <div className="flex items-center gap-2">
               <Network className="w-4 h-4 text-amber-400" />
-              <h2 className="text-lg font-bold text-white">
+              <h2 className="text-lg font-bold text-white font-display">
                 8 Core Themes & Heatmap Matrix
               </h2>
             </div>

@@ -52,7 +52,7 @@ export function LexiconDossierView() {
       <section className="liquid-glass-bento rounded-3xl p-6">
         <div className="flex items-center gap-2 mb-1">
           <Sparkles className="w-4 h-4 text-amber-400" />
-          <h2 className="text-lg font-bold text-white">
+          <h2 className="text-lg font-bold text-white font-display">
             Symbols, Stage Props & Motifs Encyclopedia ({filteredSymbols.length}
             )
           </h2>
@@ -105,7 +105,7 @@ export function LexiconDossierView() {
       <section className="liquid-glass-bento rounded-3xl p-6">
         <div className="flex items-center gap-2 mb-1">
           <Users className="w-4 h-4 text-rose-400" />
-          <h2 className="text-lg font-bold text-white">
+          <h2 className="text-lg font-bold text-white font-display">
             Dramatis Personae Psychological Dossiers (
             {filteredCharacters.length})
           </h2>
@@ -257,7 +257,7 @@ export function LexiconDossierView() {
       <section className="liquid-glass-bento rounded-3xl p-6">
         <div className="flex items-center gap-2 mb-1">
           <BookMarked className="w-4 h-4 text-emerald-400" />
-          <h2 className="text-lg font-bold text-white">
+          <h2 className="text-lg font-bold text-white font-display">
             Rhetoric, Prosody & Jacobean Cosmology Lexicon (
             {filteredRhetoric.length})
           </h2>

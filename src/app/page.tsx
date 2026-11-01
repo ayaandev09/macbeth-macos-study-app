@@ -168,7 +168,7 @@ export default function MacbethStudyDashboardMacPage() {
                 MODE 1: SINGLE SCENE BENTO FOCUS VIEW
                 =============================================================== */}
             {viewMode === "focus" && (
-              <div key="view-focus" className="view-enter-smooth">
+              <div key="view-focus" className="section-jelly-enter">
                 <ChapterBentoCard chapter={activeChapter} isDeferred={false} />
               </div>
             )}
@@ -177,7 +177,7 @@ export default function MacbethStudyDashboardMacPage() {
                 MODE 2: CONTINUOUS ALL-31-SCENES SPEED-READ FLOW
                 =============================================================== */}
             {viewMode === "stream" && (
-              <div key="view-stream" className="space-y-8 view-enter-smooth">
+              <div key="view-stream" className="space-y-8 section-jelly-enter">
                 {/* Act Filter Bar & Narrative Arc Overviews */}
                 <div className="liquid-glass-bento rounded-3xl p-5">
                   <div className="flex flex-wrap items-center justify-between gap-4 mb-4">
@@ -280,7 +280,7 @@ export default function MacbethStudyDashboardMacPage() {
                 MODE 3: THEME & QUOTE MATRIX VIEW
                 =============================================================== */}
             {viewMode === "matrix" && (
-              <div key="view-matrix" className="view-enter-smooth">
+              <div key="view-matrix" className="section-jelly-enter">
                 <ThemeMatrixView />
               </div>
             )}
@@ -289,7 +289,7 @@ export default function MacbethStudyDashboardMacPage() {
                 MODE 4: SYMBOLS, DRAMATIS PERSONAE & RHETORIC LEXICON
                 =============================================================== */}
             {viewMode === "lexicon" && (
-              <div key="view-lexicon" className="view-enter-smooth">
+              <div key="view-lexicon" className="section-jelly-enter">
                 <LexiconDossierView />
               </div>
             )}
@@ -298,7 +298,7 @@ export default function MacbethStudyDashboardMacPage() {
                 MODE 5: REVISION MATERIAL, FLASHCARDS & EXAM ESSAYS
                 =============================================================== */}
             {viewMode === "revision" && (
-              <div key="view-revision" className="view-enter-smooth">
+              <div key="view-revision" className="section-jelly-enter">
                 <RevisionCramView />
               </div>
             )}

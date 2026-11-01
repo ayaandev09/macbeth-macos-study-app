@@ -126,7 +126,7 @@ export function RevisionCramView() {
                 Pre-Lesson • Active Recall • Exam Blueprints
               </span>
             </div>
-            <h1 className="text-xl lg:text-2xl font-bold text-white tracking-tight">
+            <h1 className="text-xl lg:text-2xl font-bold text-white tracking-tight font-display">
               Macbeth Revision Hub & 5-Minute Briefings
             </h1>
             <p className="text-xs lg:text-sm text-slate-300 mt-1 max-w-2xl leading-relaxed">

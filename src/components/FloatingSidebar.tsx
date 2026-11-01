@@ -97,7 +97,7 @@ export function FloatingSidebar() {
                 </span>
                 <span className="inline-block w-1.5 h-1.5 rounded-full bg-rose-400 animate-pulse" />
               </div>
-              <h1 className="text-base font-semibold tracking-tight text-white">
+              <h1 className="text-base font-semibold tracking-tight text-white font-display">
                 Macbeth Study Shell
               </h1>
             </div>

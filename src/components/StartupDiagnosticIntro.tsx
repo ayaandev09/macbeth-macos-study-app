@@ -301,7 +301,7 @@ export const StartupDiagnosticIntro: React.FC<StartupDiagnosticIntroProps> = ({
                   • 0.8ms Hardware Latency
                 </span>
               </div>
-              <h2 className="text-base sm:text-lg font-bold text-white tracking-tight">
+              <h2 className="text-base sm:text-lg font-bold text-white tracking-tight font-display">
                 macOS Folio Dramatic Prologue &amp; Diagnostics
               </h2>
             </div>
@@ -391,7 +391,7 @@ export const StartupDiagnosticIntro: React.FC<StartupDiagnosticIntroProps> = ({
               <span className="absolute -top-4 left-4 text-4xl font-serif text-amber-400/40 select-none">
                 &ldquo;
               </span>
-              <blockquote className="text-base sm:text-lg font-bold text-white leading-relaxed pl-1 tracking-tight">
+              <blockquote className="font-serif italic text-base sm:text-lg font-semibold text-amber-100 leading-relaxed pl-1 tracking-tight">
                 {activeBeat.quotation}
               </blockquote>
               <div className="flex items-center justify-between mt-2.5 pt-2.5 border-t border-white/5 text-xs text-slate-400 font-mono">
