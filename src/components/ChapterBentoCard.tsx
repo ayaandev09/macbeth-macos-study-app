@@ -48,7 +48,7 @@ const OMEN_BADGE_STYLES: Record<ChapterData["omenLevel"], string> = {
     "bg-red-500/25 text-red-200 border-red-400/50 shadow-[0_0_20px_-4px_rgba(244,63,94,0.45)]",
 };
 
-export function ChapterBentoCard({
+export const ChapterBentoCard = React.memo(function ChapterBentoCard({
   chapter,
   isDeferred = false,
   isDeferredBelowFold = false,
@@ -982,4 +982,4 @@ export function ChapterBentoCard({
       )}
     </article>
   );
-}
+});
