@@ -33,6 +33,8 @@ import {
   HelpCircle,
   Users,
   BookOpen,
+  Flame,
+  ArrowRight,
 } from "lucide-react";
 
 interface ChapterBentoCardProps {
@@ -79,6 +81,7 @@ export const ChapterBentoCard = React.memo(function ChapterBentoCard({
   const sceneBriefing = PRE_LESSON_BRIEFINGS[chapter.id];
 
   const [showScratchpad, setShowScratchpad] = useState(false);
+  const [quizRevealed, setQuizRevealed] = useState(false);
   const isCompleted = !!completedChapters[chapter.id];
   const noteText = chapterNotes[chapter.id] || "";
   const bookPart = BOOK_PARTS.find((p) => p.id === chapter.partId);
@@ -249,6 +252,175 @@ export const ChapterBentoCard = React.memo(function ChapterBentoCard({
           </div>
         )}
       </div>
+
+      {/* =====================================================================
+          DUAL-PURPOSE MODALITY CALLOUT: REVISION CRAM vs GUIDED STUDY
+          ===================================================================== */}
+      {studyGoal === "revise" ? (
+        <div className="liquid-glass-bento rounded-3xl p-5 sm:p-6 border border-amber-500/40 bg-gradient-to-r from-amber-500/10 via-rose-500/10 to-purple-500/10 relative overflow-hidden">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-4">
+            <div className="flex items-center gap-3">
+              <span className="p-2.5 rounded-2xl bg-amber-500/20 text-amber-300 border border-amber-400/40 shadow-sm">
+                <Flame className="w-5 h-5 text-amber-400 animate-pulse" />
+              </span>
+              <div>
+                <div className="flex items-center gap-2">
+                  <h3 className="text-sm sm:text-base font-bold text-white tracking-tight">
+                    Pre-Lesson 60-Second Cram &amp; Discussion Ready
+                  </h3>
+                  <span className="px-2 py-0.5 rounded-full text-[10px] font-mono font-bold bg-amber-400/20 text-amber-300 border border-amber-400/30">
+                    Scene {chapter.displayCode}
+                  </span>
+                </div>
+                <p className="text-xs text-amber-200/80">
+                  Instant talking points for class participation, high-yield quote, and teacher pop-quiz reveal.
+                </p>
+              </div>
+            </div>
+
+            <button
+              onClick={() => setViewMode("revision")}
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl liquid-glass-pill text-xs font-bold text-amber-200 hover:text-white shrink-0 self-start sm:self-center cursor-pointer border border-amber-400/30 hover:border-amber-400/60 transition-all"
+            >
+              <span>Full Revision Hub</span>
+              <ArrowRight className="w-3.5 h-3.5" />
+            </button>
+          </div>
+
+          {sceneBriefing ? (
+            <div className="space-y-3.5">
+              <div className="p-3.5 rounded-2xl bg-black/40 border border-white/10 text-xs text-slate-200 leading-relaxed">
+                <span className="font-bold text-amber-300 block mb-1">
+                  ⚡ 30-Second Plot Takeaway:
+                </span>
+                {sceneBriefing.thirtySecondRecap}
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-3.5 text-xs">
+                {/* Teacher Pop Quiz */}
+                <div className="p-3.5 rounded-2xl bg-white/5 border border-white/10 space-y-2">
+                  <span className="font-bold text-sky-300 flex items-center gap-1.5 uppercase tracking-wider text-[11px]">
+                    <HelpCircle className="w-3.5 h-3.5" />
+                    Teacher Will Ask (Raise Hand):
+                  </span>
+                  <p className="text-slate-200 font-medium pl-2.5 border-l-2 border-sky-400/50">
+                    {sceneBriefing.teacherPopQuiz.question}
+                  </p>
+                  <div className="pt-1">
+                    <button
+                      onClick={() => setQuizRevealed(!quizRevealed)}
+                      className="text-[11px] font-mono text-sky-300 hover:text-sky-100 flex items-center gap-1 cursor-pointer"
+                    >
+                      <span>{quizRevealed ? "Hide Model Answer ▲" : "Reveal Model Answer ▼"}</span>
+                    </button>
+                    {quizRevealed && (
+                      <div className="mt-1.5 p-2.5 rounded-xl bg-sky-950/50 border border-sky-400/30 text-slate-200 text-xs leading-relaxed">
+                        <span className="font-bold text-sky-300 mr-1">Model Answer:</span>
+                        {sceneBriefing.teacherPopQuiz.answer}
+                      </div>
+                    )}
+                  </div>
+                </div>
+
+                {/* Must-Know Quote */}
+                <div className="p-3.5 rounded-2xl bg-rose-500/10 border border-rose-500/25 space-y-1.5">
+                  <div className="flex items-center justify-between">
+                    <span className="font-bold text-rose-300 flex items-center gap-1.5 uppercase tracking-wider text-[11px]">
+                      <QuoteIcon className="w-3.5 h-3.5" />
+                      The #1 Quote To Memorize:
+                    </span>
+                    <span className="font-mono text-[10px] px-1.5 py-0.5 rounded bg-rose-500/20 text-rose-200 border border-rose-400/30">
+                      Line {sceneBriefing.mustKnowQuote.line}
+                    </span>
+                  </div>
+                  <blockquote className="font-serif italic text-xs text-amber-100 leading-snug">
+                    &ldquo;{sceneBriefing.mustKnowQuote.quote}&rdquo;
+                  </blockquote>
+                  <p className="text-slate-300 text-[11px]">
+                    <strong className="text-amber-200">{sceneBriefing.mustKnowQuote.speaker}</strong>: {sceneBriefing.mustKnowQuote.whyItMatters}
+                  </p>
+                </div>
+              </div>
+            </div>
+          ) : (
+            <div className="p-3 rounded-2xl bg-black/30 border border-white/10 text-xs text-slate-300">
+              <span className="font-bold text-amber-300 block mb-1">
+                🎯 Core Analytical Exam Thesis:
+              </span>
+              <p className="leading-relaxed">{chapter.examPromptTakeaway}</p>
+            </div>
+          )}
+        </div>
+      ) : (
+        <div className="liquid-glass-bento rounded-3xl p-5 sm:p-6 border border-emerald-500/35 bg-gradient-to-r from-emerald-500/10 via-teal-500/10 to-sky-500/10 relative overflow-hidden">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-4">
+            <div className="flex items-center gap-3">
+              <span className="p-2.5 rounded-2xl bg-emerald-500/20 text-emerald-300 border border-emerald-400/40 shadow-sm">
+                <BookOpen className="w-5 h-5 text-emerald-400" />
+              </span>
+              <div>
+                <div className="flex items-center gap-2">
+                  <h3 className="text-sm sm:text-base font-bold text-white tracking-tight">
+                    First-Time Reader Guided Companion
+                  </h3>
+                  <span className="px-2 py-0.5 rounded-full text-[10px] font-mono font-bold bg-emerald-400/20 text-emerald-300 border border-emerald-400/30">
+                    Guided Reading
+                  </span>
+                </div>
+                <p className="text-xs text-emerald-200/80">
+                  Orientation for understanding Shakespeare&apos;s stagecraft, archaic language, and character motivations.
+                </p>
+              </div>
+            </div>
+
+            <button
+              onClick={() => setStudyLensMode("primer")}
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl liquid-glass-pill text-xs font-bold text-emerald-200 hover:text-white shrink-0 self-start sm:self-center cursor-pointer border border-emerald-400/30 hover:border-emerald-400/60 transition-all"
+            >
+              <span>Open Scene Primer</span>
+              <ArrowRight className="w-3.5 h-3.5" />
+            </button>
+          </div>
+
+          {scenePrimer ? (
+            <div className="space-y-3">
+              {/* Characters Onstage */}
+              <div className="p-3 rounded-2xl bg-black/40 border border-white/10 text-xs">
+                <span className="font-bold text-emerald-300 block mb-1">
+                  🎭 Characters in Scene {chapter.displayCode}:
+                </span>
+                <div className="flex flex-wrap gap-1.5 mt-1">
+                  {scenePrimer.whoIsInTheScene.map((char, i) => (
+                    <span
+                      key={i}
+                      className="font-mono text-xs px-2 py-0.5 rounded-lg bg-emerald-500/15 text-emerald-200 border border-emerald-400/25"
+                    >
+                      {char}
+                    </span>
+                  ))}
+                </div>
+              </div>
+
+              {/* Story Context */}
+              <div className="p-3.5 rounded-2xl bg-emerald-950/30 border border-emerald-400/25 text-xs text-slate-200 leading-relaxed">
+                <span className="font-bold text-emerald-300 block mb-1">
+                  🧭 Context &amp; Dramatic Trajectory:
+                </span>
+                <p>{scenePrimer.storySoFar}</p>
+              </div>
+            </div>
+          ) : (
+            <div className="p-3.5 rounded-2xl bg-black/40 border border-white/10 text-xs text-slate-200 leading-relaxed">
+              <span className="font-bold text-emerald-300 block mb-1">
+                🧭 What to look for in Scene {chapter.displayCode}:
+              </span>
+              <p>
+                Pay attention to how Shakespeare establishes <strong>{chapter.setting}</strong> and the moral weather of Scotland. Notice how motifs of blood, equivocation, and divine order surface during key dialogue.
+              </p>
+            </div>
+          )}
+        </div>
+      )}
 
       {/* =====================================================================
           STUDY LENS SELECTOR: NEW LEARNER vs PRE-LESSON CRAM vs FULL FOLIO

@@ -9,9 +9,17 @@ import { LexiconDossierView } from "@/components/LexiconDossierView";
 import { RevisionCramView } from "@/components/RevisionCramView";
 import { FloatingBottomDock } from "@/components/FloatingBottomDock";
 import { StartupDiagnosticIntro } from "@/components/StartupDiagnosticIntro";
-import { ALL_CHAPTERS, BOOK_PARTS, ActId } from "@/data";
+import { ALL_CHAPTERS, BOOK_PARTS, THEMES_TAXONOMY, ActId } from "@/data";
 import { useStudyStore } from "@/store/useStudyStore";
-import { Sparkles, Layers, SearchX } from "lucide-react";
+import {
+  Sparkles,
+  Layers,
+  SearchX,
+  CheckCircle2,
+  ArrowRight,
+  BookOpen,
+  Monitor,
+} from "lucide-react";
 
 export default function MacbethStudyDashboardMacPage() {
   const {
@@ -27,6 +35,9 @@ export default function MacbethStudyDashboardMacPage() {
     academicStyle,
     deviceMode,
     setDeviceMode,
+    completedChapters,
+    toggleChapterComplete,
+    goToNextChapter,
   } = useStudyStore();
 
   const [showStartupIntro, setShowStartupIntro] = useState(true);
@@ -57,6 +68,24 @@ export default function MacbethStudyDashboardMacPage() {
     () =>
       ALL_CHAPTERS.find((c) => c.id === activeChapterId) || ALL_CHAPTERS[0],
     [activeChapterId]
+  );
+
+  const activeBookPart = useMemo(
+    () => BOOK_PARTS.find((p) => p.id === activeChapter.partId) || BOOK_PARTS[0],
+    [activeChapter.partId]
+  );
+
+  const currentChapterIndex = useMemo(
+    () => ALL_CHAPTERS.findIndex((c) => c.id === activeChapter.id),
+    [activeChapter.id]
+  );
+
+  const nextChapter = useMemo(
+    () =>
+      currentChapterIndex >= 0 && currentChapterIndex < ALL_CHAPTERS.length - 1
+        ? ALL_CHAPTERS[currentChapterIndex + 1]
+        : null,
+    [currentChapterIndex]
   );
 
   const filteredChapters = useMemo(() => {
@@ -143,26 +172,80 @@ export default function MacbethStudyDashboardMacPage() {
         }}
       />
 
+      {/* Slide-Up Scene Index Sheet for Mobile / iPhone Mode */}
+      <FloatingSidebar isMobileSheet={true} />
+
       {/* =====================================================================
           MAIN LIQUID GLASS SHELL WORKSPACE (MAC & IPHONE 16e HARMONIZED)
           ===================================================================== */}
       <div className="relative z-10 w-full mx-auto">
         <div className="flex flex-col lg:flex-row items-start gap-6">
           {/* Left Sticky Liquid Glass Navigation Sidebar (Only on Mac Desktop Mode) */}
-          {deviceMode !== "iphone16e" && <FloatingSidebar />}
+          {deviceMode !== "iphone16e" && <FloatingSidebar isMobileSheet={false} />}
 
           {/* Main Content Column */}
           <main className="flex-1 min-w-0 w-full">
             <TopCommandBar />
 
-            {/* If user is actively typing a search query while in single Bento mode, show matching scene pills */}
+            {/* iPhone 16e Mode Banner Alert */}
+            {deviceMode === "iphone16e" && (
+              <div className="liquid-glass-bento rounded-2xl p-2.5 mb-3 flex items-center justify-between text-xs border-amber-400/30 bg-amber-500/10">
+                <span className="text-amber-200">
+                  Viewing in <strong>iPhone 16e (390px)</strong> format.
+                </span>
+                <button
+                  onClick={() => setDeviceMode("mac")}
+                  className="flex items-center gap-1 px-2.5 py-1 rounded-xl bg-white/10 text-white font-bold hover:bg-white/20 transition-colors cursor-pointer"
+                >
+                  <Monitor className="w-3.5 h-3.5 text-sky-300" />
+                  <span>Switch to Mac</span>
+                </button>
+              </div>
+            )}
+
+            {/* Quick Horizontal Scene Scrubber Strip */}
+            {(viewMode === "focus" || viewMode === "stream") && (
+              <div className="w-full flex justify-center pb-3 mb-3">
+                <div className="liquid-glass-dock rounded-full px-2.5 py-1.5 flex items-center justify-start sm:justify-center gap-1.5 max-w-full overflow-x-auto no-scrollbar shadow-lg">
+                  {ALL_CHAPTERS.map((ch) => {
+                    const isCurrent = ch.id === activeChapter.id;
+                    const isDone = !!completedChapters[ch.id];
+                    return (
+                      <button
+                        key={ch.id}
+                        onClick={() => {
+                          setActiveChapter(ch.id);
+                          if (viewMode === "stream") {
+                            document
+                              .getElementById(`chapter-card-${ch.id}`)
+                              ?.scrollIntoView({ behavior: "instant" });
+                          } else {
+                            window.scrollTo(0, 0);
+                          }
+                        }}
+                        className={`px-3 py-1.5 rounded-full text-xs font-mono font-bold shrink-0 transition-all active:scale-95 cursor-pointer border ${
+                          isCurrent
+                            ? "bg-amber-500/35 text-white border-amber-300/60 shadow"
+                            : isDone
+                            ? "bg-emerald-500/20 text-emerald-300 border-emerald-400/40"
+                            : "bg-white/[0.06] hover:bg-white/15 text-slate-300 hover:text-white border-white/10"
+                        }`}
+                      >
+                        {ch.displayCode}
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+            )}
+
+            {/* Search Match Pill Bar */}
             {searchQuery.trim() && viewMode === "focus" && (
               <div className="liquid-glass-bento rounded-2xl p-4 mb-5 border border-amber-400/30">
                 <div className="flex items-center justify-between gap-2 mb-2.5">
                   <span className="font-mono text-xs text-amber-300 flex items-center gap-1.5">
                     <Sparkles className="w-3.5 h-3.5" />
-                    Search Matches Across All 31 Scenes (
-                    {filteredChapters.length})
+                    Search Matches Across All 31 Scenes ({filteredChapters.length})
                   </span>
                   <span className="text-[11px] text-slate-400 font-mono">
                     Click a scene pill to inspect
@@ -196,143 +279,206 @@ export default function MacbethStudyDashboardMacPage() {
             )}
 
             {/* ===============================================================
-                MODE 1: SINGLE SCENE BENTO FOCUS VIEW
+                VIEW WORKSPACE
                 =============================================================== */}
-            {viewMode === "focus" && (
-              <div key="view-focus" className="section-jelly-enter">
-                <ChapterBentoCard chapter={activeChapter} isDeferred={false} />
-              </div>
-            )}
-
-            {/* ===============================================================
-                MODE 2: CONTINUOUS ALL-31-SCENES SPEED-READ FLOW
-                =============================================================== */}
-            {viewMode === "stream" && (
-              <div key="view-stream" className="space-y-8 section-jelly-enter">
-                {/* Act Filter Bar & Narrative Arc Overviews */}
-                <div className="liquid-glass-bento rounded-3xl p-5">
-                  <div className="flex flex-wrap items-center justify-between gap-4 mb-4">
-                    <div className="flex items-center gap-2">
-                      <Layers className="w-4 h-4 text-amber-400" />
-                      <h2 className="text-base font-bold text-white">
-                        Continuous 31-Scene Speed-Read Stream
-                      </h2>
+            <div key={viewMode} className="liquid-view-enter">
+              {/* ===============================================================
+                  MODE 1: SINGLE SCENE BENTO FOCUS VIEW
+                  =============================================================== */}
+              {viewMode === "focus" && (
+                <div className="space-y-4">
+                  {/* Act Context Banner */}
+                  <div className="liquid-glass-bento rounded-3xl p-4 sm:p-5 flex flex-col md:flex-row md:items-center justify-between gap-4">
+                    <div className="space-y-1">
+                      <div className="flex items-center gap-2 text-xs font-mono uppercase tracking-wider text-amber-300">
+                        <BookOpen className="w-3.5 h-3.5 shrink-0" />
+                        <span>Act {activeBookPart.romanNumeral} • {activeBookPart.title}</span>
+                      </div>
+                      <p className="text-xs text-slate-300 leading-relaxed max-w-3xl">
+                        {activeBookPart.overview}
+                      </p>
                     </div>
 
-                    <div className="flex flex-wrap items-center gap-1.5">
-                      {(
-                        [
-                          { id: "all", label: "All 5 Acts (31 Scenes)" },
-                          { id: "act-1", label: "Act I (7)" },
-                          { id: "act-2", label: "Act II (4)" },
-                          { id: "act-3", label: "Act III (6)" },
-                          { id: "act-4", label: "Act IV (3)" },
-                          { id: "act-5", label: "Act V (11)" },
-                        ] as { id: ActId | "all"; label: string }[]
-                      ).map((tab) => (
+                    <div className="shrink-0 flex flex-wrap gap-1.5">
+                      {activeBookPart.dominantThemes.map((tId) => {
+                        const t = THEMES_TAXONOMY[tId];
+                        if (!t) return null;
+                        return (
+                          <span
+                            key={tId}
+                            className="px-2.5 py-1 rounded-full text-[11px] font-semibold border"
+                            style={{
+                              backgroundColor: t.badgeBg,
+                              borderColor: t.badgeBorder,
+                              color: t.badgeText,
+                            }}
+                          >
+                            {t.name}
+                          </span>
+                        );
+                      })}
+                    </div>
+                  </div>
+
+                  {/* Active Scene Bento Grid */}
+                  <div key={activeChapter.id} className="liquid-chapter-swap">
+                    <ChapterBentoCard chapter={activeChapter} isDeferred={false} />
+                  </div>
+
+                  {/* Seamless Next-Scene Speed-Read Transition Footer */}
+                  {nextChapter && (
+                    <div className="liquid-glass-bento rounded-3xl p-5 flex flex-col sm:flex-row items-center justify-between gap-4">
+                      <div>
+                        <div className="text-xs font-mono uppercase tracking-wider text-slate-400 mb-1">
+                          Up Next in Your Speed-Read Queue
+                        </div>
+                        <div className="text-base sm:text-lg font-bold text-white">
+                          {nextChapter.displayCode}: {nextChapter.title.replace(/^Act \d+, Scene \d+:\s*/, "")}
+                        </div>
+                        <div className="text-xs text-amber-300">
+                          {nextChapter.subtitle}
+                        </div>
+                      </div>
+
+                      <div className="flex items-center gap-2.5 shrink-0">
                         <button
-                          key={tab.id}
-                          onClick={() => setActivePartFilter(tab.id)}
-                          className={`px-3 py-1.5 rounded-xl text-xs font-mono transition-all cursor-pointer ${
-                            activePartFilter === tab.id
-                              ? "liquid-glass-pill-active text-white"
-                              : "liquid-glass-pill text-slate-300"
-                          }`}
+                          onClick={() => {
+                            if (!completedChapters[activeChapter.id]) {
+                              toggleChapterComplete(activeChapter.id);
+                            }
+                            goToNextChapter();
+                            window.scrollTo(0, 0);
+                          }}
+                          className="flex items-center gap-2 px-5 py-3 rounded-2xl text-xs font-bold bg-gradient-to-r from-emerald-500/30 to-amber-500/30 hover:from-emerald-500/40 hover:to-amber-500/40 text-white border border-emerald-400/50 shadow-lg cursor-pointer transition-all active:scale-95"
                         >
-                          {tab.label}
+                          <CheckCircle2 className="w-4 h-4 text-emerald-300" />
+                          <span>Complete {activeChapter.displayCode} &amp; Continue</span>
+                          <ArrowRight className="w-4 h-4" />
                         </button>
+                      </div>
+                    </div>
+                  )}
+                </div>
+              )}
+
+              {/* ===============================================================
+                  MODE 2: CONTINUOUS ALL-31-SCENES SPEED-READ FLOW
+                  =============================================================== */}
+              {viewMode === "stream" && (
+                <div className="space-y-8">
+                  {/* Act Filter Bar & Narrative Arc Overviews */}
+                  <div className="liquid-glass-bento rounded-3xl p-5">
+                    <div className="flex flex-wrap items-center justify-between gap-4 mb-4">
+                      <div className="flex items-center gap-2">
+                        <Layers className="w-4 h-4 text-amber-400" />
+                        <h2 className="text-base font-bold text-white">
+                          Continuous 31-Scene Speed-Read Stream
+                        </h2>
+                      </div>
+
+                      <div className="flex flex-wrap items-center gap-1.5">
+                        {(
+                          [
+                            { id: "all", label: "All 5 Acts (31 Scenes)" },
+                            { id: "act-1", label: "Act I (7)" },
+                            { id: "act-2", label: "Act II (4)" },
+                            { id: "act-3", label: "Act III (6)" },
+                            { id: "act-4", label: "Act IV (3)" },
+                            { id: "act-5", label: "Act V (11)" },
+                          ] as { id: ActId | "all"; label: string }[]
+                        ).map((tab) => (
+                          <button
+                            key={tab.id}
+                            onClick={() => setActivePartFilter(tab.id)}
+                            className={`px-3 py-1.5 rounded-xl text-xs font-mono transition-all cursor-pointer ${
+                              activePartFilter === tab.id
+                                ? "liquid-glass-pill-active text-white"
+                                : "liquid-glass-pill text-slate-300"
+                            }`}
+                          >
+                            {tab.label}
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+
+                    {/* Act Overviews Grid */}
+                    <div className="grid grid-cols-1 md:grid-cols-5 gap-3">
+                      {BOOK_PARTS.map((part) => (
+                        <div
+                          key={part.id}
+                          className="p-3.5 rounded-2xl bg-slate-950/55 border border-white/10"
+                        >
+                          <div className="flex items-center justify-between mb-1">
+                            <span className="font-mono text-[11px] font-bold text-amber-300 uppercase">
+                              Act {part.romanNumeral}
+                            </span>
+                            <span className="font-mono text-[10px] text-slate-400">
+                              {part.chapters.length} Scenes
+                            </span>
+                          </div>
+                          <p className="text-xs font-semibold text-white mb-1">
+                            {part.title.replace(/^Act [IVX]+:\s*/, "")}
+                          </p>
+                          <p className="text-[11px] text-slate-300 leading-relaxed mb-2 line-clamp-4">
+                            {part.overview}
+                          </p>
+                          <p className="text-[10px] font-mono text-rose-300/90">
+                            {part.narrativeArc}
+                          </p>
+                        </div>
                       ))}
                     </div>
                   </div>
 
-                  {/* Act Overviews Grid */}
-                  <div className="grid grid-cols-1 md:grid-cols-5 gap-3">
-                    {BOOK_PARTS.map((part) => (
-                      <div
-                        key={part.id}
-                        className="p-3.5 rounded-2xl bg-slate-950/55 border border-white/10"
+                  {/* All Matching Scene Cards */}
+                  {filteredChapters.length > 0 ? (
+                    filteredChapters.map((ch, idx) => (
+                      <ChapterBentoCard
+                        key={ch.id}
+                        chapter={ch}
+                        isDeferred={idx > 0}
+                      />
+                    ))
+                  ) : (
+                    <div className="liquid-glass-bento rounded-3xl p-12 text-center">
+                      <SearchX className="w-8 h-8 text-rose-400 mx-auto mb-3" />
+                      <h3 className="text-base font-bold text-white mb-1">
+                        No Scenes Match Your Filter
+                      </h3>
+                      <p className="text-xs text-slate-400 mb-4">
+                        Try clearing your search query or switching back to All 5
+                        Acts.
+                      </p>
+                      <button
+                        onClick={() => {
+                          setSearchQuery("");
+                          setActivePartFilter("all");
+                        }}
+                        className="liquid-glass-pill px-4 py-2 rounded-xl text-xs font-mono text-amber-300 cursor-pointer"
                       >
-                        <div className="flex items-center justify-between mb-1">
-                          <span className="font-mono text-[11px] font-bold text-amber-300 uppercase">
-                            Act {part.romanNumeral}
-                          </span>
-                          <span className="font-mono text-[10px] text-slate-400">
-                            {part.chapters.length} Scenes
-                          </span>
-                        </div>
-                        <p className="text-xs font-semibold text-white mb-1">
-                          {part.title.replace(/^Act [IVX]+:\s*/, "")}
-                        </p>
-                        <p className="text-[11px] text-slate-300 leading-relaxed mb-2 line-clamp-4">
-                          {part.overview}
-                        </p>
-                        <p className="text-[10px] font-mono text-rose-300/90">
-                          {part.narrativeArc}
-                        </p>
-                      </div>
-                    ))}
-                  </div>
+                        Reset Filters
+                      </button>
+                    </div>
+                  )}
                 </div>
+              )}
 
-                {/* All Matching Scene Cards */}
-                {filteredChapters.length > 0 ? (
-                  filteredChapters.map((ch, idx) => (
-                    <ChapterBentoCard
-                      key={ch.id}
-                      chapter={ch}
-                      isDeferred={idx > 0}
-                    />
-                  ))
-                ) : (
-                  <div className="liquid-glass-bento rounded-3xl p-12 text-center">
-                    <SearchX className="w-8 h-8 text-rose-400 mx-auto mb-3" />
-                    <h3 className="text-base font-bold text-white mb-1">
-                      No Scenes Match Your Filter
-                    </h3>
-                    <p className="text-xs text-slate-400 mb-4">
-                      Try clearing your search query or switching back to All 5
-                      Acts.
-                    </p>
-                    <button
-                      onClick={() => {
-                        setSearchQuery("");
-                        setActivePartFilter("all");
-                      }}
-                      className="liquid-glass-pill px-4 py-2 rounded-xl text-xs font-mono text-amber-300 cursor-pointer"
-                    >
-                      Reset Filters
-                    </button>
-                  </div>
-                )}
-              </div>
-            )}
+              {/* ===============================================================
+                  MODE 3: THEME & QUOTE MATRIX VIEW
+                  =============================================================== */}
+              {viewMode === "matrix" && <ThemeMatrixView />}
 
-            {/* ===============================================================
-                MODE 3: THEME & QUOTE MATRIX VIEW
-                =============================================================== */}
-            {viewMode === "matrix" && (
-              <div key="view-matrix" className="section-jelly-enter">
-                <ThemeMatrixView />
-              </div>
-            )}
+              {/* ===============================================================
+                  MODE 4: SYMBOLS, DRAMATIS PERSONAE & RHETORIC LEXICON
+                  =============================================================== */}
+              {viewMode === "lexicon" && <LexiconDossierView />}
 
-            {/* ===============================================================
-                MODE 4: SYMBOLS, DRAMATIS PERSONAE & RHETORIC LEXICON
-                =============================================================== */}
-            {viewMode === "lexicon" && (
-              <div key="view-lexicon" className="section-jelly-enter">
-                <LexiconDossierView />
-              </div>
-            )}
-
-            {/* ===============================================================
-                MODE 5: REVISION MATERIAL, FLASHCARDS & EXAM ESSAYS
-                =============================================================== */}
-            {viewMode === "revision" && (
-              <div key="view-revision" className="section-jelly-enter">
-                <RevisionCramView />
-              </div>
-            )}
+              {/* ===============================================================
+                  MODE 5: REVISION MATERIAL, FLASHCARDS & EXAM ESSAYS
+                  =============================================================== */}
+              {viewMode === "revision" && <RevisionCramView />}
+            </div>
           </main>
         </div>
       </div>

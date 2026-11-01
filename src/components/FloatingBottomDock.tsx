@@ -12,6 +12,7 @@ import {
   Compass,
   ArrowUp,
   GraduationCap,
+  ListFilter,
 } from "lucide-react";
 
 export function FloatingBottomDock() {
@@ -24,6 +25,7 @@ export function FloatingBottomDock() {
     toggleChapterComplete,
     speedReadMode,
     toggleSpeedReadMode,
+    setChapterSheetOpen,
   } = useStudyStore();
 
   const dockScrollRef = useRef<HTMLDivElement>(null);
@@ -69,6 +71,15 @@ export function FloatingBottomDock() {
           aria-label="Mac navigation dock"
           className="flex items-center justify-between gap-2 w-full overflow-x-auto no-scrollbar touch-pan-x overscroll-x-contain"
         >
+          {/* Mobile Index Trigger */}
+          <button
+            onClick={() => setChapterSheetOpen(true)}
+            className="lg:hidden p-1.5 rounded-full liquid-glass-pill text-amber-300 active:scale-90 cursor-pointer shrink-0"
+            title="Open Scene Index Sheet"
+          >
+            <ListFilter className="w-4 h-4" />
+          </button>
+
           {/* Previous Scene */}
           <button
             disabled={!prevChapter}
