@@ -8,7 +8,8 @@ Macbeth Codex is a native macOS application built for International Baccalaureat
  📸 Interface Preview & Navigation
 
  1. The Command Center (Hero Overview)
-![Hero Overview](Hero%20Overview.jpg)
+<img width="1441" height="928" alt="Hero Overview" src="https://github.com/user-attachments/assets/3e78e8c1-12aa-48fe-ba77-52c0a3adcc08" />
+
 
 The primary launchpad provides a high-level view of your syllabus progress and current study target:
 * Folio Mastery Tracker: Tracks completion across all 31 scenes and 78 narrative beats in real time, calculating estimated remaining study hours.
@@ -19,7 +20,8 @@ The primary launchpad provides a high-level view of your syllabus progress and c
 ---
 
  2. Analytical Hub & Theme Matrix
-![Analytical Hub](Analytical%20Hub.jpg)
+<img width="1441" height="928" alt="Analytical Hub" src="https://github.com/user-attachments/assets/5d8baeb4-636e-4b69-bd39-5569b40b3637" />
+
 
 Designed specifically for IB Paper 1, Paper 2, and Individual Oral (IO) preparation:
 * Motif Filter Tags: Filter textual analysis instantly across five core themes: Ambition, Fate vs. Free Will, Manhood & Gender, Appearance vs. Reality, and Supernatural Equivocation.
@@ -29,11 +31,13 @@ Designed specifically for IB Paper 1, Paper 2, and Individual Oral (IO) preparat
 ---
 
  3. Active Revision Modes
-![Continuous Flow](Continous%20Flow.jpg)
+<img width="1441" height="928" alt="Active Revision Mode" src="https://github.com/user-attachments/assets/8bfb02ab-14cb-4d2e-b1ac-06ed9fc29fe0" />
+
 
 * Continuous Flow Mode: Read uninterrupted scene analyses and critical commentaries in a clean, vertical stream without page reloads.
 
-![Active Revision Mode](Active%20Revision%20Mode.jpg)
+<img width="1441" height="928" alt="Active Revision Mode" src="https://github.com/user-attachments/assets/f746bddd-4c2c-459a-8011-2a1953fd98d5" />
+
 
 * Active Recall Cards: Test memory using interactive flashcards, quote fill-in-the-blanks, and thematic justification prompts.
 * Switch between modes at any time using the Study and Revision toggle in the top bar.
@@ -41,7 +45,8 @@ Designed specifically for IB Paper 1, Paper 2, and Individual Oral (IO) preparat
 ---
 
  4. Desktop Widgets (macOS WidgetKit)
-![Native Desktop Integration](Native%20Desktop%20Integration%20%28WidgetKit%29.jpg)
+<img width="430" height="817" alt="Native Desktop Integratoin (WidgetKit)" src="https://github.com/user-attachments/assets/34b7701b-40ff-44f0-8231-a62f1a37bb23" />
+
 
 Keep revision top-of-mind without keeping the full app open:
 * Live Study Counter: Displays your active revision streak, remaining scenes, and next scheduled scene on your desktop wallpaper or Notification Center.
