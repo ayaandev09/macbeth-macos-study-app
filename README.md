@@ -8,7 +8,8 @@ Macbeth Codex is a native macOS application built for International Baccalaureat
  📸 Interface Preview & Navigation
 
  1. The Command Center (Hero Overview)
-![Hero Overview](docs/Hero%20Overview.png)
+<img width="1441" height="928" alt="Hero Overview" src="https://github.com/user-attachments/assets/f8991c11-7459-40b1-b695-1d0de604effb" />
+
 
 
 The primary launchpad provides a high-level view of your syllabus progress and current study target:
@@ -20,7 +21,8 @@ The primary launchpad provides a high-level view of your syllabus progress and c
 ---
 
  2. Analytical Hub & Theme Matrix
-![Analytical Hub](docs/Analytical%20Hub.png)
+<img width="1441" height="928" alt="Analytical Hub" src="https://github.com/user-attachments/assets/b1125652-d1d1-4490-90cf-eaafd307b683" />
+
 
 
 Designed specifically for IB Paper 1, Paper 2, and Individual Oral (IO) preparation:
@@ -31,10 +33,12 @@ Designed specifically for IB Paper 1, Paper 2, and Individual Oral (IO) preparat
 ---
 
  3. Active Revision Modes
-![Continuous Flow](docs/Continous%20Flow.png)
+<img width="1441" height="928" alt="Active Revision Mode" src="https://github.com/user-attachments/assets/f757daca-0385-4a62-9bd3-a43c52bced03" />
+
 
 * Continuous Flow Mode: Read uninterrupted scene analyses and critical commentaries in a clean, vertical stream without page reloads.
-![Active Revision Mode](docs/Active%20Revision%20Mode.png)
+<img width="1442" height="922" alt="Continous Flow" src="https://github.com/user-attachments/assets/79e2e947-a5a3-492d-960a-267e78550843" />
+
 
 
 
@@ -44,7 +48,8 @@ Designed specifically for IB Paper 1, Paper 2, and Individual Oral (IO) preparat
 ---
 
  4. Desktop Widgets (macOS WidgetKit)
-![Native Desktop Integration](docs/Native%20Desktop%20Integration%20%28WidgetKit%29.png)
+<img width="430" height="817" alt="Native Desktop Integratoin (WidgetKit)" src="https://github.com/user-attachments/assets/4ebb3351-edfa-4c9a-8a2e-bf33f97484ab" />
+
 
 
 Keep revision top-of-mind without keeping the full app open:
