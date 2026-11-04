@@ -87,15 +87,18 @@ Keep revision top-of-mind without keeping the full app open:
 
 🛠️ macOS Installation Instructions
 
-Because this is a free, open-source app, macOS Gatekeeper may show a warning saying the app is "damaged" or "cannot be opened" because it hasn't been signed by a paid Apple Developer account. 
+Because this is a free, open-source app, macOS Gatekeeper may block it from opening initially because it hasn't been signed by a paid Apple Developer account. 
 
 Here is how to safely install and open it:
 
 1. Download the latest `.dmg` file from the Releases page and double-click to open it.
 2. Drag the **Macbeth** app into your **Applications** folder.
-3. Open your Applications folder in Finder.
-4. **Right-click (or Control-click)** on the app and select **Open**.
-5. Click **Open** again on the security popup. 
+3. Try to open the app by double-clicking it. You will see a warning that it cannot be opened. Click **Done** or **OK**.
+4. Open your Mac's **System Settings** and navigate to **Privacy & Security**[span_0](start_span)[span_0](end_span).
+5. Scroll down to the **Security** section. You will see a message stating the app was blocked to protect your Mac[span_1](start_span)[span_1](end_span).
+6. Click the **Open Anyway** button next to that message[span_2](start_span)[span_2](end_span).
+7. Enter your Mac password or use Touch ID, then click **Open** on the final popup.
 
-*Note: You only need to do this right-click bypass the very first time. Afterward, you can open the app normally from your Launchpad or Spotlight.*
+*Note: You only need to do this the very first time. Afterward, you can open the app normally from your Launchpad or Spotlight.*
+
 
