@@ -36,7 +36,8 @@ Designed specifically for IB Paper 1, Paper 2, and Individual Oral (IO) preparat
 
 * Continuous Flow Mode: Read uninterrupted scene analyses and critical commentaries in a clean, vertical stream without page reloads.
 
-<img width="1441" height="928" alt="Active Revision Mode" src="https://github.com/user-attachments/assets/f746bddd-4c2c-459a-8011-2a1953fd98d5" />
+<img width="1442" height="922" alt="Continous Flow" src="https://github.com/user-attachments/assets/8d138275-6d0a-49ed-ad70-308f38f7917e" />
+
 
 
 * Active Recall Cards: Test memory using interactive flashcards, quote fill-in-the-blanks, and thematic justification prompts.
