@@ -3,14 +3,24 @@
 import React, { useMemo, useState, useEffect } from "react";
 import { FloatingSidebar } from "@/components/FloatingSidebar";
 import { TopCommandBar } from "@/components/TopCommandBar";
+import { WidgetBridge } from "@/components/WidgetBridge";
 import { ChapterBentoCard } from "@/components/ChapterBentoCard";
+import { StudyMiniHomepage } from "@/components/StudyMiniHomepage";
 import { ThemeMatrixView } from "@/components/ThemeMatrixView";
 import { LexiconDossierView } from "@/components/LexiconDossierView";
 import { RevisionCramView } from "@/components/RevisionCramView";
 import { FloatingBottomDock } from "@/components/FloatingBottomDock";
 import { StartupDiagnosticIntro } from "@/components/StartupDiagnosticIntro";
+import { CinematicStartupIntro } from "@/components/CinematicStartupIntro";
+import { ChromaticButton } from "@/components/chromatic-button";
 import { ALL_CHAPTERS, BOOK_PARTS, THEMES_TAXONOMY, ActId } from "@/data";
 import { useStudyStore } from "@/store/useStudyStore";
+import {
+  initLiveSyncConnection,
+  decodeSyncFromUrl,
+  pullSyncFromServer,
+  pushSyncToServer,
+} from "@/lib/syncService";
 import {
   Sparkles,
   Layers,
@@ -18,7 +28,6 @@ import {
   CheckCircle2,
   ArrowRight,
   BookOpen,
-  Monitor,
 } from "lucide-react";
 
 export default function MacbethStudyDashboardMacPage() {
@@ -38,6 +47,7 @@ export default function MacbethStudyDashboardMacPage() {
     completedChapters,
     toggleChapterComplete,
     goToNextChapter,
+    applyRemoteSync,
   } = useStudyStore();
 
   const [showStartupIntro, setShowStartupIntro] = useState(true);
@@ -51,18 +61,31 @@ export default function MacbethStudyDashboardMacPage() {
     }
   }, [academicStyle]);
 
-  // Detect URL parameter ?view=mac or ?view=iphone
+  // Live sync hydration
   useEffect(() => {
     if (typeof window !== "undefined") {
       const params = new URLSearchParams(window.location.search);
-      const viewParam = params.get("view");
-      if (viewParam === "mac") {
-        setDeviceMode("mac");
-      } else if (viewParam === "iphone" || viewParam === "iphone16e") {
-        setDeviceMode("iphone16e");
+      const syncParam = params.get("sync");
+      if (syncParam) {
+        const decoded = decodeSyncFromUrl(syncParam);
+        if (decoded) {
+          applyRemoteSync(decoded);
+        }
+      } else {
+        pullSyncFromServer().then((remote) => {
+          if (remote) applyRemoteSync(remote);
+        });
       }
     }
-  }, [setDeviceMode]);
+
+    const disconnectSync = initLiveSyncConnection((incoming) => {
+      applyRemoteSync(incoming);
+    });
+
+    return () => {
+      disconnectSync();
+    };
+  }, [applyRemoteSync]);
 
   const activeChapter = useMemo(
     () =>
@@ -91,9 +114,10 @@ export default function MacbethStudyDashboardMacPage() {
   const filteredChapters = useMemo(() => {
     const q = searchQuery.trim().toLowerCase();
     return ALL_CHAPTERS.filter((ch) => {
-      const matchesPart =
-        activePartFilter === "all" || ch.partId === activePartFilter;
-      if (!matchesPart) return false;
+      // Global search across all acts when query is active
+      if (!q && activePartFilter !== "all" && ch.partId !== activePartFilter) {
+        return false;
+      }
       if (!q) return true;
 
       const inHeader =
@@ -126,20 +150,25 @@ export default function MacbethStudyDashboardMacPage() {
     });
   }, [searchQuery, activePartFilter]);
 
-  return (
-    <div
-      className={
-        deviceMode === "iphone16e"
-          ? "iphone-16e-shell"
-          : "mac-dashboard-shell"
+  // When searching in focus mode, automatically sync active scene to first search match
+  useEffect(() => {
+    if (searchQuery.trim() && filteredChapters.length > 0) {
+      if (!filteredChapters.some((ch) => ch.id === activeChapterId)) {
+        setActiveChapter(filteredChapters[0].id);
       }
-    >
+    }
+  }, [searchQuery, filteredChapters, activeChapterId, setActiveChapter]);
+
+  return (
+    <div className="mac-dashboard-shell">
       {/* =====================================================================
           CINEMATIC STARTUP DIAGNOSTICS & TELEMETRY
           ===================================================================== */}
-      {showStartupIntro && (
-        <StartupDiagnosticIntro onComplete={() => setShowStartupIntro(false)} />
-      )}
+      <CinematicStartupIntro
+        isOpen={showStartupIntro}
+        onClose={() => setShowStartupIntro(false)}
+        onComplete={() => setShowStartupIntro(false)}
+      />
       {diagnosticsModalOpen && (
         <StartupDiagnosticIntro
           isManualTelemetry={true}
@@ -148,96 +177,19 @@ export default function MacbethStudyDashboardMacPage() {
       )}
 
       {/* =====================================================================
-          GPU-ACCELERATED LIQUID AMBIENT ORBS (ZERO BLUR REPAINT OVERHEAD)
+          MAIN LIQUID GLASS SHELL WORKSPACE (MAC WIDESCREEN DASHBOARD)
           ===================================================================== */}
-      <div
-        className="liquid-ambient-orb w-[700px] h-[700px] -top-36 left-1/4"
-        style={{
-          background:
-            "radial-gradient(circle, rgba(244,63,94,0.2) 0%, rgba(244,63,94,0.03) 65%, transparent 100%)",
-        }}
-      />
-      <div
-        className="liquid-ambient-orb w-[650px] h-[650px] top-1/3 -right-28"
-        style={{
-          background:
-            "radial-gradient(circle, rgba(251,191,36,0.18) 0%, rgba(251,191,36,0.03) 65%, transparent 100%)",
-        }}
-      />
-      <div
-        className="liquid-ambient-orb w-[720px] h-[720px] -bottom-44 left-1/3"
-        style={{
-          background:
-            "radial-gradient(circle, rgba(52,211,153,0.15) 0%, rgba(52,211,153,0.02) 65%, transparent 100%)",
-        }}
-      />
+      <div className="relative z-10 w-full flex flex-col lg:flex-row gap-5 items-start">
+        {/* Left Sticky Liquid Glass Navigation Sidebar */}
+        <FloatingSidebar isMobileSheet={false} />
 
-      {/* Slide-Up Scene Index Sheet for Mobile / iPhone Mode */}
-      <FloatingSidebar isMobileSheet={true} />
-
-      {/* =====================================================================
-          MAIN LIQUID GLASS SHELL WORKSPACE (MAC & IPHONE 16e HARMONIZED)
-          ===================================================================== */}
-      <div className="relative z-10 w-full mx-auto">
-        <div className="flex flex-col lg:flex-row items-start gap-6">
-          {/* Left Sticky Liquid Glass Navigation Sidebar (Only on Mac Desktop Mode) */}
-          {deviceMode !== "iphone16e" && <FloatingSidebar isMobileSheet={false} />}
-
-          {/* Main Content Column */}
-          <main className="flex-1 min-w-0 w-full">
+        {/* Main Content Column */}
+        <main className="flex-1 min-w-0 w-full pb-36">
+            <WidgetBridge />
             <TopCommandBar />
 
-            {/* iPhone 16e Mode Banner Alert */}
-            {deviceMode === "iphone16e" && (
-              <div className="liquid-glass-bento rounded-2xl p-2.5 mb-3 flex items-center justify-between text-xs border-amber-400/30 bg-amber-500/10">
-                <span className="text-amber-200">
-                  Viewing in <strong>iPhone 16e (390px)</strong> format.
-                </span>
-                <button
-                  onClick={() => setDeviceMode("mac")}
-                  className="flex items-center gap-1 px-2.5 py-1 rounded-xl bg-white/10 text-white font-bold hover:bg-white/20 transition-colors cursor-pointer"
-                >
-                  <Monitor className="w-3.5 h-3.5 text-sky-300" />
-                  <span>Switch to Mac</span>
-                </button>
-              </div>
-            )}
-
-            {/* Quick Horizontal Scene Scrubber Strip */}
-            {(viewMode === "focus" || viewMode === "stream") && (
-              <div className="w-full flex justify-center pb-3 mb-3">
-                <div className="liquid-glass-dock rounded-full px-2.5 py-1.5 flex items-center justify-start sm:justify-center gap-1.5 max-w-full overflow-x-auto no-scrollbar shadow-lg">
-                  {ALL_CHAPTERS.map((ch) => {
-                    const isCurrent = ch.id === activeChapter.id;
-                    const isDone = !!completedChapters[ch.id];
-                    return (
-                      <button
-                        key={ch.id}
-                        onClick={() => {
-                          setActiveChapter(ch.id);
-                          if (viewMode === "stream") {
-                            document
-                              .getElementById(`chapter-card-${ch.id}`)
-                              ?.scrollIntoView({ behavior: "instant" });
-                          } else {
-                            window.scrollTo(0, 0);
-                          }
-                        }}
-                        className={`px-3 py-1.5 rounded-full text-xs font-mono font-bold shrink-0 transition-all active:scale-95 cursor-pointer border ${
-                          isCurrent
-                            ? "bg-amber-500/35 text-white border-amber-300/60 shadow"
-                            : isDone
-                            ? "bg-emerald-500/20 text-emerald-300 border-emerald-400/40"
-                            : "bg-white/[0.06] hover:bg-white/15 text-slate-300 hover:text-white border-white/10"
-                        }`}
-                      >
-                        {ch.displayCode}
-                      </button>
-                    );
-                  })}
-                </div>
-              </div>
-            )}
+            {/* Mini Homepage & Live Widget Telemetry Hub */}
+            <StudyMiniHomepage />
 
             {/* Search Match Pill Bar */}
             {searchQuery.trim() && viewMode === "focus" && (
@@ -286,38 +238,54 @@ export default function MacbethStudyDashboardMacPage() {
                   MODE 1: SINGLE SCENE BENTO FOCUS VIEW
                   =============================================================== */}
               {viewMode === "focus" && (
-                <div className="space-y-4">
-                  {/* Act Context Banner */}
-                  <div className="liquid-glass-bento rounded-3xl p-4 sm:p-5 flex flex-col md:flex-row md:items-center justify-between gap-4">
-                    <div className="space-y-1">
-                      <div className="flex items-center gap-2 text-xs font-mono uppercase tracking-wider text-amber-300">
-                        <BookOpen className="w-3.5 h-3.5 shrink-0" />
-                        <span>Act {activeBookPart.romanNumeral} • {activeBookPart.title}</span>
+                <div className="space-y-5">
+                  {/* Act Context Banner - 100% Full-Width Bulletproof Native Card */}
+                  <div className="liquid-glass-bento rounded-3xl p-5 mb-5 border border-white/15 shadow-xl bg-gradient-to-br from-white/[0.07] to-white/[0.02] backdrop-blur-xl space-y-3">
+                    <div className="flex items-center justify-between gap-3 border-b border-white/10 pb-3">
+                      <div className="flex items-center gap-2.5 min-w-0">
+                        <div className="p-2 rounded-xl bg-amber-500/20 text-amber-300 border border-amber-400/30 shrink-0">
+                          <BookOpen className="w-4 h-4" />
+                        </div>
+                        <div className="min-w-0">
+                          <span className="text-[10px] font-mono font-bold tracking-wider text-amber-400 uppercase block">
+                            Act {activeBookPart.romanNumeral} Overview
+                          </span>
+                          <h2 className="text-sm sm:text-base font-bold text-white tracking-tight truncate">
+                            {activeBookPart.title.replace(/^Act [IVX]+:\s*/, "")}
+                          </h2>
+                        </div>
                       </div>
-                      <p className="text-xs text-slate-300 leading-relaxed max-w-3xl">
-                        {activeBookPart.overview}
-                      </p>
+                      <span className="px-3 py-1 rounded-full text-xs font-mono font-bold bg-amber-400/15 text-amber-300 border border-amber-400/30 shrink-0">
+                        {activeBookPart.chapters.length} Scenes
+                      </span>
                     </div>
 
-                    <div className="shrink-0 flex flex-wrap gap-1.5">
-                      {activeBookPart.dominantThemes.map((tId) => {
-                        const t = THEMES_TAXONOMY[tId];
-                        if (!t) return null;
-                        return (
-                          <span
-                            key={tId}
-                            className="px-2.5 py-1 rounded-full text-[11px] font-semibold border"
-                            style={{
-                              backgroundColor: t.badgeBg,
-                              borderColor: t.badgeBorder,
-                              color: t.badgeText,
-                            }}
-                          >
-                            {t.name}
-                          </span>
-                        );
-                      })}
-                    </div>
+                    <p className="text-xs sm:text-sm text-slate-200/90 leading-relaxed w-full">
+                      {activeBookPart.overview}
+                    </p>
+
+                    {activeBookPart.dominantThemes && activeBookPart.dominantThemes.length > 0 && (
+                      <div className="pt-1 flex flex-wrap items-center gap-2">
+                        <span className="text-[11px] font-mono text-slate-400 mr-1">Act Themes:</span>
+                        {activeBookPart.dominantThemes.map((tId) => {
+                          const t = THEMES_TAXONOMY[tId];
+                          if (!t) return null;
+                          return (
+                            <span
+                              key={tId}
+                              className="px-2.5 py-1 rounded-full text-[11px] font-semibold border transition-all hover:brightness-110 cursor-default"
+                              style={{
+                                backgroundColor: t.badgeBg,
+                                borderColor: t.badgeBorder,
+                                color: t.badgeText,
+                              }}
+                            >
+                              {t.shortName || t.name}
+                            </span>
+                          );
+                        })}
+                      </div>
+                    )}
                   </div>
 
                   {/* Active Scene Bento Grid */}
@@ -341,7 +309,7 @@ export default function MacbethStudyDashboardMacPage() {
                       </div>
 
                       <div className="flex items-center gap-2.5 shrink-0">
-                        <button
+                        <ChromaticButton
                           onClick={() => {
                             if (!completedChapters[activeChapter.id]) {
                               toggleChapterComplete(activeChapter.id);
@@ -349,12 +317,29 @@ export default function MacbethStudyDashboardMacPage() {
                             goToNextChapter();
                             window.scrollTo(0, 0);
                           }}
-                          className="flex items-center gap-2 px-5 py-3 rounded-2xl text-xs font-bold bg-gradient-to-r from-emerald-500/30 to-amber-500/30 hover:from-emerald-500/40 hover:to-amber-500/40 text-white border border-emerald-400/50 shadow-lg cursor-pointer transition-all active:scale-95"
+                          color="#00802f"
+                          colorMode="spectrum"
+                          speed={0.7}
+                          paused={false}
+                          phase={0}
+                          feather={100}
+                          projectionScale={174.7}
+                          intensity={1.4}
+                          grain={0.105}
+                          seed={7}
+                          borderRadius={50}
+                          hoverEffect="brighten"
+                          entrance="blur-up"
+                          entranceSpeed={1}
+                          entranceBlur={10}
+                          entranceDistance={20}
+                          entranceScale={0.65}
+                          className="!min-w-[240px] !h-12 !px-6 !text-xs font-bold shadow-xl cursor-pointer"
                         >
-                          <CheckCircle2 className="w-4 h-4 text-emerald-300" />
+                          <CheckCircle2 className="w-4 h-4 text-emerald-300 mr-2" />
                           <span>Complete {activeChapter.displayCode} &amp; Continue</span>
-                          <ArrowRight className="w-4 h-4" />
-                        </button>
+                          <ArrowRight className="w-4 h-4 text-white ml-2" />
+                        </ChromaticButton>
                       </div>
                     </div>
                   )}
@@ -480,13 +465,9 @@ export default function MacbethStudyDashboardMacPage() {
               {viewMode === "revision" && <RevisionCramView />}
             </div>
           </main>
-        </div>
       </div>
 
-      {/* =====================================================================
-          FLOATING LIQUID GLASS BOTTOM DOCK
-          ===================================================================== */}
-      <FloatingBottomDock />
+
     </div>
   );
 }

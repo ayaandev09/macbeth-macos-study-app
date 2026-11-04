@@ -3,6 +3,7 @@
 import React, { useState } from "react";
 import { THEMES_TAXONOMY, ALL_CHAPTERS, ThemeId } from "@/data";
 import { useStudyStore } from "@/store/useStudyStore";
+import { QuoteNetwork } from "@/components/QuoteNetwork";
 import {
   Network,
   Quote as QuoteIcon,
@@ -431,6 +432,8 @@ export function ThemeMatrixView() {
           })}
         </div>
       </div>
+
+      <QuoteNetwork />
     </div>
   );
 }

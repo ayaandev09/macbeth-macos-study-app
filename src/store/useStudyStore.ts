@@ -19,7 +19,7 @@ interface StudyStoreState {
   studyLensMode: StudyLensMode;
   studyGoal: StudyGoal;
   academicStyle: AcademicStyle;
-  deviceMode: DeviceMode;
+  deviceMode: "mac";
   speedReadMode: boolean;
   searchQuery: string;
   sidebarCollapsed: boolean;
@@ -59,6 +59,7 @@ interface StudyStoreState {
   resetAllProgress: () => void;
   goToNextChapter: () => void;
   goToPrevChapter: () => void;
+  applyRemoteSync: (payload: any) => void;
 }
 
 export const useStudyStore = create<StudyStoreState>()(
@@ -122,9 +123,9 @@ export const useStudyStore = create<StudyStoreState>()(
         set({ academicStyle: style });
       },
 
-      setDeviceMode: (device) =>
+      setDeviceMode: () =>
         set({
-          deviceMode: device,
+          deviceMode: "mac",
         }),
 
       setFlashcardScore: (cardId, status) =>
@@ -278,6 +279,16 @@ export const useStudyStore = create<StudyStoreState>()(
           set({ activeChapterId: ALL_CHAPTERS[idx - 1].id });
         }
       },
+
+      applyRemoteSync: (payload) =>
+        set((state) => ({
+          ...(payload.activeChapterId ? { activeChapterId: payload.activeChapterId } : {}),
+          ...(payload.studyGoal ? { studyGoal: payload.studyGoal } : {}),
+          ...(payload.academicStyle ? { academicStyle: payload.academicStyle } : {}),
+          ...(payload.completedChapters
+            ? { completedChapters: { ...state.completedChapters, ...payload.completedChapters } }
+            : {}),
+        })),
     }),
     {
       name: "shakespeare-macbeth-liquid-study-store-v1",
@@ -299,7 +310,6 @@ export const useStudyStore = create<StudyStoreState>()(
         speedReadMode: state.speedReadMode,
         studyGoal: state.studyGoal,
         academicStyle: state.academicStyle,
-        deviceMode: state.deviceMode,
       }),
     }
   )

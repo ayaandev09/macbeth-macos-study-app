@@ -165,8 +165,19 @@ export const StartupDiagnosticIntro: React.FC<StartupDiagnosticIntroProps> = ({
   const [measuredFps, setMeasuredFps] = useState(120);
   const [isExiting, setIsExiting] = useState(false);
   const [beatProgress, setBeatProgress] = useState(0);
+  const [showFullModal, setShowFullModal] = useState(isManualTelemetry);
 
   const activeBeat = DRAMATIC_BEATS[activeBeatIndex];
+
+  // Auto-dismiss the non-blocking startup telemetry capsule after 5.2s
+  useEffect(() => {
+    if (!isManualTelemetry && !showFullModal) {
+      const timer = setTimeout(() => {
+        handleLaunch();
+      }, 5200);
+      return () => clearTimeout(timer);
+    }
+  }, [isManualTelemetry, showFullModal]);
 
   // Real-time Hardware FPS Meter (RAF-based compositor frequency)
   useEffect(() => {
@@ -193,7 +204,7 @@ export const StartupDiagnosticIntro: React.FC<StartupDiagnosticIntroProps> = ({
   useEffect(() => {
     if (isPaused) return;
 
-    const DURATION_MS = 3800;
+    const DURATION_MS = 5200;
     const STEP_MS = 50;
     let elapsed = 0;
 
@@ -249,6 +260,56 @@ export const StartupDiagnosticIntro: React.FC<StartupDiagnosticIntroProps> = ({
     }, 320);
   };
 
+  if (!showFullModal) {
+    return (
+      <aside
+        aria-label="Liquid Glass Startup Telemetry Capsule"
+        className={`fixed top-4 left-1/2 -translate-x-1/2 z-50 pointer-events-auto transition-all duration-600 ease-[cubic-bezier(0.16,1,0.3,1)] ${
+          isExiting
+            ? "opacity-0 -translate-y-6 scale-90 pointer-events-none"
+            : "liquid-jelly-enter"
+        }`}
+      >
+        <div className="liquid-glass-dock rounded-full px-4 py-2 flex items-center gap-3.5 shadow-2xl border border-amber-300/40 bg-slate-950/85 backdrop-blur-2xl liquid-pulse-rim">
+          <div className="w-8 h-8 rounded-full bg-gradient-to-tr from-amber-500/30 via-rose-500/30 to-purple-500/30 border border-amber-300/40 flex items-center justify-center shrink-0">
+            <Crown className="w-4 h-4 text-amber-300 animate-pulse" />
+          </div>
+
+          <div className="flex flex-col">
+            <div className="flex items-center gap-2">
+              <span className="font-mono text-[11px] font-bold text-amber-300 uppercase tracking-wider">
+                DUNSINANE // 1606
+              </span>
+              <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-ping" />
+              <span className="font-mono text-[10px] text-emerald-300 font-bold">
+                {measuredFps} FPS // 0.4ms
+              </span>
+            </div>
+            <span className="text-[11px] text-slate-300 font-medium">
+              31 First Folio Scenes • Native Liquid Glass Active
+            </span>
+          </div>
+
+          <div className="flex items-center gap-1.5 pl-2 border-l border-white/15">
+            <button
+              onClick={() => setShowFullModal(true)}
+              className="px-2.5 py-1 rounded-full text-xs font-semibold bg-white/10 hover:bg-white/20 text-white transition-all active:scale-95 cursor-pointer"
+            >
+              Tour Beats
+            </button>
+            <button
+              onClick={handleLaunch}
+              className="p-1 rounded-full hover:bg-white/10 text-slate-400 hover:text-white transition-all active:scale-90 cursor-pointer"
+              title="Dismiss"
+            >
+              <X className="w-3.5 h-3.5" />
+            </button>
+          </div>
+        </div>
+      </aside>
+    );
+  }
+
   return (
     <div
       role="dialog"
@@ -284,8 +345,8 @@ export const StartupDiagnosticIntro: React.FC<StartupDiagnosticIntroProps> = ({
         {/* Top Header: Scottish Crown & Live Diagnostics Telemetry */}
         <div className="flex items-center justify-between pb-4 mb-4 border-b border-white/10 shrink-0">
           <div className="flex items-center gap-3.5">
-            <div className="w-11 h-11 rounded-2xl bg-gradient-to-br from-rose-500/30 via-amber-500/25 to-emerald-500/25 border border-white/20 flex items-center justify-center shadow-inner shrink-0">
-              <Crown className="w-6 h-6 text-amber-300" />
+            <div className="w-11 h-11 rounded-2xl bg-gradient-to-br from-rose-500/30 via-amber-500/25 to-emerald-500/25 border border-white/20 flex items-center justify-center shadow-inner shrink-0 overflow-hidden p-1.5">
+              <img src="/logo.svg" alt="Dunsinane Royal Crown Logo" className="w-full h-full object-contain" />
             </div>
 
             <div>

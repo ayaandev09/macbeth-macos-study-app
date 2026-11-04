@@ -10,6 +10,7 @@ import {
 } from "@/data";
 import { useStudyStore } from "@/store/useStudyStore";
 import { ActId } from "@/data/types";
+import { ChromaticButton } from "./chromatic-button";
 import {
   CheckCircle2,
   Circle,
@@ -40,7 +41,6 @@ export function FloatingSidebar({ isMobileSheet = false }: FloatingSidebarProps)
     resetAllProgress,
     chapterSheetOpen,
     setChapterSheetOpen,
-    deviceMode,
   } = useStudyStore();
 
   const [expandedParts, setExpandedParts] = useState<Record<ActId, boolean>>({
@@ -280,7 +280,7 @@ export function FloatingSidebar({ isMobileSheet = false }: FloatingSidebarProps)
           <div className="flex items-center justify-between pb-3 mb-2 border-b border-white/10 shrink-0">
             <div>
               <span className="text-[10px] font-bold tracking-[0.2em] uppercase text-amber-300 block">
-                MACBETH INDEX • {deviceMode === "mac" ? "MAC DESKTOP" : "IPHONE 16e"}
+                MACBETH INDEX • MAC CODEX
               </span>
               <h2 className="text-base font-bold text-white font-display">
                 5 Acts &amp; 31 Scenes
@@ -312,40 +312,35 @@ export function FloatingSidebar({ isMobileSheet = false }: FloatingSidebarProps)
   }
 
   return (
-    <aside className="w-full lg:w-[340px] xl:w-[360px] shrink-0">
-      <div className="liquid-glass-sidebar rounded-3xl p-5 lg:sticky lg:top-6 lg:max-h-[calc(100dvh-3rem)] flex flex-col">
-        {/* Top Dunsinane Royal Identity Header */}
-        <div className="flex items-center justify-between gap-3 pb-4 border-b border-white/10 shrink-0">
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-2xl bg-gradient-to-br from-rose-500/25 via-amber-500/20 to-emerald-500/20 border border-white/20 flex items-center justify-center shadow-inner">
-              <Crown className="w-5 h-5 text-amber-300" />
-            </div>
-            <div>
-              <div className="flex items-center gap-2">
-                <span className="font-mono text-[10px] tracking-[0.22em] uppercase text-amber-300 font-semibold">
-                  DUNSINANE // 1606
-                </span>
-                <span className="inline-block w-1.5 h-1.5 rounded-full bg-rose-400 animate-pulse" />
-              </div>
-              <h1 className="text-base font-semibold tracking-tight text-white font-display">
-                Macbeth Study Shell
-              </h1>
-            </div>
+    <aside className="hidden lg:flex w-full lg:w-[300px] xl:w-[330px] shrink-0 lg:sticky lg:top-5 lg:h-[calc(100vh-2.5rem)] flex-col liquid-glass-sidebar rounded-3xl p-4 overflow-hidden select-none z-20">
+      {/* Top Dunsinane Royal Identity Header */}
+      <div className="flex items-center justify-between pb-3 mb-3 border-b border-white/10 shrink-0">
+        <div className="flex items-center gap-2.5">
+          <div className="w-9 h-9 rounded-2xl bg-gradient-to-br from-rose-500/25 to-amber-500/20 border border-amber-400/30 flex items-center justify-center overflow-hidden p-1">
+            <img src="/logo.svg" alt="Dunsinane Crown Logo" className="w-full h-full object-contain" />
           </div>
-
-          {completedCount > 0 && (
-            <button
-              onClick={resetAllProgress}
-              title="Reset reading progress"
-              className="liquid-glass-pill p-2 rounded-xl text-slate-400 hover:text-rose-300 cursor-pointer"
-            >
-              <RotateCcw className="w-3.5 h-3.5" />
-            </button>
-          )}
+          <div>
+            <span className="font-mono text-[10px] tracking-[0.22em] uppercase text-amber-300 font-semibold block">
+              DUNSINANE // 1606
+            </span>
+            <h1 className="text-sm font-bold text-white tracking-tight">
+              Macbeth Codex
+            </h1>
+          </div>
         </div>
 
-        {sidebarBody}
+        {completedCount > 0 && (
+          <button
+            onClick={resetAllProgress}
+            title="Reset progress"
+            className="p-2 rounded-xl text-slate-400 hover:text-white hover:bg-white/10 transition-colors cursor-pointer"
+          >
+            <RotateCcw className="w-3.5 h-3.5" />
+          </button>
+        )}
       </div>
+
+      {sidebarBody}
     </aside>
   );
 }

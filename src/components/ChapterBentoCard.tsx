@@ -9,6 +9,7 @@ import {
   PRE_LESSON_BRIEFINGS,
 } from "@/data";
 import { useStudyStore } from "@/store/useStudyStore";
+import { RecallFlipCard } from "@/components/RecallFlipCard";
 import {
   CheckCircle2,
   Circle,
@@ -92,8 +93,22 @@ export const ChapterBentoCard = React.memo(function ChapterBentoCard({
   return (
     <article
       id={`chapter-card-${chapter.id}`}
-      className={`space-y-4 ${isCardDeferred ? "deferred-chapter-card" : ""}`}
+      className={`space-y-5 topic-transition-enter ${isCardDeferred ? "deferred-chapter-card" : ""}`}
     >
+      <RecallFlipCard
+        moduleCode={chapter.displayCode}
+        title={`${chapter.displayCode} · ${chapter.title.replace(/^Act \d+, Scene \d+:\s*/, "")}`}
+        prompt={
+          sceneBriefing?.teacherPopQuiz?.question ||
+          chapter.examPromptTakeaway ||
+          chapter.summary
+        }
+        answer={sceneBriefing?.teacherPopQuiz?.answer || chapter.summary}
+        accent="#8B4513"
+        secondary="#800000"
+        meta="ACTIVE RECALL"
+      />
+
       {/* =====================================================================
           HERO SCENE BANNER
           ===================================================================== */}
@@ -144,10 +159,10 @@ export const ChapterBentoCard = React.memo(function ChapterBentoCard({
               </span>
             </div>
 
-            <h2 className="text-2xl lg:text-3xl font-bold tracking-tight text-white font-display">
+            <h1 className="text-xl sm:text-2xl lg:text-3xl font-bold text-white tracking-tight mb-1.5 font-display">
               {chapter.title}
-            </h2>
-            <p className="text-sm lg:text-base text-slate-300 mt-1 font-serif italic">
+            </h1>
+            <p className="text-xs sm:text-sm text-slate-300 font-medium font-serif italic">
               {chapter.subtitle}
             </p>
           </div>
