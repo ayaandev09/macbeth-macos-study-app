@@ -94,9 +94,9 @@ Here is how to safely install and open it:
 1. Download the latest `.dmg` file from the Releases page and double-click to open it.
 2. Drag the **Macbeth** app into your **Applications** folder.
 3. Try to open the app by double-clicking it. You will see a warning that it cannot be opened. Click **Done** or **OK**.
-4. Open your Mac's **System Settings** and navigate to **Privacy & Security**[span_0](start_span)[span_0](end_span).
-5. Scroll down to the **Security** section. You will see a message stating the app was blocked to protect your Mac[span_1](start_span)[span_1](end_span).
-6. Click the **Open Anyway** button next to that message[span_2](start_span)[span_2](end_span).
+4. Open your Mac's **System Settings** and navigate to **Privacy & Security**.
+5. Scroll down to the **Security** section. You will see a message stating the app was blocked to protect your Mac.
+6. Click the **Open Anyway** button next to that message.
 7. Enter your Mac password or use Touch ID, then click **Open** on the final popup.
 
 *Note: You only need to do this the very first time. Afterward, you can open the app normally from your Launchpad or Spotlight.*
