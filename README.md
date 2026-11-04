@@ -82,3 +82,20 @@ Keep revision top-of-mind without keeping the full app open:
 
 * Creativity: Conceptualizing, designing, and coding a native macOS software application, complete with a custom Liquid Glass user interface and desktop widget synchronization.
 * Service: Open-sourcing the software to provide secondary school literature students globally with a modern, distraction-free study companion for their exams.
+
+---
+
+🛠️ macOS Installation Instructions
+
+Because this is a free, open-source app, macOS Gatekeeper may show a warning saying the app is "damaged" or "cannot be opened" because it hasn't been signed by a paid Apple Developer account. 
+
+Here is how to safely install and open it:
+
+1. Download the latest `.dmg` file from the Releases page and double-click to open it.
+2. Drag the **Macbeth** app into your **Applications** folder.
+3. Open your Applications folder in Finder.
+4. **Right-click (or Control-click)** on the app and select **Open**.
+5. Click **Open** again on the security popup. 
+
+*Note: You only need to do this right-click bypass the very first time. Afterward, you can open the app normally from your Launchpad or Spotlight.*
+
