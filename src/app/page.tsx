@@ -27,6 +27,7 @@ import {
   pullSyncFromServer,
   pushSyncToServer,
 } from "@/lib/syncService";
+import { initGlobalTactileListener } from "@/lib/tactileHaptics";
 import {
   Sparkles,
   Layers,
@@ -87,6 +88,12 @@ export default function MacbethStudyDashboardMacPage() {
       document.documentElement.setAttribute("data-handwritten-style", activeFont);
     }
   }, [academicStyle]);
+
+  // Activate universal tactile mechanical feedback on buttons
+  useEffect(() => {
+    const cleanup = initGlobalTactileListener();
+    return cleanup;
+  }, []);
 
   // Global Keyboard Shortcut: Cmd/Ctrl + I to toggle Analytical Inspector
   useEffect(() => {
