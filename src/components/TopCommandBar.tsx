@@ -166,10 +166,10 @@ export function TopCommandBar({ onOpenWalkthrough }: TopCommandBarProps = {}) {
   return (
     <>
       <header className="liquid-card-flagship !rounded-3xl overflow-hidden p-2.5 sm:p-3 mb-3 flex flex-col gap-2 shadow-xl relative mac-drag-region transition-all z-20 w-full max-w-full">
-      {/* Top Segment: Brand & Status (Left) & Compact Ergonomic Action Cluster (Right) */}
-      <div className="flex items-center justify-between gap-3 w-full pb-2 border-b border-white/10 min-h-[44px]">
+      {/* Top Segment: Brand & Status (Left: Flexible, shrinks cleanly) & Compact Action Cluster (Right: ~280px total) */}
+      <div className="flex items-center justify-between gap-2 w-full pb-2 border-b border-white/10 min-h-[42px] max-w-full overflow-hidden">
         {/* Brand & Breadcrumbs (Left) */}
-        <div className="flex items-center gap-2 shrink-0 mac-no-drag">
+        <div className="flex items-center gap-2 min-w-0 shrink mac-no-drag">
           {/* Native macOS Sidebar Toggle (⌘B) */}
           <button
             onClick={toggleSidebar}
@@ -187,7 +187,7 @@ export function TopCommandBar({ onOpenWalkthrough }: TopCommandBarProps = {}) {
           <button
             onClick={() => triggerStartupIntro()}
             title="Click to replay Scottish Crown Cinematic Startup Intro"
-            className="flex items-center gap-2 min-w-0 text-left cursor-pointer group shrink-0"
+            className="flex items-center gap-2 min-w-0 text-left cursor-pointer group"
           >
             <div className="w-8 h-8 rounded-xl bg-gradient-to-br from-amber-400/25 via-rose-500/20 to-amber-600/25 border border-amber-400/40 flex items-center justify-center p-1 shadow-md relative shrink-0 group-hover:scale-105 transition-transform overflow-hidden">
               <MacbethAppLogo className="w-full h-full object-contain" />
@@ -207,41 +207,23 @@ export function TopCommandBar({ onOpenWalkthrough }: TopCommandBarProps = {}) {
           </button>
         </div>
 
-        {/* Center: Integrated Spotlight Quick Search Pill */}
-        <button
-          type="button"
-          onClick={openSpotlight}
-          title="Spotlight Search 31 Scenes, Quotes & Themes (⌘K)"
-          className="flex-1 max-w-[220px] 2xl:max-w-xs hidden 2xl:flex items-center justify-between gap-2 px-3 py-1.5 rounded-xl bg-black/50 hover:bg-black/70 border border-white/10 hover:border-amber-400/40 transition-all text-left cursor-pointer group mac-no-drag shadow-inner"
-        >
-          <div className="flex items-center gap-2 min-w-0">
-            <Search className="w-3.5 h-3.5 text-amber-400 group-hover:scale-110 transition-transform shrink-0" />
-            <span className="text-xs text-slate-300 group-hover:text-white transition-colors truncate">
-              Search scenes, quotes...
-            </span>
-          </div>
-          <kbd className="inline-flex items-center gap-0.5 px-1.5 py-0.5 rounded text-[10px] font-mono font-bold text-amber-300 bg-amber-500/15 border border-amber-400/25 shrink-0">
-            ⌘K
-          </kbd>
-        </button>
-
         {/* Right Section: Compact Ergonomic Modality Switchers & Action Pills */}
-        <div className="flex items-center justify-end gap-1.5 sm:gap-2 shrink-0 mac-no-drag">
-          {/* Quick Spotlight Trigger Button (Compact for non-2xl viewports) */}
+        <div className="flex items-center justify-end gap-1.5 shrink-0 mac-no-drag">
+          {/* Quick Spotlight Trigger Button */}
           <button
             onClick={openSpotlight}
             title="Search Scenes & Quotes (⌘K)"
-            className="flex 2xl:hidden items-center gap-1.5 px-2.5 py-1.5 rounded-xl bg-black/50 hover:bg-black/70 border border-white/10 hover:border-amber-400/40 text-slate-300 hover:text-white cursor-pointer transition-all"
+            className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl bg-black/50 hover:bg-black/70 border border-white/10 hover:border-amber-400/40 text-slate-300 hover:text-white cursor-pointer transition-all shrink-0"
           >
             <Search className="w-3.5 h-3.5 text-amber-400" />
-            <span className="text-[11px] font-medium text-slate-300 hidden sm:inline">Search</span>
+            <span className="text-[11px] font-medium text-slate-300 hidden md:inline">Search</span>
             <kbd className="inline-flex items-center px-1 py-0.2 rounded text-[9px] font-mono font-bold text-amber-300 bg-amber-500/15 border border-amber-400/25">
               ⌘K
             </kbd>
           </button>
 
           {/* Study Goal Switcher: Revision vs Study (Compact Segmented Pill) */}
-          <div className="flex items-center p-0.5 rounded-full bg-black/60 border border-white/12 text-xs">
+          <div className="flex items-center p-0.5 rounded-full bg-black/60 border border-white/12 text-xs shrink-0">
             <button
               onClick={() => setStudyGoal("revise")}
               title="Pre-lesson cramming, exam traps & active recall"
@@ -268,73 +250,25 @@ export function TopCommandBar({ onOpenWalkthrough }: TopCommandBarProps = {}) {
             </button>
           </div>
 
-          {/* Academic Typography Switcher (Compact Dropdown, shown on wide screens) */}
-          <div className="hidden 2xl:flex items-center p-0.5 rounded-full bg-black/60 border border-white/12 text-xs">
-            <span className="pl-2 text-slate-400 flex items-center">
-              <BookA className="w-3 h-3 text-amber-400" />
-            </span>
-            <select
-              value={academicStyle}
-              onChange={(e) => setAcademicStyle(e.target.value as AcademicStyle)}
-              title="Academic Typography Selection"
-              className="bg-transparent text-[11px] font-bold text-amber-200 border-none rounded-full px-2 py-1 focus:outline-none cursor-pointer"
-            >
-              <option value="newsreader" className="bg-slate-900 text-white">
-                🎓 Newsreader
-              </option>
-              <option value="garamond" className="bg-slate-900 text-white">
-                🏛️ Garamond
-              </option>
-              <option value="jakarta" className="bg-slate-900 text-white">
-                🔬 Jakarta
-              </option>
-              <option value="cinzel" className="bg-slate-900 text-white">
-                👑 Cinzel
-              </option>
-            </select>
-          </div>
-
           {/* Timed Exam Sprint Button */}
           <button
             onClick={openExamSprint}
             title="Launch Timed Exam Sprint (⌘E)"
-            className="hidden sm:flex items-center gap-1 px-2.5 py-1.5 rounded-full text-xs font-bold transition-all cursor-pointer border bg-amber-500/15 text-amber-200 border-amber-400/35 hover:bg-amber-500/25 shadow-sm soft-button shrink-0"
+            className="flex items-center gap-1 px-2.5 py-1.5 rounded-full text-xs font-bold transition-all cursor-pointer border bg-amber-500/15 text-amber-200 border-amber-400/35 hover:bg-amber-500/25 shadow-sm soft-button shrink-0"
           >
             <Timer className="w-3.5 h-3.5 text-amber-300 animate-pulse" />
-            <span className="hidden 2xl:inline text-[11px]">Sprint</span>
-            <span className="text-[10px] font-mono text-amber-400/70">⌘E</span>
+            <span className="text-[10px] font-mono text-amber-400/80">⌘E</span>
           </button>
 
           {/* Pro Analytical Inspector Toggle Pill (Shown only when tucked away to prevent collision) */}
           {!isInspectorOpen && (
             <button
               onClick={toggleInspector}
-              title="Open Analytical Inspector (Tucked in Top Bar · ⌘I)"
-              className="flex items-center gap-1.5 px-2.5 sm:px-3 py-1.5 rounded-full text-xs font-bold transition-all cursor-pointer border soft-button relative group shrink-0 bg-amber-500/15 text-amber-200 hover:text-white border-amber-400/50 hover:border-amber-300 shadow-[0_0_18px_rgba(245,158,11,0.35)] tucked-pill-beacon"
+              title="Open Analytical Inspector (⌘I)"
+              className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-full text-xs font-bold transition-all cursor-pointer border soft-button shrink-0 bg-amber-500/15 text-amber-200 hover:text-white border-amber-400/50 hover:border-amber-300 shadow-[0_0_18px_rgba(245,158,11,0.35)] tucked-pill-beacon"
             >
-              <div className="relative flex items-center justify-center">
-                <Sparkles className="w-3.5 h-3.5 text-amber-300 group-hover:rotate-12 transition-transform" />
-                <span className="absolute -top-1 -right-1 w-2 h-2 rounded-full bg-amber-400 animate-ping pointer-events-none" />
-              </div>
-              <span className="hidden sm:inline text-[11px]">Inspector</span>
-              <span className="text-[9px] font-mono font-bold uppercase tracking-wider text-amber-300 bg-amber-500/25 px-1.5 py-0.2 rounded-full border border-amber-400/40">
-                Tucked
-              </span>
-              <span className="text-[10px] font-mono text-amber-400/80 bg-amber-500/15 px-1 py-0.2 rounded border border-amber-400/25">
-                ⌘I
-              </span>
-            </button>
-          )}
-
-          {/* Interactive App Tour / Walkthrough */}
-          {onOpenWalkthrough && (
-            <button
-              onClick={onOpenWalkthrough}
-              title="Interactive App Walkthrough & Guide (Tour)"
-              className="hidden 2xl:flex items-center gap-1.5 px-2.5 sm:px-3 py-1.5 rounded-full text-xs font-bold transition-all cursor-pointer border bg-amber-500/10 hover:bg-amber-500/20 text-amber-300 border-amber-400/35 shadow-sm soft-button shrink-0"
-            >
-              <Compass className="w-3.5 h-3.5 text-amber-400" />
-              <span className="text-[11px]">Tour</span>
+              <Sparkles className="w-3.5 h-3.5 text-amber-300" />
+              <span className="text-[10px] font-mono text-amber-400/80">⌘I</span>
             </button>
           )}
 
@@ -352,7 +286,7 @@ export function TopCommandBar({ onOpenWalkthrough }: TopCommandBarProps = {}) {
       {/* Row 2: Symmetrical 5-Column Navigation Grid - 100% Adaptive to Any Mac Screen */}
       <nav
         aria-label="Integrated Main Sections Bar"
-        className="w-full grid grid-cols-5 gap-1 sm:gap-1.5 p-1 bg-black/60 border border-white/12 rounded-2xl shadow-inner relative"
+        className="w-full grid grid-cols-5 gap-1 p-1 bg-black/60 border border-white/12 rounded-2xl shadow-inner relative max-w-full overflow-hidden"
       >
         {VIEW_MODES.map((mode) => {
           const isActive = viewMode === mode.id;
@@ -360,7 +294,7 @@ export function TopCommandBar({ onOpenWalkthrough }: TopCommandBarProps = {}) {
             <button
               key={mode.id}
               onClick={() => setViewMode(mode.id)}
-              className={`relative col-span-1 flex items-center justify-center gap-1.5 py-1.5 sm:py-2 px-1 rounded-xl text-xs font-bold transition-colors cursor-pointer truncate ${
+              className={`relative col-span-1 flex items-center justify-center gap-1.5 py-1.5 sm:py-2 px-1 rounded-xl text-xs font-bold transition-colors cursor-pointer min-w-0 overflow-hidden ${
                 isActive
                   ? "text-amber-200"
                   : "text-slate-400 hover:text-white hover:bg-white/5"
@@ -376,8 +310,7 @@ export function TopCommandBar({ onOpenWalkthrough }: TopCommandBarProps = {}) {
               <span className={`relative z-10 ${isActive ? "text-amber-300 shrink-0" : "text-slate-400 shrink-0"}`}>
                 {mode.icon}
               </span>
-              <span className="relative z-10 hidden 2xl:inline truncate">{mode.label}</span>
-              <span className="relative z-10 inline 2xl:hidden truncate">{mode.shortLabel}</span>
+              <span className="relative z-10 text-xs truncate">{mode.shortLabel}</span>
             </button>
           );
         })}
