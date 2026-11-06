@@ -1,7 +1,8 @@
 "use client";
 
 import React, { useMemo, useState, useEffect, useCallback } from "react";
-import { AnimatePresence } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
+import { AmbientAuroraCanvas } from "@/components/AmbientAuroraCanvas";
 import { FloatingSidebar } from "@/components/FloatingSidebar";
 import { TopCommandBar } from "@/components/TopCommandBar";
 import { WidgetBridge } from "@/components/WidgetBridge";
@@ -221,6 +222,7 @@ export default function MacbethStudyDashboardMacPage() {
             : "opacity-0 pointer-events-none select-none"
         }`}
       >
+        <AmbientAuroraCanvas />
         {diagnosticsModalOpen && (
           <StartupDiagnosticIntro
             isManualTelemetry={true}
