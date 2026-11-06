@@ -1,6 +1,7 @@
 "use client";
 
-import React, { useMemo, useState, useEffect } from "react";
+import React, { useMemo, useState, useEffect, useCallback } from "react";
+import { AnimatePresence } from "framer-motion";
 import { FloatingSidebar } from "@/components/FloatingSidebar";
 import { TopCommandBar } from "@/components/TopCommandBar";
 import { WidgetBridge } from "@/components/WidgetBridge";
@@ -12,6 +13,10 @@ import { RevisionCramView } from "@/components/RevisionCramView";
 import { FloatingBottomDock } from "@/components/FloatingBottomDock";
 import { StartupDiagnosticIntro } from "@/components/StartupDiagnosticIntro";
 import { CinematicStartupIntro } from "@/components/CinematicStartupIntro";
+import { ImmersiveAppWalkthrough } from "@/components/ImmersiveAppWalkthrough";
+import { MacbethRightInspector } from "@/components/MacbethRightInspector";
+import { TimedExamSprintModal } from "@/components/TimedExamSprintModal";
+import { JellySpotlightModal } from "@/components/JellySpotlightModal";
 import { ChromaticButton } from "@/components/chromatic-button";
 import { ALL_CHAPTERS, BOOK_PARTS, THEMES_TAXONOMY, ActId } from "@/data";
 import { useStudyStore } from "@/store/useStudyStore";
@@ -48,9 +53,30 @@ export default function MacbethStudyDashboardMacPage() {
     toggleChapterComplete,
     goToNextChapter,
     applyRemoteSync,
+    isInspectorOpen,
+    toggleInspector,
+    isExamSprintActive,
+    closeExamSprint,
+    toggleExamSprint,
+    isSpotlightOpen,
+    closeSpotlight,
+    setStudyGoal,
   } = useStudyStore();
 
-  const [showStartupIntro, setShowStartupIntro] = useState(true);
+  const [isStartupActive, setIsStartupActive] = useState(true);
+  const [showMainUI, setShowMainUI] = useState(false);
+  const [isWalkthroughOpen, setIsWalkthroughOpen] = useState(false);
+
+  const handleStartupComplete = useCallback(() => {
+    setIsStartupActive(false);
+    setShowMainUI(true);
+    if (typeof window !== "undefined") {
+      const hasSeen = localStorage.getItem("hasSeenAppWalkthrough_macbeth_v1");
+      if (!hasSeen) {
+        setIsWalkthroughOpen(true);
+      }
+    }
+  }, []);
 
   // Synchronize universal academic professional font attribute
   useEffect(() => {
@@ -60,6 +86,21 @@ export default function MacbethStudyDashboardMacPage() {
       document.documentElement.setAttribute("data-handwritten-style", activeFont);
     }
   }, [academicStyle]);
+
+  // Global Keyboard Shortcut: Cmd/Ctrl + I to toggle Analytical Inspector
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === "i") {
+        e.preventDefault();
+        toggleInspector();
+      } else if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === "e") {
+        e.preventDefault();
+        toggleExamSprint();
+      }
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [toggleInspector, toggleExamSprint]);
 
   // Live sync hydration
   useEffect(() => {
@@ -160,36 +201,47 @@ export default function MacbethStudyDashboardMacPage() {
   }, [searchQuery, filteredChapters, activeChapterId, setActiveChapter]);
 
   return (
-    <div className="mac-dashboard-shell">
-      {/* =====================================================================
-          CINEMATIC STARTUP DIAGNOSTICS & TELEMETRY
-          ===================================================================== */}
-      <CinematicStartupIntro
-        isOpen={showStartupIntro}
-        onClose={() => setShowStartupIntro(false)}
-        onComplete={() => setShowStartupIntro(false)}
-      />
-      {diagnosticsModalOpen && (
-        <StartupDiagnosticIntro
-          isManualTelemetry={true}
-          onClose={() => setDiagnosticsModalOpen(false)}
-        />
-      )}
+    <>
+      {/* 1. Bulletproof Zero-Latency Liquid Glass Startup Animation */}
+      <AnimatePresence>
+        {isStartupActive && (
+          <CinematicStartupIntro
+            isOpen={isStartupActive}
+            onClose={handleStartupComplete}
+            onComplete={handleStartupComplete}
+          />
+        )}
+      </AnimatePresence>
+
+      {/* 2. Main Study Dashboard - Fluid Liquid Glass Reveal */}
+      <div
+        className={`mac-dashboard-shell transition-opacity duration-300 ease-out ${
+          showMainUI
+            ? "opacity-100 pointer-events-auto"
+            : "opacity-0 pointer-events-none select-none"
+        }`}
+      >
+        {diagnosticsModalOpen && (
+          <StartupDiagnosticIntro
+            isManualTelemetry={true}
+            onClose={() => setDiagnosticsModalOpen(false)}
+          />
+        )}
 
       {/* =====================================================================
           MAIN LIQUID GLASS SHELL WORKSPACE (MAC WIDESCREEN DASHBOARD)
           ===================================================================== */}
-      <div className="relative z-10 w-full flex flex-col lg:flex-row gap-5 items-start">
+      <div className="relative z-10 w-full flex flex-col lg:flex-row gap-4 xl:gap-5 items-start">
         {/* Left Sticky Liquid Glass Navigation Sidebar */}
         <FloatingSidebar isMobileSheet={false} />
 
         {/* Main Content Column */}
         <main className="flex-1 min-w-0 w-full pb-36">
             <WidgetBridge />
-            <TopCommandBar />
+            <TopCommandBar onOpenWalkthrough={() => setIsWalkthroughOpen(true)} />
 
             {/* Mini Homepage & Live Widget Telemetry Hub */}
-            <StudyMiniHomepage />
+            {!searchQuery.trim() && <StudyMiniHomepage />}
 
             {/* Search Match Pill Bar */}
             {searchQuery.trim() && viewMode === "focus" && (
@@ -465,9 +517,35 @@ export default function MacbethStudyDashboardMacPage() {
               {viewMode === "revision" && <RevisionCramView />}
             </div>
           </main>
+
+        {/* Right Sticky Liquid Glass Analytical Inspector */}
+        <MacbethRightInspector
+          chapter={activeChapter}
+          isOpen={isInspectorOpen}
+          onToggle={toggleInspector}
+        />
       </div>
-
-
     </div>
+
+    {/* Timed Exam Sprint Full-Screen Simulation Modal */}
+    <TimedExamSprintModal
+      isOpen={isExamSprintActive}
+      onClose={closeExamSprint}
+      chapter={activeChapter}
+    />
+
+    {/* Flagship Spacious Jelly Spotlight Command Palette */}
+    <JellySpotlightModal
+      isOpen={isSpotlightOpen}
+      onClose={closeSpotlight}
+    />
+
+    {/* Immersive Onboarding Walkthrough Tour */}
+    <ImmersiveAppWalkthrough
+      isOpen={isWalkthroughOpen}
+      onClose={() => setIsWalkthroughOpen(false)}
+      onSelectGoal={(goal) => setStudyGoal(goal)}
+    />
+    </>
   );
 }

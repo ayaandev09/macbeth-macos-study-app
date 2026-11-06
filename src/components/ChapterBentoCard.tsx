@@ -90,6 +90,38 @@ export const ChapterBentoCard = React.memo(function ChapterBentoCard({
     (s) => !!completedSubSections[s.id]
   ).length;
 
+  const tensionScore = React.useMemo(() => {
+    switch (chapter.omenLevel) {
+      case "ABYSSAL DOOM":
+        return 98;
+      case "REGICIDE":
+        return 94;
+      case "TYRANNY & PARANOIA":
+        return 88;
+      case "TEMPTATION":
+        return 76;
+      case "VALOR & OMEN":
+      default:
+        return 62;
+    }
+  }, [chapter.omenLevel]);
+
+  const tensionDescriptor = React.useMemo(() => {
+    switch (chapter.omenLevel) {
+      case "ABYSSAL DOOM":
+        return "Catastrophic Climax";
+      case "REGICIDE":
+        return "Point of No Return";
+      case "TYRANNY & PARANOIA":
+        return "Paranoid Bloodshed";
+      case "TEMPTATION":
+        return "Fatal Ambition Rising";
+      case "VALOR & OMEN":
+      default:
+        return "Noble Heroism & Omen";
+    }
+  }, [chapter.omenLevel]);
+
   return (
     <article
       id={`chapter-card-${chapter.id}`}
@@ -110,12 +142,12 @@ export const ChapterBentoCard = React.memo(function ChapterBentoCard({
       />
 
       {/* =====================================================================
-          HERO SCENE BANNER
+          FLAGSHIP HERO SCENE BANNER (LIQUID GLASS 2.0 & HELIOS INSPIRATION)
           ===================================================================== */}
-      <div className="liquid-glass-bento rounded-3xl p-6 lg:p-7 relative overflow-hidden">
-        {/* Specular Radial Glow (Zero Filter Overhead) */}
+      <div className="liquid-card-flagship rounded-3xl p-6 lg:p-7 relative overflow-hidden shadow-2xl">
+        {/* Specular Radial Glow */}
         <div
-          className="pointer-events-none absolute -top-24 -right-24 w-72 h-72 rounded-full opacity-25"
+          className="pointer-events-none absolute -top-24 -right-24 w-80 h-80 rounded-full opacity-30"
           style={{
             background:
               chapter.partNumber === 1
@@ -133,15 +165,14 @@ export const ChapterBentoCard = React.memo(function ChapterBentoCard({
         <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 relative z-10">
           <div>
             <div className="flex flex-wrap items-center gap-2 mb-2.5">
-              <span className="font-mono text-xs font-bold px-2.5 py-1 rounded-xl bg-white/10 text-white border border-white/15">
+              <span className="font-mono text-xs font-bold px-3 py-1 rounded-xl bg-white/12 text-white border border-white/20 shadow-sm">
                 {chapter.displayCode}
               </span>
-              <span className="font-mono text-xs px-2.5 py-1 rounded-xl bg-amber-500/15 text-amber-300 border border-amber-400/25">
-                ACT {bookPart?.romanNumeral || chapter.partNumber} • SCENE{" "}
-                {chapter.chapterNumber}
+              <span className="font-mono text-xs px-3 py-1 rounded-xl bg-amber-500/20 text-amber-200 border border-amber-400/35">
+                ACT {bookPart?.romanNumeral || chapter.partNumber} • SCENE {chapter.chapterNumber}
               </span>
               {chapter.folioCrossRef && (
-                <span className="font-mono text-[11px] px-2.5 py-1 rounded-xl bg-indigo-500/15 text-indigo-200 border border-indigo-400/30">
+                <span className="font-mono text-[11px] px-2.5 py-1 rounded-xl bg-indigo-500/20 text-indigo-200 border border-indigo-400/35">
                   {chapter.folioCrossRef}
                 </span>
               )}
@@ -153,7 +184,7 @@ export const ChapterBentoCard = React.memo(function ChapterBentoCard({
                 <ShieldAlert className="w-3.5 h-3.5" />
                 OMEN: {chapter.omenLevel}
               </span>
-              <span className="font-mono text-xs px-2.5 py-1 rounded-xl bg-white/[0.05] text-slate-300 border border-white/10 flex items-center gap-1.5">
+              <span className="font-mono text-xs px-2.5 py-1 rounded-xl bg-white/[0.06] text-slate-200 border border-white/12 flex items-center gap-1.5">
                 <Clock className="w-3.5 h-3.5 text-amber-400" />
                 {chapter.readingTimeMinutes} min speed-read
               </span>
@@ -167,21 +198,21 @@ export const ChapterBentoCard = React.memo(function ChapterBentoCard({
             </p>
           </div>
 
-          {/* Action Buttons */}
-          <div className="flex items-center gap-2 self-start lg:self-center shrink-0">
-            {/* Prev/Next Scene Arrows (Orwell 1984 Style) */}
-            <div className="flex items-center gap-1 mr-1">
+          {/* Action Buttons: Prev/Next, Notes, and Soft Master Scene Button */}
+          <div className="flex items-center gap-2.5 self-start lg:self-center shrink-0">
+            {/* Prev/Next Scene Arrows */}
+            <div className="flex items-center gap-1.5 mr-1">
               <button
                 onClick={goToPrevChapter}
                 title="Previous Scene"
-                className="p-2 rounded-2xl liquid-glass-pill text-slate-300 hover:text-white cursor-pointer"
+                className="w-10 h-10 rounded-2xl liquid-card-flagship text-slate-300 hover:text-white flex items-center justify-center cursor-pointer soft-button"
               >
                 <ChevronLeft className="w-4 h-4" />
               </button>
               <button
                 onClick={goToNextChapter}
                 title="Next Scene"
-                className="p-2 rounded-2xl liquid-glass-pill text-slate-300 hover:text-white cursor-pointer"
+                className="w-10 h-10 rounded-2xl liquid-card-flagship text-slate-300 hover:text-white flex items-center justify-center cursor-pointer soft-button"
               >
                 <ChevronRight className="w-4 h-4" />
               </button>
@@ -189,29 +220,29 @@ export const ChapterBentoCard = React.memo(function ChapterBentoCard({
 
             <button
               onClick={() => setShowScratchpad((prev) => !prev)}
-              className="liquid-glass-pill px-3.5 py-2.5 rounded-2xl text-xs font-medium text-slate-200 flex items-center gap-2 cursor-pointer"
+              className="px-4 py-2.5 rounded-2xl text-xs font-semibold text-slate-200 bg-white/5 hover:bg-white/10 border border-white/12 flex items-center gap-2 cursor-pointer soft-button"
             >
               <StickyNote className="w-4 h-4 text-amber-300" />
               <span>Notes {noteText ? "• Active" : ""}</span>
               {showScratchpad ? (
-                <ChevronUp className="w-3.5 h-3.5" />
+                <ChevronUp className="w-3.5 h-3.5 text-slate-400" />
               ) : (
-                <ChevronDown className="w-3.5 h-3.5" />
+                <ChevronDown className="w-3.5 h-3.5 text-slate-400" />
               )}
             </button>
 
             <button
               onClick={() => toggleChapterComplete(chapter.id)}
-              className={`px-4 py-2.5 rounded-2xl text-xs font-semibold flex items-center gap-2 transition-all cursor-pointer ${
+              className={`px-5 py-2.5 rounded-2xl text-xs font-bold flex items-center gap-2.5 transition-all cursor-pointer soft-button shadow-xl ${
                 isCompleted
-                  ? "bg-emerald-500/20 text-emerald-200 border border-emerald-400/40 shadow-[0_0_20px_-4px_rgba(52,211,153,0.4)]"
-                  : "liquid-glass-pill text-white"
+                  ? "bg-emerald-500/25 text-emerald-200 border border-emerald-400/50 shadow-[0_0_24px_rgba(52,211,153,0.35)]"
+                  : "liquid-card-flagship text-white hover:border-amber-400/40"
               }`}
             >
               {isCompleted ? (
                 <>
-                  <CheckCircle2 className="w-4 h-4 text-emerald-400" />
-                  <span>Completed</span>
+                  <CheckCircle2 className="w-4 h-4 text-emerald-400 animate-tick-pop" />
+                  <span>Scene Mastered</span>
                 </>
               ) : (
                 <>
@@ -223,12 +254,12 @@ export const ChapterBentoCard = React.memo(function ChapterBentoCard({
           </div>
         </div>
 
-        {/* Metadata Strip: Setting & Cosmic Weather Status */}
+        {/* Setting & Stage Climate Footer */}
         <div className="mt-5 pt-4 border-t border-white/10 grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
           <div className="flex items-start gap-2.5 text-slate-300">
             <MapPin className="w-4 h-4 text-rose-400 shrink-0 mt-0.5" />
             <div>
-              <span className="text-slate-400 block text-[10px] font-mono uppercase">
+              <span className="text-slate-400 block text-[10px] font-mono uppercase tracking-wider">
                 Stage Setting
               </span>
               <span className="font-medium text-slate-100">
@@ -240,7 +271,7 @@ export const ChapterBentoCard = React.memo(function ChapterBentoCard({
           <div className="flex items-start gap-2.5 text-slate-300">
             <Brain className="w-4 h-4 text-emerald-400 shrink-0 mt-0.5" />
             <div>
-              <span className="text-slate-400 block text-[10px] font-mono uppercase">
+              <span className="text-slate-400 block text-[10px] font-mono uppercase tracking-wider">
                 Cosmic & Moral Weather
               </span>
               <span className="font-medium text-slate-100">
@@ -254,18 +285,100 @@ export const ChapterBentoCard = React.memo(function ChapterBentoCard({
         {showScratchpad && (
           <div className="mt-4 pt-4 border-t border-white/10">
             <label className="block font-mono text-[11px] uppercase tracking-wider text-amber-300 mb-2">
-              Personal Seminar & Essay Scratchpad ({chapter.displayCode}) —
-              Saved Automatically
+              Personal Seminar & Essay Scratchpad ({chapter.displayCode}) — Saved Automatically
             </label>
             <textarea
               value={noteText}
               onChange={(e) => setChapterNote(chapter.id, e.target.value)}
               rows={3}
               placeholder="Write your essay thesis hooks, meter/scansion observations, or Jacobean context notes for this scene..."
-              className="w-full rounded-2xl bg-slate-950/75 border border-white/15 p-3.5 text-xs text-slate-100 placeholder:text-slate-500 focus:outline-none focus:border-amber-400/50"
+              className="w-full rounded-2xl bg-slate-950/80 border border-white/15 p-3.5 text-xs text-slate-100 placeholder:text-slate-500 focus:outline-none focus:border-amber-400/50 shadow-inner"
             />
           </div>
         )}
+      </div>
+
+      {/* =====================================================================
+          FLAGSHIP ANALYTICS DECK (HELIOS SOLAR & SALES ANALYTICS BENTO 2.0)
+          ===================================================================== */}
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3.5">
+        {/* KPI 1: Dramatic Tension Gauge */}
+        <div className="liquid-card-flagship rounded-3xl p-4.5 flex flex-col justify-between">
+          <div className="flex items-center justify-between text-[11px] font-mono text-slate-400 mb-2">
+            <span className="uppercase tracking-wider flex items-center gap-1.5">
+              <Flame className="w-3.5 h-3.5 text-rose-400" />
+              Tension Index
+            </span>
+            <span className="font-bold text-rose-300">{tensionScore}%</span>
+          </div>
+          <div className="w-full h-2 rounded-full bg-slate-900/90 overflow-hidden p-0.5 border border-white/10 mb-2.5">
+            <div
+              className="h-full rounded-full bg-gradient-to-r from-amber-400 to-rose-500 transition-all duration-700"
+              style={{ width: `${tensionScore}%` }}
+            />
+          </div>
+          <div className="flex items-center justify-between">
+            <span className="text-xs font-bold text-white truncate">
+              {tensionDescriptor}
+            </span>
+            <span className="text-[10px] font-mono text-slate-400 shrink-0 ml-1">
+              Boiling Point
+            </span>
+          </div>
+        </div>
+
+        {/* KPI 2: Jacobean Omen & Prophecy */}
+        <div className="liquid-card-flagship rounded-3xl p-4.5 flex flex-col justify-between">
+          <div className="flex items-center justify-between text-[11px] font-mono text-slate-400 mb-2">
+            <span className="uppercase tracking-wider flex items-center gap-1.5">
+              <ShieldAlert className="w-3.5 h-3.5 text-amber-400" />
+              Supernatural
+            </span>
+            <span className="w-2 h-2 rounded-full bg-amber-400 animate-ping" />
+          </div>
+          <div className="text-sm font-bold text-amber-300 font-mono truncate mb-1">
+            {chapter.omenLevel}
+          </div>
+          <div className="text-[11px] text-slate-300 truncate">
+            Folio Prophetic Vector
+          </div>
+        </div>
+
+        {/* KPI 3: Reading Pace & Verse Structure */}
+        <div className="liquid-card-flagship rounded-3xl p-4.5 flex flex-col justify-between">
+          <div className="flex items-center justify-between text-[11px] font-mono text-slate-400 mb-2">
+            <span className="uppercase tracking-wider flex items-center gap-1.5">
+              <Clock className="w-3.5 h-3.5 text-sky-400" />
+              Rhythm & Pace
+            </span>
+            <span className="font-mono text-sky-300 font-bold">{chapter.readingTimeMinutes}m</span>
+          </div>
+          <div className="text-sm font-bold text-white truncate mb-1">
+            Blank Verse (Iambic)
+          </div>
+          <div className="text-[11px] text-slate-300 truncate">
+            {chapter.subSections.length} Beats • {chapter.quotes.length} Key Lines
+          </div>
+        </div>
+
+        {/* KPI 4: Dramatis Personae */}
+        <div className="liquid-card-flagship rounded-3xl p-4.5 flex flex-col justify-between">
+          <div className="flex items-center justify-between text-[11px] font-mono text-slate-400 mb-2">
+            <span className="uppercase tracking-wider flex items-center gap-1.5">
+              <Users className="w-3.5 h-3.5 text-emerald-400" />
+              Stage Presence
+            </span>
+            <span className="font-mono text-emerald-300 font-bold">
+              {scenePrimer?.whoIsInTheScene.length || 3} Actors
+            </span>
+          </div>
+          <div className="text-sm font-bold text-white truncate mb-1">
+            {scenePrimer?.whoIsInTheScene[0] || "Macbeth"} et al.
+          </div>
+          <div className="text-[11px] text-emerald-300/80 truncate">
+            {scenePrimer?.whoIsInTheScene.slice(1, 3).join(", ") || "Scottish Thanes"}
+          </div>
+        </div>
       </div>
 
       {/* =====================================================================
@@ -839,19 +952,25 @@ export const ChapterBentoCard = React.memo(function ChapterBentoCard({
       </div>
 
       {/* =====================================================================
-          BENTO ROW 2: GRANULAR DRAMATIC SUB-SECTIONS (BEATS)
+          BENTO ROW 2: GRANULAR DRAMATIC SUB-SECTIONS (SALES DASHBOARD 2.0 STYLE)
           ===================================================================== */}
-      <div className="liquid-glass-bento rounded-3xl p-6">
-        <div className="flex flex-wrap items-center justify-between gap-2 mb-4">
-          <div className="flex items-center gap-2">
-            <Layers className="w-4 h-4 text-amber-400" />
-            <h3 className="text-sm font-semibold uppercase tracking-wider text-white font-mono">
-              Scene Sub-Sections Breakdown ({completedSubsCount}/
-              {chapter.subSections.length} Beats Checked)
-            </h3>
+      <div className="liquid-card-flagship rounded-3xl p-6 shadow-2xl">
+        <div className="flex flex-wrap items-center justify-between gap-2 mb-4.5 pb-3 border-b border-white/10">
+          <div className="flex items-center gap-2.5">
+            <div className="w-8 h-8 rounded-xl bg-amber-500/20 text-amber-300 border border-amber-400/30 flex items-center justify-center shrink-0">
+              <Layers className="w-4 h-4" />
+            </div>
+            <div>
+              <h3 className="text-sm font-bold uppercase tracking-wider text-white font-mono flex items-center gap-2">
+                <span>Scene Sub-Sections Breakdown</span>
+                <span className="text-[11px] font-bold px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-400/30">
+                  {completedSubsCount}/{chapter.subSections.length} Beats Checked
+                </span>
+              </h3>
+            </div>
           </div>
           <span className="text-xs text-slate-400 font-mono">
-            Click any beat card to mark complete
+            Click tick button or card to toggle
           </span>
         </div>
 
@@ -862,35 +981,49 @@ export const ChapterBentoCard = React.memo(function ChapterBentoCard({
               <div
                 key={sub.id}
                 onClick={() => toggleSubSectionComplete(chapter.id, sub.id)}
-                className={`rounded-2xl border p-4 flex flex-col justify-between transition-all cursor-pointer ${
+                className={`rounded-2xl border p-4.5 flex flex-col justify-between transition-all cursor-pointer group soft-button ${
                   isSubDone
-                    ? "bg-emerald-950/20 border-emerald-400/40"
-                    : "bg-slate-950/55 border-white/10 hover:border-amber-400/35"
+                    ? "bg-emerald-950/25 border-emerald-400/50 shadow-[0_0_20px_rgba(52,211,153,0.15)]"
+                    : "bg-slate-950/60 border-white/12 hover:border-amber-400/40 hover:bg-slate-950/80 shadow-md"
                 }`}
               >
                 <div>
-                  <div className="flex items-center justify-between gap-2 mb-2">
-                    <span className="font-mono text-[10px] uppercase tracking-widest px-2 py-0.5 rounded-md bg-amber-500/15 text-amber-300 border border-amber-400/25">
-                      {chapter.displayCode}.{idx + 1} • {sub.sceneMarker}
+                  <div className="flex items-center justify-between gap-2 mb-3">
+                    <span className="font-mono text-[10px] font-bold uppercase tracking-widest px-2.5 py-1 rounded-lg bg-amber-500/15 text-amber-300 border border-amber-400/30">
+                      Beat 0{idx + 1} • {sub.sceneMarker}
                     </span>
-                    {isSubDone ? (
-                      <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
-                    ) : (
-                      <Circle className="w-4 h-4 text-slate-500 shrink-0" />
-                    )}
+                    <button
+                      type="button"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        toggleSubSectionComplete(chapter.id, sub.id);
+                      }}
+                      title={isSubDone ? "Mark beat incomplete" : "Mark beat completed"}
+                      className={`w-9 h-9 rounded-xl flex items-center justify-center shrink-0 border transition-all cursor-pointer soft-tick-btn ${
+                        isSubDone
+                          ? "bg-emerald-500/25 border-emerald-400/50 text-emerald-300 shadow-[0_0_12px_rgba(52,211,153,0.3)] animate-tick-pop"
+                          : "bg-white/5 border-white/12 text-slate-400 hover:text-white hover:border-amber-400/40 hover:bg-white/10"
+                      }`}
+                    >
+                      {isSubDone ? (
+                        <CheckCircle2 className="w-5 h-5 text-emerald-400" />
+                      ) : (
+                        <Circle className="w-5 h-5 text-slate-400 group-hover:text-amber-300" />
+                      )}
+                    </button>
                   </div>
 
                   <h4
-                    className={`text-sm font-semibold mb-2 ${
+                    className={`text-sm font-bold mb-2 transition-colors ${
                       isSubDone
-                        ? "text-emerald-200 line-through"
-                        : "text-white"
+                        ? "text-emerald-200 line-through decoration-emerald-400/60"
+                        : "text-white group-hover:text-amber-200"
                     }`}
                   >
                     {sub.title}
                   </h4>
 
-                  <p className="text-xs text-slate-300 leading-relaxed mb-3">
+                  <p className="text-xs text-slate-300 leading-relaxed mb-3.5">
                     {sub.content}
                   </p>
                 </div>

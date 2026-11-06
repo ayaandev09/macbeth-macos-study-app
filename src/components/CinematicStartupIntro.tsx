@@ -1,25 +1,22 @@
 "use client";
 
-import React, { useState, useEffect, useRef, useMemo } from "react";
+import React, { useState, useEffect, useRef, useMemo, useCallback } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import {
   Sparkles,
   ArrowRight,
   CheckCircle2,
   Clock,
-  Flame,
-  Target,
-  BookOpen,
-  Layers,
-  Activity,
+  Compass,
   Zap,
   TrendingUp,
   X,
-  Compass,
+  Layers,
   Crown
 } from "lucide-react";
 import { useStudyStore } from "@/store/useStudyStore";
 import { ALL_CHAPTERS } from "@/data";
-import { LiquidGlassLogo } from "./liquid-glass-logo";
+import { MacbethAppLogo } from "./MacbethAppLogo";
 
 /**
  * Macbeth Dedicated Vector Logo Emblem
@@ -58,32 +55,6 @@ const MacbethLogoSVG: React.FC<{ className?: string }> = ({ className = "w-full 
     <circle cx="256" cy="256" r="236" fill="url(#macbethGlow)" />
     <circle cx="256" cy="256" r="220" fill="#0d0408" stroke="url(#goldImperial)" strokeWidth="4" strokeOpacity="0.9" />
     <circle cx="256" cy="256" r="206" fill="none" stroke="#e11d48" strokeWidth="1.5" strokeDasharray="6 6" strokeOpacity="0.4" />
-
-    {/* Scottish Claymore Sword */}
-    <g>
-      <path d="M 256 90 L 264 360 L 256 385 L 248 360 Z" fill="url(#crimsonBlade)" stroke="#ffffff" strokeWidth="1" />
-      <line x1="256" y1="90" x2="256" y2="370" stroke="#fef08a" strokeWidth="1.5" strokeOpacity="0.8" />
-      <path d="M 210 355 C 230 360, 282 360, 302 355 L 306 367 C 282 372, 230 372, 206 367 Z" fill="url(#goldImperial)" />
-      <rect x="251" y="367" width="10" height="38" rx="2" fill="#78350f" stroke="url(#goldImperial)" strokeWidth="1" />
-      <circle cx="256" cy="415" r="11" fill="url(#goldImperial)" />
-    </g>
-
-    {/* Golden Imperial Crown */}
-    <g>
-      <path
-        d="M 160 270 L 175 190 L 218 230 L 256 165 L 294 230 L 337 190 L 352 270 Z"
-        fill="url(#goldImperial)"
-        stroke="#fef08a"
-        strokeWidth="2.5"
-        strokeLinejoin="round"
-      />
-      <circle cx="175" cy="186" r="5" fill="#ffffff" />
-      <circle cx="218" cy="226" r="5" fill="#f43f5e" />
-      <circle cx="256" cy="160" r="7" fill="#ffffff" />
-      <circle cx="294" cy="226" r="5" fill="#f43f5e" />
-      <circle cx="337" cy="186" r="5" fill="#ffffff" />
-      <rect x="156" y="270" width="200" height="22" rx="4" fill="#78350f" stroke="url(#goldImperial)" strokeWidth="2" />
-    </g>
   </svg>
 );
 
@@ -98,14 +69,12 @@ export const CinematicStartupIntro: React.FC<CinematicStartupIntroProps> = ({
   onClose,
   onComplete,
 }) => {
-  const [phase, setPhase] = useState<"enter" | "active" | "dissolve" | "done">("enter");
-  const [mounted, setMounted] = useState(false);
   const [currentTime, setCurrentTime] = useState("");
   const [sessionSeconds, setSessionSeconds] = useState(0);
-  const [countdown, setCountdown] = useState(4);
+  const [countdown, setCountdown] = useState(6);
+  const [isDismissing, setIsDismissing] = useState(false);
   const isDismissingRef = useRef(false);
 
-  // Pull live state continuously from Zustand
   const { completedChapters, activeChapterId, setActiveChapter } = useStudyStore();
 
   // 1. Live real-time digital clock
@@ -125,68 +94,60 @@ export const CinematicStartupIntro: React.FC<CinematicStartupIntroProps> = ({
     return () => clearInterval(timer);
   }, []);
 
-  // 2. Active study session timer
+  // 2. Study Session Stop-Watch
   useEffect(() => {
-    const interval = setInterval(() => {
+    const timer = setInterval(() => {
       setSessionSeconds((prev) => prev + 1);
     }, 1000);
-    return () => clearInterval(interval);
+    return () => clearInterval(timer);
   }, []);
 
-  // 3. Butter-smooth entrance
+  // Reset dismissing lock whenever intro becomes active
   useEffect(() => {
     if (isOpen) {
-      const raf = requestAnimationFrame(() => {
-        setMounted(true);
-        setPhase("active");
-      });
-      return () => cancelAnimationFrame(raf);
+      isDismissingRef.current = false;
+      setCountdown(6);
     }
   }, [isOpen]);
 
-  // 4. Glancing countdown: 4.5s hold time to read key priorities
+  // Unified dismiss logic
+  const handleDismiss = useCallback(() => {
+    if (isDismissingRef.current) return;
+    isDismissingRef.current = true;
+    onClose();
+    onComplete?.();
+  }, [onClose, onComplete]);
+
+  // 3. Luxurious Fluid Countdown (6 seconds for full liquid glass immersion)
   useEffect(() => {
     if (!isOpen) return;
-    isDismissingRef.current = false;
-    let currentCount = 4;
-    setCountdown(currentCount);
+    const interval = setInterval(() => {
+      setCountdown((prev) => {
+        if (prev <= 1) {
+          clearInterval(interval);
+          handleDismiss();
+          return 0;
+        }
+        return prev - 1;
+      });
+    }, 1000);
+    return () => clearInterval(interval);
+  }, [isOpen, handleDismiss]);
 
-    const timer = setInterval(() => {
-      currentCount -= 1;
-      setCountdown(Math.max(0, currentCount));
-      if (currentCount <= 0) {
-        clearInterval(timer);
-        handleDismiss();
-      }
-    }, 1100);
-
-    return () => clearInterval(timer);
-  }, [isOpen]);
-
-  // 5. Space/Enter/Escape to skip
+  // Keyboard shortcut listener (Space, Enter, Esc)
   useEffect(() => {
     if (!isOpen) return;
-    const onKey = (e: KeyboardEvent) => {
-      if (e.key === "Escape" || e.key === " " || e.key === "Enter") {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape" || e.key === "Enter" || e.key === " ") {
+        e.preventDefault();
         handleDismiss();
       }
     };
-    window.addEventListener("keydown", onKey);
-    return () => window.removeEventListener("keydown", onKey);
-  }, [isOpen]);
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [isOpen, handleDismiss]);
 
-  const handleDismiss = () => {
-    if (isDismissingRef.current) return;
-    isDismissingRef.current = true;
-    setPhase("dissolve");
-    setTimeout(() => {
-      setPhase("done");
-      onClose();
-      if (onComplete) onComplete();
-    }, 600);
-  };
-
-  // Live syllabus metrics computation
+  // Calculate live study metrics
   const totalChaptersCount = ALL_CHAPTERS.length;
   const completedCount = useMemo(() => {
     return Object.values(completedChapters).filter(Boolean).length;
@@ -197,7 +158,7 @@ export const CinematicStartupIntro: React.FC<CinematicStartupIntroProps> = ({
       ? Math.round((completedCount / totalChaptersCount) * 100)
       : 0;
 
-  // Find the exact next scene/chapter STILL TO DO
+  // Find the exact next scene STILL TO DO
   const nextTodoChapter = useMemo(() => {
     const uncompleted = ALL_CHAPTERS.find((c) => !completedChapters[c.id]);
     if (uncompleted) return uncompleted;
@@ -213,83 +174,100 @@ export const CinematicStartupIntro: React.FC<CinematicStartupIntroProps> = ({
     return `${String(mins).padStart(2, "0")}:${String(secs).padStart(2, "0")}`;
   }, [sessionSeconds]);
 
-  if (!isOpen || phase === "done") return null;
+  if (!isOpen) return null;
 
   return (
-    <div
+    <motion.div
+      initial={{ opacity: 1 }}
+      animate={{ opacity: 1 }}
+      exit={{
+        opacity: 0,
+        transition: { duration: 0.35, ease: [0.16, 1, 0.3, 1] },
+      }}
       onClick={handleDismiss}
-      className={`fixed inset-0 z-50 flex items-center justify-center p-4 cursor-pointer select-none transition-all duration-600 ease-[cubic-bezier(0.16,1,0.3,1)] ${
-        phase === "dissolve"
-          ? "opacity-0 scale-[1.02] -translate-y-2 blur-[8px] pointer-events-none"
-          : mounted
-            ? "opacity-100 scale-100 translate-y-0 blur-0"
-            : "opacity-0 scale-[0.96] translate-y-3 blur-md"
-      }`}
+      className="fixed inset-0 z-[9999] flex items-center justify-center p-4 sm:p-6 select-none bg-[#090306] backdrop-blur-2xl overflow-hidden cursor-pointer"
       style={{
         background:
-          "radial-gradient(circle at 50% 35%, rgba(245,158,11,0.18) 0%, rgba(13,4,8,0.92) 80%)",
-        backdropFilter: "blur(24px)",
-        WebkitBackdropFilter: "blur(24px)",
+          "radial-gradient(circle at 50% 35%, rgba(245,158,11,0.22) 0%, rgba(9,3,6,0.98) 75%)",
+        willChange: "opacity",
       }}
     >
-      {/* Central Glass Study Briefing HUD */}
-      <div
+      {/* Central Liquid Glass Briefing HUD */}
+      <motion.div
+        initial={{ opacity: 0, scale: 0.95, y: 12 }}
+        animate={{ opacity: 1, scale: 1, y: 0 }}
+        exit={{
+          opacity: 0,
+          scale: 0.98,
+          y: -10,
+          transition: { duration: 0.3, ease: [0.16, 1, 0.3, 1] },
+        }}
+        transition={{
+          duration: 0.45,
+          ease: [0.16, 1, 0.3, 1],
+        }}
         onClick={(e) => e.stopPropagation()}
-        className={`relative w-full max-w-lg p-6 sm:p-7 rounded-3xl border border-amber-400/25 bg-gradient-to-br from-white/[0.08] via-slate-900/90 to-slate-950/95 shadow-[0_28px_64px_rgba(0,0,0,0.85)] flex flex-col text-left overflow-hidden transition-all duration-600 ease-[cubic-bezier(0.16,1,0.3,1)] ${
-          mounted && phase !== "dissolve"
-            ? "opacity-100 scale-100 translate-y-0"
-            : "opacity-0 scale-[0.96] translate-y-3"
-        }`}
+        className="relative w-full max-w-lg p-6 sm:p-7 rounded-[2rem] border border-white/12 ring-1 ring-inset ring-white/10 bg-white/[0.04] dark:bg-black/55 backdrop-blur-2xl shadow-[0_32px_80px_rgba(0,0,0,0.85),inset_0_1px_1px_rgba(255,255,255,0.2),inset_0_0_24px_rgba(255,255,255,0.03)] flex flex-col text-left overflow-hidden cursor-default"
       >
-        {/* Shimmer Rim */}
-        <div className="absolute inset-0 bg-gradient-to-r from-transparent via-amber-400/10 to-transparent -translate-x-full animate-[shimmer_2.5s_infinite] pointer-events-none" />
+        {/* Specular Ambient Reflection Sheen */}
+        <div className="absolute inset-x-0 top-0 h-32 rounded-t-[2rem] bg-gradient-to-b from-white/[0.08] via-white/[0.02] to-transparent pointer-events-none" />
 
-        {/* Authentic ReactDrops Liquid Glass Logo Showcase */}
-        <div className="w-full h-36 sm:h-44 rounded-2xl overflow-hidden relative mb-4 bg-black/70 border border-amber-400/25 shadow-2xl flex items-center justify-center">
-          <LiquidGlassLogo
-            logo="/logo.svg"
-            ending="logo"
-            theme="light"
-            logoColor="original"
-            background="#000000"
-            depth={2.9}
-            style={{ height: "100%", width: "100%", minHeight: 0 }}
+        {/* Authentic Royal Scottish Insignia Showcase - Mesmerizing Liquid Glass Animation */}
+        <div className="w-full h-40 sm:h-48 rounded-2xl overflow-hidden relative mb-4 bg-gradient-to-b from-black/90 via-black/75 to-[#12050c] border border-amber-400/40 shadow-2xl flex items-center justify-center p-4 relative">
+          {/* Rotating Ambient Caustic Liquid Halo (120 FPS Metal GPU Composited) */}
+          <div
+            className="absolute w-60 h-60 rounded-full pointer-events-none liquid-caustic-halo"
+            style={{
+              background:
+                "radial-gradient(circle, rgba(245,158,11,0.32) 0%, rgba(225,29,72,0.18) 45%, transparent 70%)",
+            }}
           />
+
+          {/* Liquid Glass Breathing Emblem */}
+          <div className="w-28 h-28 sm:w-32 sm:h-32 relative z-10 flex items-center justify-center liquid-logo-float">
+            <MacbethAppLogo className="w-full h-full object-contain filter drop-shadow-[0_0_32px_rgba(245,158,11,0.65)]" />
+
+            {/* Slow Sweeping Liquid Glass Refraction Sheen Beam */}
+            <div className="absolute inset-0 rounded-full overflow-hidden pointer-events-none">
+              <div
+                className="w-full h-full liquid-glass-sheen"
+                style={{
+                  background:
+                    "linear-gradient(115deg, transparent 20%, rgba(255,255,255,0.55) 50%, transparent 80%)",
+                }}
+              />
+            </div>
+            <span className="absolute -top-1 -right-1 w-3 h-3 rounded-full bg-amber-400 animate-ping pointer-events-none" />
+          </div>
         </div>
 
-        {/* Header: Logo, App Title & Live Telemetry Badge */}
-        <div className="flex items-center justify-between gap-3 mb-5 border-b border-white/10 pb-4">
-          <div className="flex items-center gap-3">
-            <div className="w-11 h-11 rounded-2xl bg-amber-500/15 border border-amber-400/35 p-1.5 flex items-center justify-center shrink-0 shadow-inner">
-              <MacbethLogoSVG className="w-full h-full" />
+        {/* App Title & Status Header */}
+        <div className="flex items-center justify-between pb-3 mb-3 border-b border-white/10">
+          <div>
+            <div className="flex items-center gap-2">
+              <span className="font-mono text-[10px] font-bold uppercase tracking-[0.2em] text-amber-300">
+                MACBETH // FOLIO 1623
+              </span>
+              <span className="px-1.5 py-0.5 rounded-full bg-amber-500/15 border border-amber-500/30 text-[9px] font-mono text-amber-200">
+                CRITICAL EDITION
+              </span>
             </div>
-            <div>
-              <div className="flex items-center gap-2">
-                <span className="text-[10px] font-mono font-bold tracking-widest text-amber-400 uppercase">
-                  DUNSINANE // 1606
-                </span>
-              </div>
-              <h1 className="text-base sm:text-lg font-bold text-white tracking-tight">
-                Macbeth Folio Briefing
-              </h1>
-            </div>
+            <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-white flex items-center gap-2 mt-0.5 font-serif">
+              <span>Macbeth Literary Codex</span>
+              <Sparkles className="w-4 h-4 text-amber-300" />
+            </h1>
           </div>
-
-          {/* Live Continuous Sync Beacon */}
-          <div className="flex flex-col items-end shrink-0">
-            <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-emerald-500/15 border border-emerald-400/30 text-[10px] font-mono text-emerald-300 font-semibold">
-              <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-              LIVE SYNC
-            </div>
-            <span className="text-[10px] font-mono text-slate-400 mt-1">
-              {currentTime}
+          <div className="text-right font-mono">
+            <span className="text-[10px] text-slate-400 block">SYSTEM TIME</span>
+            <span className="text-xs font-bold text-slate-200">
+              {currentTime || "00:00:00"}
             </span>
           </div>
         </div>
 
-        {/* Priority Card: Next Focus / What Still Needs To Be Done */}
-        <div className="p-4 rounded-2xl bg-amber-950/40 border border-amber-400/30 mb-4 relative overflow-hidden">
-          <div className="flex items-center justify-between gap-2 mb-1.5">
+        {/* Dynamic Focus Milestone Card (Up Next • Still To Do) */}
+        <div className="p-4 rounded-2xl bg-amber-500/10 border border-amber-400/20 mb-4">
+          <div className="flex items-center justify-between mb-1.5">
             <span className="inline-flex items-center gap-1 text-[10px] font-mono font-bold uppercase tracking-wider text-amber-300">
               <Compass className="w-3 h-3 text-amber-400" /> Up Next • Still To Do
             </span>
@@ -297,14 +275,16 @@ export const CinematicStartupIntro: React.FC<CinematicStartupIntroProps> = ({
               {remainingChaptersCount} scenes remaining
             </span>
           </div>
-          <h2 className="text-sm sm:text-base font-bold text-white mb-1 line-clamp-1">
+          <h2 className="text-sm sm:text-base font-bold text-white mb-1 line-clamp-1 font-serif">
             {nextTodoChapter?.title}
           </h2>
           <p className="text-xs text-amber-100/70 line-clamp-2 font-sans mb-3">
             {nextTodoChapter?.summary || "Continue tragic arc analysis and Jacobean thematic investigation."}
           </p>
 
-          <button
+          <motion.button
+            whileHover={{ scale: 1.02 }}
+            whileTap={{ scale: 0.98 }}
             onClick={() => {
               if (nextTodoChapter) setActiveChapter(nextTodoChapter.id);
               handleDismiss();
@@ -313,7 +293,7 @@ export const CinematicStartupIntro: React.FC<CinematicStartupIntroProps> = ({
           >
             <span>Jump Directly to Scene</span>
             <ArrowRight className="w-3.5 h-3.5" />
-          </button>
+          </motion.button>
         </div>
 
         {/* Bento Status Grid: Syllabus Progress & Study Pulse */}
@@ -361,20 +341,32 @@ export const CinematicStartupIntro: React.FC<CinematicStartupIntroProps> = ({
           </p>
         </div>
 
-        {/* Footer: Countdown & Skip Action */}
-        <div className="flex items-center justify-between pt-1 border-t border-white/10 text-xs">
-          <span className="text-[11px] font-mono text-slate-400">
-            Opening workspace in <span className="text-amber-300 font-bold">{countdown}s</span>...
-          </span>
-          <button
+        {/* Footer: Countdown with Liquid Progress Track & Skip Action */}
+        <div className="flex items-center justify-between pt-2 border-t border-white/10 text-xs">
+          <div className="flex items-center gap-2.5">
+            <span className="text-[11px] font-mono text-slate-400">
+              Opening in <span className="text-amber-300 font-bold font-mono">{countdown}s</span>
+            </span>
+            <div className="w-16 h-1 rounded-full bg-white/10 overflow-hidden hidden sm:block">
+              <motion.div
+                className="h-full bg-gradient-to-r from-amber-400 to-rose-400 rounded-full"
+                initial={{ width: "100%" }}
+                animate={{ width: "0%" }}
+                transition={{ duration: 6, ease: "linear" }}
+              />
+            </div>
+          </div>
+          <motion.button
+            whileHover={{ scale: 1.04 }}
+            whileTap={{ scale: 0.96 }}
             onClick={handleDismiss}
-            className="px-3 py-1.5 rounded-xl bg-white/10 hover:bg-white/20 text-white font-mono text-xs transition-colors flex items-center gap-1 cursor-pointer"
+            className="px-3.5 py-1.5 rounded-xl bg-amber-500/20 hover:bg-amber-500/30 text-amber-200 border border-amber-400/40 font-mono text-xs transition-all flex items-center gap-1.5 cursor-pointer shadow-md soft-button"
           >
             <span>Enter Now</span>
-            <ArrowRight className="w-3 h-3" />
-          </button>
+            <ArrowRight className="w-3.5 h-3.5" />
+          </motion.button>
         </div>
-      </div>
-    </div>
+      </motion.div>
+    </motion.div>
   );
 };

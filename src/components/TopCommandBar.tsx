@@ -4,6 +4,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { useStudyStore, ViewMode, AcademicStyle } from "@/store/useStudyStore";
 import { ALL_CHAPTERS } from "@/data";
 import { ChromaticButton } from "./chromatic-button";
+import { MacbethAppLogo } from "./MacbethAppLogo";
 import {
   LayoutGrid,
   Layers,
@@ -17,10 +18,14 @@ import {
   GraduationCap,
   BookOpen,
   BookA,
-  Award,
-  Flame,
   ArrowRight,
+  Sparkles,
+  Timer,
+  Keyboard,
+  PanelLeft,
+  Compass,
 } from "lucide-react";
+import { KeyboardShortcutsModal } from "./KeyboardShortcutsModal";
 
 const VIEW_MODES: {
   id: ViewMode;
@@ -60,8 +65,13 @@ const VIEW_MODES: {
   },
 ];
 
-export function TopCommandBar() {
+interface TopCommandBarProps {
+  onOpenWalkthrough?: () => void;
+}
+
+export function TopCommandBar({ onOpenWalkthrough }: TopCommandBarProps = {}) {
   const {
+    activeChapterId,
     viewMode,
     setViewMode,
     studyGoal,
@@ -74,6 +84,16 @@ export function TopCommandBar() {
     setChapterSheetOpen,
     setDiagnosticsModalOpen,
     setActiveChapter,
+    isInspectorOpen,
+    toggleInspector,
+    openExamSprint,
+    isSpotlightOpen,
+    openSpotlight,
+    closeSpotlight,
+    toggleSpotlight,
+    triggerStartupIntro,
+    sidebarCollapsed,
+    toggleSidebar,
   } = useStudyStore();
 
   const completedCount = Object.values(completedChapters || {}).filter(Boolean).length;
@@ -82,37 +102,10 @@ export function TopCommandBar() {
     : 0;
   const activeStreak = 5;
 
-  const [isSearchFocused, setIsSearchFocused] = useState(false);
-  const searchInputRef = useRef<HTMLInputElement>(null);
+  const [isShortcutsOpen, setIsShortcutsOpen] = useState(false);
+  const currentChapter = ALL_CHAPTERS.find((c) => c.id === activeChapterId) || ALL_CHAPTERS[0];
 
-  const matchingResults: { id: string; displayCode: string; title: string; snippet: string }[] = React.useMemo(() => {
-    const q = searchQuery.trim().toLowerCase();
-    if (!q) return [];
-    return ALL_CHAPTERS.filter((ch) => {
-      return (
-        ch.title.toLowerCase().includes(q) ||
-        (ch.subtitle && ch.subtitle.toLowerCase().includes(q)) ||
-        ch.displayCode.toLowerCase().includes(q) ||
-        (ch.summary && ch.summary.toLowerCase().includes(q)) ||
-        ch.quotes?.some((item) => item.quote.toLowerCase().includes(q) || item.speaker.toLowerCase().includes(q)) ||
-        ch.subSections?.some((s) => s.title.toLowerCase().includes(q) || (s.content && s.content.toLowerCase().includes(q)))
-      );
-    }).map((ch) => ({
-      id: ch.id,
-      displayCode: ch.displayCode,
-      title: ch.title,
-      snippet: ch.briefing?.mustKnowQuote?.quote || ch.summary || "",
-    }));
-  }, [searchQuery]);
-
-  const selectSearchResult = (chapterId: string) => {
-    setActiveChapter(chapterId);
-    setViewMode("focus");
-    setIsSearchFocused(false);
-    window.scrollTo({ top: 0, behavior: "smooth" });
-  };
-
-  // MacBook Air M1 Native Keyboard Accelerators (⌘K, Escape, 1-5 View Switching)
+  // MacBook Air M1 Native Keyboard Accelerators (⌘K, ⌘B, Escape, 1-5 View Switching)
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       const target = e.target as HTMLElement | null;
@@ -121,30 +114,31 @@ export function TopCommandBar() {
         target?.tagName === "TEXTAREA" ||
         target?.isContentEditable;
 
-      if (e.key === "Escape") {
-        if (
-          searchInputRef.current &&
-          document.activeElement === searchInputRef.current
-        ) {
-          searchInputRef.current.blur();
-          setSearchQuery("");
-        }
-        return;
-      }
-
       if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === "k") {
         e.preventDefault();
-        searchInputRef.current?.focus();
+        toggleSpotlight();
         return;
       }
 
-      if (e.key === "/" && !isInput) {
+      if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === "b") {
         e.preventDefault();
-        searchInputRef.current?.focus();
+        toggleSidebar();
         return;
       }
 
-      if (!isInput && !e.metaKey && !e.ctrlKey && !e.altKey) {
+      if (e.key === "/" && !isInput && !isSpotlightOpen) {
+        e.preventDefault();
+        openSpotlight();
+        return;
+      }
+
+      if ((e.key === "?" || (e.shiftKey && e.key === "/")) && !isInput && !isSpotlightOpen) {
+        e.preventDefault();
+        setIsShortcutsOpen((prev) => !prev);
+        return;
+      }
+
+      if (!isInput && !e.metaKey && !e.ctrlKey && !e.altKey && !isSpotlightOpen) {
         if (e.key === "1") {
           e.preventDefault();
           setViewMode("focus");
@@ -166,264 +160,227 @@ export function TopCommandBar() {
 
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [setViewMode, setSearchQuery]);
+  }, [setViewMode, toggleSpotlight, openSpotlight, isSpotlightOpen]);
 
   return (
     <>
-      <header className="liquid-glass-long-bar !rounded-3xl overflow-hidden p-3 sm:p-4 mb-4 flex flex-col gap-3 z-20 shadow-2xl relative">
-      {/* Top Segment: Brand (Left) & Controls/Actions (Right) */}
-      <div className="flex flex-wrap items-center justify-between gap-3 w-full">
-        {/* Brand & Live Diagnostics Status Pill */}
-        <div className="flex items-center gap-2.5 shrink-0">
-          <div className="flex items-center gap-2">
-            <ChromaticButton
-              onClick={() => setDiagnosticsModalOpen(true)}
-              title="Click to run live Scottish Crown & Folio System Diagnostics"
-              color="#d97706"
-              colorMode="spectrum"
-              speed={0.7}
-              hoverEffect="brighten"
-              className="chromatic-icon !rounded-2xl border border-amber-400/40 relative shadow-lg overflow-hidden p-1.5"
-            >
-              <img src="/logo.svg" alt="Dunsinane Crown Logo" className="w-5 h-5 object-contain" />
-              <span className="absolute -top-0.5 -right-0.5 w-2 h-2 rounded-full bg-emerald-400 animate-ping pointer-events-none" />
-            </ChromaticButton>
-            <div className="leading-tight">
-              <span className="text-[10px] font-mono font-bold tracking-[0.2em] text-amber-400 uppercase block">
+      <header className="liquid-card-flagship !rounded-3xl p-3 sm:p-4 mb-5 flex flex-col gap-3 shadow-2xl relative mac-drag-region transition-all z-20">
+      {/* Top Segment: Brand & Status (Left) & Compact Ergonomic Action Cluster (Right) */}
+      <div className="flex items-center justify-between gap-3 w-full pb-2.5 border-b border-white/10 min-h-[44px]">
+        {/* Brand & Breadcrumbs (Left) */}
+        <div className="flex items-center gap-2 shrink-0 mac-no-drag">
+          {/* Native macOS Sidebar Toggle (⌘B) */}
+          <button
+            onClick={toggleSidebar}
+            title={sidebarCollapsed ? "Expand Scene Navigation Sidebar (⌘B)" : "Collapse Sidebar for Wide View (⌘B)"}
+            className={`w-8 h-8 rounded-xl flex items-center justify-center transition-all cursor-pointer soft-button shrink-0 border ${
+              sidebarCollapsed
+                ? "bg-amber-500/20 text-amber-300 border-amber-400/40 shadow-sm"
+                : "bg-white/5 hover:bg-white/10 text-slate-400 hover:text-white border-white/10"
+            }`}
+          >
+            <PanelLeft className="w-4 h-4" />
+          </button>
+
+          {/* Brand Logo & Title */}
+          <button
+            onClick={() => triggerStartupIntro()}
+            title="Click to replay Scottish Crown Cinematic Startup Intro"
+            className="flex items-center gap-2 min-w-0 text-left cursor-pointer group shrink-0"
+          >
+            <div className="w-8 h-8 rounded-xl bg-gradient-to-br from-amber-400/25 via-rose-500/20 to-amber-600/25 border border-amber-400/40 flex items-center justify-center p-1 shadow-md relative shrink-0 group-hover:scale-105 transition-transform overflow-hidden">
+              <MacbethAppLogo className="w-full h-full object-contain" />
+            </div>
+            <div className="min-w-0 leading-tight">
+              <span className="text-[9px] font-mono font-bold tracking-[0.2em] text-amber-400 uppercase block truncate">
                 DUNSINANE // 1606
               </span>
-              <span className="text-xs font-semibold text-white tracking-tight">
-                Macbeth Codex
+              <span className="text-xs font-semibold text-white tracking-tight flex items-center gap-1 truncate">
+                <span>Macbeth Codex</span>
+                <span className="text-slate-500">/</span>
+                <span className="text-amber-300 font-mono text-[11px] font-bold">
+                  {currentChapter.displayCode}
+                </span>
               </span>
-            </div>
-          </div>
-
-          {/* Polished Academic Status Badge: Overall Syllabus Mastery & Active Streak */}
-          <button
-            type="button"
-            onClick={() => setDiagnosticsModalOpen(true)}
-            title={`Syllabus Mastery: ${masteryPercentage}% (${completedCount}/${ALL_CHAPTERS.length} Scenes) • Active Study Streak: ${activeStreak} Days`}
-            className="flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-950/40 border border-emerald-500/30 text-[11px] font-mono shadow-md backdrop-blur-md hover:bg-emerald-900/30 transition-all cursor-pointer"
-          >
-            <div className="flex items-center gap-1.5">
-              <Award className="w-3.5 h-3.5 text-emerald-400" />
-              <span className="font-bold text-emerald-300">{masteryPercentage}%</span>
-              <span className="text-[9px] uppercase tracking-wider text-emerald-400/70 font-semibold hidden sm:inline">Mastery</span>
-            </div>
-            <span className="w-1 h-1 rounded-full bg-emerald-500/40" />
-            <div className="flex items-center gap-1">
-              <Flame className="w-3.5 h-3.5 text-amber-400 fill-amber-400/20 animate-pulse" />
-              <span className="font-bold text-amber-300">{activeStreak}d</span>
-              <span className="text-[9px] uppercase tracking-wider text-amber-400/70 font-semibold hidden sm:inline">Streak</span>
             </div>
           </button>
         </div>
 
-        {/* Right Section: Modality Switchers & Action Pills */}
-        <div className="flex flex-wrap items-center justify-end gap-2 shrink-0">
-          {/* Study Goal Switcher: Revision vs Study */}
-          <div className="flex items-center gap-1 p-1 rounded-full bg-black/50 border border-white/12 text-xs">
-            {studyGoal === "revise" ? (
-              <ChromaticButton
-                onClick={() => setStudyGoal("revise")}
-                title="Pre-lesson cramming, exam traps & active recall"
-                color="#d97706"
-                colorMode="spectrum"
-                speed={0.7}
-                hoverEffect="brighten"
-                className="chromatic-pill !px-3 !py-1.5 text-xs font-bold whitespace-nowrap shadow-md"
-              >
-                <Zap className="w-3.5 h-3.5 text-amber-200 mr-1" />
-                <span>Revision</span>
-              </ChromaticButton>
-            ) : (
-              <button
-                onClick={() => setStudyGoal("revise")}
-                title="Pre-lesson cramming, exam traps & active recall"
-                className="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-bold text-slate-400 hover:text-slate-200 transition-all cursor-pointer whitespace-nowrap"
-              >
-                <Zap className="w-3.5 h-3.5 text-amber-300" />
-                <span>Revision</span>
-              </button>
-            )}
-
-            {studyGoal === "learn" ? (
-              <ChromaticButton
-                onClick={() => setStudyGoal("learn")}
-                title="First-time guided study with context"
-                color="#00802f"
-                colorMode="spectrum"
-                speed={0.7}
-                hoverEffect="brighten"
-                className="chromatic-pill !px-3 !py-1.5 text-xs font-bold whitespace-nowrap shadow-md"
-              >
-                <BookOpen className="w-3.5 h-3.5 text-emerald-200 mr-1" />
-                <span>Study</span>
-              </ChromaticButton>
-            ) : (
-              <button
-                onClick={() => setStudyGoal("learn")}
-                title="First-time guided study with context"
-                className="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-bold text-slate-400 hover:text-slate-200 transition-all cursor-pointer whitespace-nowrap"
-              >
-                <BookOpen className="w-3.5 h-3.5 text-emerald-300" />
-                <span>Study</span>
-              </button>
-            )}
+        {/* Right Section: Compact Ergonomic Modality Switchers & Action Pills */}
+        <div className="flex items-center justify-end gap-1.5 sm:gap-2 shrink-0 mac-no-drag">
+          {/* Study Goal Switcher: Revision vs Study (Compact Segmented Pill) */}
+          <div className="flex items-center p-0.5 rounded-full bg-black/60 border border-white/12 text-xs">
+            <button
+              onClick={() => setStudyGoal("revise")}
+              title="Pre-lesson cramming, exam traps & active recall"
+              className={`flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-bold transition-all cursor-pointer whitespace-nowrap ${
+                studyGoal === "revise"
+                  ? "bg-amber-500/25 text-amber-200 border border-amber-400/40 shadow-sm"
+                  : "text-slate-400 hover:text-slate-200"
+              }`}
+            >
+              <Zap className="w-3 h-3 text-amber-300" />
+              <span className="hidden lg:inline text-[11px]">Revise</span>
+            </button>
+            <button
+              onClick={() => setStudyGoal("learn")}
+              title="First-time guided study with context"
+              className={`flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-bold transition-all cursor-pointer whitespace-nowrap ${
+                studyGoal === "learn"
+                  ? "bg-emerald-500/25 text-emerald-200 border border-emerald-400/40 shadow-sm"
+                  : "text-slate-400 hover:text-slate-200"
+              }`}
+            >
+              <BookOpen className="w-3 h-3 text-emerald-300" />
+              <span className="hidden lg:inline text-[11px]">Study</span>
+            </button>
           </div>
 
-          {/* Academic & Professional Typography Switcher */}
-          <div className="flex items-center gap-1 p-1 rounded-full bg-black/50 border border-white/12 text-xs">
-            <span className="pl-2.5 text-slate-400 flex items-center gap-1 text-[11px] font-bold">
-              <BookA className="w-3.5 h-3.5 text-amber-400" />
+          {/* Academic Typography Switcher (Compact Dropdown) */}
+          <div className="flex items-center p-0.5 rounded-full bg-black/60 border border-white/12 text-xs">
+            <span className="pl-2 text-slate-400 flex items-center">
+              <BookA className="w-3 h-3 text-amber-400" />
             </span>
             <select
               value={academicStyle}
               onChange={(e) => setAcademicStyle(e.target.value as AcademicStyle)}
-              title="Academic & Professional Typography Selection"
-              className="bg-transparent text-xs font-bold text-amber-200 border-none rounded-full px-2.5 py-1 focus:outline-none cursor-pointer"
+              title="Academic Typography Selection"
+              className="bg-transparent text-[11px] font-bold text-amber-200 border-none rounded-full px-2 py-1 focus:outline-none cursor-pointer"
             >
               <option value="newsreader" className="bg-slate-900 text-white">
-                🎓 Oxford Newsreader
+                🎓 Newsreader
               </option>
               <option value="garamond" className="bg-slate-900 text-white">
-                🏛️ Classical Garamond
+                🏛️ Garamond
               </option>
               <option value="jakarta" className="bg-slate-900 text-white">
-                🔬 Modern Jakarta Pro
+                🔬 Jakarta
               </option>
               <option value="cinzel" className="bg-slate-900 text-white">
-                👑 Regal Cinzel
+                👑 Cinzel
               </option>
             </select>
           </div>
+
+          {/* Timed Exam Sprint Button */}
+          <button
+            onClick={openExamSprint}
+            title="Launch Timed Exam Sprint (⌘E)"
+            className="flex items-center gap-1 px-2.5 py-1.5 rounded-full text-xs font-bold transition-all cursor-pointer border bg-amber-500/15 text-amber-200 border-amber-400/35 hover:bg-amber-500/25 shadow-sm soft-button shrink-0"
+          >
+            <Timer className="w-3.5 h-3.5 text-amber-300 animate-pulse" />
+            <span className="hidden xl:inline text-[11px]">Sprint</span>
+            <span className="text-[10px] font-mono text-amber-400/70">⌘E</span>
+          </button>
+
+          {/* Pro Analytical Inspector Toggle Pill (Shown only when tucked away to prevent collision) */}
+          {!isInspectorOpen && (
+            <button
+              onClick={toggleInspector}
+              title="Open Analytical Inspector (Tucked in Top Bar · ⌘I)"
+              className="flex items-center gap-1.5 px-2.5 sm:px-3 py-1.5 rounded-full text-xs font-bold transition-all cursor-pointer border soft-button relative group shrink-0 bg-amber-500/15 text-amber-200 hover:text-white border-amber-400/50 hover:border-amber-300 shadow-[0_0_18px_rgba(245,158,11,0.35)] tucked-pill-beacon"
+            >
+              <div className="relative flex items-center justify-center">
+                <Sparkles className="w-3.5 h-3.5 text-amber-300 group-hover:rotate-12 transition-transform" />
+                <span className="absolute -top-1 -right-1 w-2 h-2 rounded-full bg-amber-400 animate-ping pointer-events-none" />
+              </div>
+              <span className="hidden sm:inline text-[11px]">Inspector</span>
+              <span className="text-[9px] font-mono font-bold uppercase tracking-wider text-amber-300 bg-amber-500/25 px-1.5 py-0.2 rounded-full border border-amber-400/40">
+                Tucked
+              </span>
+              <span className="text-[10px] font-mono text-amber-400/80 bg-amber-500/15 px-1 py-0.2 rounded border border-amber-400/25">
+                ⌘I
+              </span>
+            </button>
+          )}
+
+          {/* Interactive App Tour / Walkthrough */}
+          {onOpenWalkthrough && (
+            <button
+              onClick={onOpenWalkthrough}
+              title="Interactive App Walkthrough & Guide (Tour)"
+              className="hidden sm:flex items-center gap-1.5 px-2.5 sm:px-3 py-1.5 rounded-full text-xs font-bold transition-all cursor-pointer border bg-amber-500/10 hover:bg-amber-500/20 text-amber-300 border-amber-400/35 shadow-sm soft-button shrink-0"
+            >
+              <Compass className="w-3.5 h-3.5 text-amber-400" />
+              <span className="hidden xl:inline text-[11px]">Tour</span>
+            </button>
+          )}
+
+          {/* Native Shortcuts Cheatsheet Guide (?) */}
+          <button
+            onClick={() => setIsShortcutsOpen((prev) => !prev)}
+            title="Keyboard Shortcuts Cheatsheet (?)"
+            className="flex items-center justify-center w-8 h-8 rounded-full text-xs font-bold transition-all cursor-pointer border bg-white/5 hover:bg-white/10 text-slate-300 hover:text-white border-white/10 shadow-sm soft-button shrink-0"
+          >
+            <span className="text-xs font-mono font-bold text-slate-300">?</span>
+          </button>
         </div>
       </div>
 
-      {/* Row 2: Dedicated Full-Width Navigation Track - Perfectly Sized Pills with Zero Clipping */}
+      {/* Row 2: Symmetrical 5-Column Navigation Grid - 100% Adaptive to Any Mac Screen */}
       <nav
         aria-label="Integrated Main Sections Bar"
-        className="w-full rounded-2xl p-1.5 bg-black/55 border border-white/12 flex items-center justify-start sm:justify-center gap-1.5 sm:gap-2 overflow-x-auto no-scrollbar shadow-inner"
+        className="w-full grid grid-cols-5 gap-1 sm:gap-1.5 p-1 bg-black/60 border border-white/12 rounded-2xl shadow-inner"
       >
         {VIEW_MODES.map((mode) => {
           const isActive = viewMode === mode.id;
-          return isActive ? (
-            <ChromaticButton
-              key={mode.id}
-              onClick={() => setViewMode(mode.id)}
-              color="#d97706"
-              colorMode="spectrum"
-              speed={0.7}
-              hoverEffect="brighten"
-              className="chromatic-compact !px-3.5 !py-1.5 rounded-xl text-xs font-bold text-white shrink-0 whitespace-nowrap shadow-lg shadow-amber-500/25 border border-amber-300/60"
-            >
-              <span className="text-amber-200 mr-1.5">{mode.icon}</span>
-              <span className="hidden sm:inline">{mode.label}</span>
-              <span className="inline sm:hidden">{mode.shortLabel}</span>
-            </ChromaticButton>
-          ) : (
+          return (
             <button
               key={mode.id}
               onClick={() => setViewMode(mode.id)}
-              className="flex items-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-1.5 sm:py-2 rounded-xl text-xs font-semibold text-slate-300 hover:text-white hover:bg-white/10 hover:brightness-110 active:scale-[0.96] transition-all duration-200 cursor-pointer shrink-0 whitespace-nowrap"
+              className={`col-span-1 flex items-center justify-center gap-1.5 py-1.5 sm:py-2 px-1 rounded-xl text-xs font-bold transition-all cursor-pointer truncate ${
+                isActive
+                  ? "bg-amber-500/25 text-amber-200 border border-amber-400/50 shadow-md shadow-amber-500/20"
+                  : "text-slate-400 hover:text-white hover:bg-white/5"
+              }`}
             >
-              <span className="text-slate-400">{mode.icon}</span>
-              <span className="hidden sm:inline">{mode.label}</span>
-              <span className="inline sm:hidden">{mode.shortLabel}</span>
+              <span className={isActive ? "text-amber-300 shrink-0" : "text-slate-400 shrink-0"}>
+                {mode.icon}
+              </span>
+              <span className="hidden 2xl:inline truncate">{mode.label}</span>
+              <span className="inline 2xl:hidden truncate">{mode.shortLabel}</span>
             </button>
           );
         })}
       </nav>
 
-      {/* Row 3: Full-Width Search Bar with Mac ⌘K Shortcut & Instant Spotlight Results */}
-      <div className="relative w-full">
-        <Search className="w-4 h-4 text-slate-400 absolute left-4 top-1/2 -translate-y-1/2 pointer-events-none" />
-        <input
-          ref={searchInputRef}
-          type="text"
-          value={searchQuery}
-          onChange={(e) => setSearchQuery(e.target.value)}
-          onFocus={() => setIsSearchFocused(true)}
-          onBlur={() => {
-            setTimeout(() => setIsSearchFocused(false), 200);
-          }}
-          onKeyDown={(e) => {
-            if (e.key === "Enter" && matchingResults.length > 0) {
-              e.preventDefault();
-              selectSearchResult(matchingResults[0].id);
-            }
-          }}
-          placeholder="Search 31 Macbeth scenes, quotes, symbols (e.g. 'dagger', 'unsex me here', 'Banquo', 'Birnam Wood', 'equivocator')..."
-          className="w-full pl-10 pr-14 py-2 rounded-2xl text-xs text-white placeholder-slate-400 bg-black/45 border border-white/10 focus:outline-none focus:border-amber-400/60 focus:bg-black/60 transition-all font-sans shadow-inner"
-        />
-        {!searchQuery ? (
-          <span className="hidden sm:inline-flex items-center gap-0.5 px-2 py-0.5 rounded-lg text-[10px] font-mono text-slate-400 bg-white/10 border border-white/10 absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none select-none">
-            <kbd className="font-sans text-[11px]">⌘</kbd>K
-          </span>
-        ) : (
-          <button
-            onClick={() => {
-              setSearchQuery("");
-              setIsSearchFocused(false);
-            }}
-            className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-white cursor-pointer p-1"
-          >
-            <X className="w-3.5 h-3.5" />
-          </button>
-        )}
-
-        {/* Instant Interactive Search Results Dropdown */}
-        {searchQuery.trim().length > 0 && isSearchFocused && (
-          <div
-            className="absolute left-0 right-0 top-full mt-2 z-50 rounded-2xl p-3 border border-amber-500/30 shadow-2xl backdrop-blur-2xl max-h-[380px] overflow-y-auto no-scrollbar"
-            style={{
-              backgroundColor: "rgba(18, 10, 5, 0.95)",
-              boxShadow: "0 20px 50px rgba(0, 0, 0, 0.8)",
-            }}
-          >
-            <div className="flex items-center justify-between px-2 pb-2 mb-2 border-b border-white/10 text-[11px] font-mono">
-              <span className="text-slate-400">
-                Found <strong className="text-amber-300">{matchingResults.length}</strong> scenes for &quot;{searchQuery}&quot;
-              </span>
-              <span className="text-slate-500 text-[10px]">Press Enter or click to inspect</span>
+      {/* Row 3: Flagship Spacious Jelly Spotlight Command Pill (Raycast / Spotlight Ergonomics) */}
+      <div className="w-full">
+        <button
+          type="button"
+          onClick={openSpotlight}
+          className="w-full px-4 py-2.5 rounded-2xl bg-black/55 hover:bg-black/70 border border-white/12 hover:border-amber-400/40 text-left flex items-center justify-between gap-3 shadow-inner transition-all group cursor-pointer soft-button"
+        >
+          <div className="flex items-center gap-3 min-w-0">
+            <div className="w-7 h-7 rounded-xl bg-amber-500/15 border border-amber-400/30 flex items-center justify-center text-amber-300 group-hover:scale-105 transition-transform shrink-0">
+              <Search className="w-3.5 h-3.5" />
             </div>
-
-            {matchingResults.length > 0 ? (
-              <div className="space-y-1">
-                {matchingResults.slice(0, 8).map((item) => (
-                  <button
-                    key={item.id}
-                    onMouseDown={(e) => {
-                      e.preventDefault();
-                      selectSearchResult(item.id);
-                    }}
-                    className="w-full text-left p-2.5 rounded-xl hover:bg-white/10 active:bg-white/15 transition-all flex items-center justify-between gap-3 group cursor-pointer"
-                  >
-                    <div className="min-w-0 flex-1">
-                      <div className="flex items-center gap-2">
-                        <span className="font-mono text-xs font-bold text-amber-300 px-1.5 py-0.5 rounded bg-amber-500/10 border border-amber-500/20">
-                          {item.displayCode}
-                        </span>
-                        <span className="text-xs font-semibold text-white truncate group-hover:text-amber-200 transition-colors">
-                          {item.title}
-                        </span>
-                      </div>
-                      <p className="text-[11px] text-slate-400 truncate mt-0.5 font-sans">
-                        {item.snippet}
-                      </p>
-                    </div>
-                    <ArrowRight className="w-3.5 h-3.5 text-slate-500 group-hover:text-amber-300 shrink-0 -translate-x-1 group-hover:translate-x-0 transition-transform" />
-                  </button>
-                ))}
-              </div>
-            ) : (
-              <div className="p-4 text-center text-xs text-slate-400 font-mono">
-                No scenes matched &quot;{searchQuery}&quot;. Try terms like &apos;dagger&apos;, &apos;Banquo&apos;, &apos;Duncan&apos;, or &apos;Dunsinane&apos;.
-              </div>
-            )}
+            <div className="min-w-0 truncate">
+              <span className="text-xs text-slate-300 group-hover:text-white transition-colors">
+                Spotlight Search 31 Macbeth scenes, iconic quotes, soliloquies, themes...
+              </span>
+              <span className="hidden lg:inline text-[11px] text-slate-400 ml-2 font-mono">
+                (e.g. &ldquo;dagger&rdquo;, &ldquo;unsex me here&rdquo;, &ldquo;Banquo&rdquo;, &ldquo;I.2&rdquo;)
+              </span>
+            </div>
           </div>
-        )}
+
+          <div className="flex items-center gap-2 shrink-0">
+            <span className="hidden sm:inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-[10px] font-mono font-bold text-amber-300 bg-amber-500/15 border border-amber-400/30 group-hover:bg-amber-500/25 transition-all">
+              <kbd className="font-sans text-[11px]">⌘</kbd>K
+            </span>
+          </div>
+        </button>
       </div>
+
+      {/* Global Native Keyboard Shortcuts Cheatsheet Modal */}
+      <KeyboardShortcutsModal
+        isOpen={isShortcutsOpen}
+        onClose={() => setIsShortcutsOpen(false)}
+        appName="Macbeth First Folio Codex"
+        accentColor="#d97706"
+        onOpenTour={onOpenWalkthrough}
+      />
     </header>
   </>
   );

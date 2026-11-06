@@ -1,76 +1,104 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="100%" height="100%" preserveAspectRatio="xMidYMid meet">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512" preserveAspectRatio="xMidYMid meet">
   <defs>
-    <radialGradient id="mbGlow" cx="50%" cy="45%" r="65%">
-      <stop offset="0%" stop-color="#fbbf24" stop-opacity="0.35"/>
-      <stop offset="45%" stop-color="#f59e0b" stop-opacity="0.15"/>
-      <stop offset="100%" stop-color="#000000" stop-opacity="0"/>
-    </radialGradient>
+    <!-- Royal Scottish Gold Gradients -->
     <linearGradient id="goldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
       <stop offset="0%" stop-color="#fef08a"/>
       <stop offset="25%" stop-color="#f59e0b"/>
-      <stop offset="60%" stop-color="#d97706"/>
-      <stop offset="100%" stop-color="#78350f"/>
+      <stop offset="65%" stop-color="#d97706"/>
+      <stop offset="100%" stop-color="#92400e"/>
     </linearGradient>
-    <linearGradient id="bladeGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#ffffff"/>
-      <stop offset="35%" stop-color="#e2e8f0"/>
-      <stop offset="70%" stop-color="#94a3b8"/>
-      <stop offset="100%" stop-color="#475569"/>
-    </linearGradient>
+    <radialGradient id="goldAura" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#f59e0b" stop-opacity="0.32"/>
+      <stop offset="60%" stop-color="#d97706" stop-opacity="0.12"/>
+      <stop offset="100%" stop-color="#92400e" stop-opacity="0"/>
+    </radialGradient>
+
+    <!-- Royal Velvet Crimson -->
     <linearGradient id="crimsonGrad" x1="0%" y1="0%" x2="0%" y2="100%">
-      <stop offset="0%" stop-color="#f43f5e"/>
-      <stop offset="50%" stop-color="#be123c"/>
+      <stop offset="0%" stop-color="#fb7185"/>
+      <stop offset="35%" stop-color="#e11d48"/>
+      <stop offset="70%" stop-color="#9f1239"/>
       <stop offset="100%" stop-color="#4c0519"/>
     </linearGradient>
-    <filter id="royalShadow" x="-20%" y="-20%" width="140%" height="140%">
-      <feDropShadow dx="0" dy="8" stdDeviation="12" flood-color="#f59e0b" flood-opacity="0.4"/>
-    </filter>
+
+    <!-- Steel Blade Gradients -->
+    <linearGradient id="bladeGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#ffffff"/>
+      <stop offset="40%" stop-color="#e2e8f0"/>
+      <stop offset="75%" stop-color="#94a3b8"/>
+      <stop offset="100%" stop-color="#475569"/>
+    </linearGradient>
   </defs>
 
-  <!-- Ambient Glow & Shield Plate -->
-  <circle cx="256" cy="256" r="236" fill="url(#mbGlow)"/>
-  <circle cx="256" cy="256" r="220" fill="#090d16" stroke="url(#goldGrad)" stroke-width="4" stroke-opacity="0.8"/>
-  <circle cx="256" cy="256" r="208" fill="none" stroke="url(#goldGrad)" stroke-width="1.5" stroke-dasharray="6 6" stroke-opacity="0.4"/>
+  <!-- Ambient Royal Halo Aura -->
+  <circle cx="256" cy="256" r="240" fill="url(#goldAura)"/>
+
+  <!-- Outer Golden Royal Shield Frame -->
+  <circle cx="256" cy="256" r="230" fill="#0b0f19" stroke="url(#goldGrad)" stroke-width="8" stroke-opacity="0.95"/>
+  <circle cx="256" cy="256" r="214" fill="none" stroke="#fef08a" stroke-width="2" stroke-dasharray="8 8" stroke-opacity="0.65"/>
 
   <!-- Dunsinane Royal Scottish Crown -->
-  <g filter="url(#royalShadow)">
-    <!-- Crown Base Band -->
-    <path d="M 146 325 C 200 342, 312 342, 366 325 L 358 355 C 310 370, 202 370, 154 355 Z" fill="url(#goldGrad)" stroke="#fef08a" stroke-width="1.5"/>
-    
-    <!-- Crown Band Jewels -->
-    <circle cx="180" cy="344" r="5" fill="#f43f5e"/>
-    <circle cx="218" cy="348" r="6" fill="#10b981"/>
-    <circle cx="256" cy="349" r="7" fill="#38bdf8"/>
-    <circle cx="294" cy="348" r="6" fill="#10b981"/>
-    <circle cx="332" cy="344" r="5" fill="#f43f5e"/>
+  <!-- Velvet Cap of Estate -->
+  <path
+    d="M 148 318 C 148 226, 186 172, 256 166 C 326 172, 364 226, 364 318 Z"
+    fill="url(#crimsonGrad)"
+    stroke="#f43f5e"
+    stroke-width="3"
+    stroke-opacity="0.6"
+  />
 
-    <!-- Velvet Cap interior of Scottish Crown -->
-    <path d="M 160 325 C 160 250, 190 200, 256 195 C 322 200, 352 250, 352 325 Z" fill="url(#crimsonGrad)" opacity="0.95"/>
+  <!-- Golden Crown Peak Arches (Bold Silhouette) -->
+  <path
+    d="M 132 318 L 152 216 L 196 268 L 256 160 L 316 268 L 360 216 L 380 318 Z"
+    fill="url(#goldGrad)"
+    stroke="#fef08a"
+    stroke-width="5"
+    stroke-linejoin="round"
+  />
 
-    <!-- Golden Arches and Peaks -->
-    <path d="M 146 325 L 160 240 L 195 285 L 256 185 L 317 285 L 352 240 L 366 325 Z" fill="url(#goldGrad)" stroke="#fef08a" stroke-width="2"/>
+  <!-- Crown Base Band (Solid Gold with Highlights) -->
+  <path
+    d="M 132 318 C 190 338, 322 338, 380 318 L 372 360 C 318 382, 194 382, 140 360 Z"
+    fill="url(#goldGrad)"
+    stroke="#fef08a"
+    stroke-width="4"
+  />
 
-    <!-- Fleur-de-lis and Cross Pattée Crest Finial -->
-    <path d="M 256 155 L 261 170 L 276 170 L 264 179 L 268 194 L 256 185 L 244 194 L 248 179 L 236 170 L 251 170 Z" fill="#fef08a"/>
-    <circle cx="256" cy="148" r="8" fill="url(#goldGrad)" stroke="#fef08a" stroke-width="2"/>
-    <circle cx="160" cy="235" r="7" fill="url(#goldGrad)"/>
-    <circle cx="352" cy="235" r="7" fill="url(#goldGrad)"/>
-  </g>
+  <!-- Royal Crown Jewels Inset -->
+  <circle cx="174" cy="344" r="8" fill="#e11d48" stroke="#ffffff" stroke-width="1.5"/>
+  <circle cx="215" cy="351" r="9" fill="#10b981" stroke="#ffffff" stroke-width="1.5"/>
+  <circle cx="256" cy="353" r="11" fill="#38bdf8" stroke="#ffffff" stroke-width="2"/>
+  <circle cx="297" cy="351" r="9" fill="#10b981" stroke="#ffffff" stroke-width="1.5"/>
+  <circle cx="338" cy="344" r="8" fill="#e11d48" stroke="#ffffff" stroke-width="1.5"/>
 
-  <!-- Dagger of the Mind (Central Spectral Dagger Pointing Downwards) -->
-  <g>
-    <!-- Crossguard -->
-    <path d="M 230 255 C 245 258, 267 258, 282 255 L 285 264 C 265 268, 247 268, 227 264 Z" fill="url(#goldGrad)" stroke="#fef08a" stroke-width="1"/>
-    <!-- Dagger Pommel & Grip -->
-    <path d="M 252 220 L 260 220 L 259 255 L 253 255 Z" fill="url(#goldGrad)"/>
-    <circle cx="256" cy="214" r="6" fill="#fef08a" stroke="#d97706" stroke-width="2"/>
+  <!-- Golden Peak Orb Finials -->
+  <circle cx="152" cy="212" r="10" fill="#fef08a" stroke="#d97706" stroke-width="2"/>
+  <circle cx="360" cy="212" r="10" fill="#fef08a" stroke="#d97706" stroke-width="2"/>
 
-    <!-- Sharp Steel Blade with Bloodline Ridge -->
-    <path d="M 248 265 L 256 395 L 264 265 Z" fill="url(#bladeGrad)" stroke="#cbd5e1" stroke-width="1"/>
-    <line x1="256" y1="265" x2="256" y2="385" stroke="#f43f5e" stroke-width="1.5" stroke-linecap="round"/>
-    <circle cx="256" cy="397" r="2.5" fill="#f43f5e"/>
-  </g>
+  <!-- Spectral Dagger of the Mind (Central Vertical Piercing Blade) -->
+  <!-- Jeweled Spherical Pommel -->
+  <circle cx="256" cy="80" r="12" fill="url(#goldGrad)" stroke="#fef08a" stroke-width="3"/>
 
-  <!-- Bottom Arch Inscription Ring -->
-  <text x="256" y="440" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, 'Cinzel', serif" font-size="14" font-weight="bold" letter-spacing="6" fill="#f59e0b" opacity="0.9">DUNSINANE • 1606</text>
+  <!-- Dagger Grip -->
+  <rect x="250" y="92" width="12" height="34" rx="3" fill="url(#goldGrad)" stroke="#78350f" stroke-width="1.5"/>
+
+  <!-- Crossguard -->
+  <path
+    d="M 218 126 C 240 131, 272 131, 294 126 L 298 138 C 272 144, 240 144, 214 138 Z"
+    fill="url(#goldGrad)"
+    stroke="#fef08a"
+    stroke-width="2.5"
+  />
+
+  <!-- Gleaming Steel Blade with Crimson Bloodline -->
+  <path
+    d="M 246 142 L 256 310 L 266 142 Z"
+    fill="url(#bladeGrad)"
+    stroke="#cbd5e1"
+    stroke-width="2"
+  />
+  <line x1="256" y1="144" x2="256" y2="296" stroke="#e11d48" stroke-width="3" stroke-linecap="round"/>
+
+  <!-- Blood Drop at the tip -->
+  <circle cx="256" cy="316" r="4.5" fill="#e11d48"/>
 </svg>

@@ -9,6 +9,7 @@ export type StudyLensMode = "primer" | "revision" | "deep";
 export type StudyGoal = "learn" | "revise";
 export type AcademicStyle = "newsreader" | "garamond" | "jakarta" | "cinzel";
 export type DeviceMode = "mac" | "iphone16e";
+export type WidgetTemplateSize = "small" | "medium" | "large";
 
 interface StudyStoreState {
   // Navigation & View State
@@ -25,6 +26,11 @@ interface StudyStoreState {
   sidebarCollapsed: boolean;
   chapterSheetOpen: boolean;
   diagnosticsModalOpen: boolean;
+  isInspectorOpen: boolean;
+  isExamSprintActive: boolean;
+  isSpotlightOpen: boolean;
+  isStartupActive: boolean;
+  widgetTemplate: WidgetTemplateSize;
 
   // Persisted Study Progress State
   completedChapters: Record<string, boolean>;
@@ -47,6 +53,18 @@ interface StudyStoreState {
   toggleSidebar: () => void;
   setChapterSheetOpen: (open: boolean) => void;
   setDiagnosticsModalOpen: (open: boolean) => void;
+  toggleInspector: () => void;
+  setInspectorOpen: (open: boolean) => void;
+  openExamSprint: () => void;
+  closeExamSprint: () => void;
+  toggleExamSprint: () => void;
+  openSpotlight: () => void;
+  closeSpotlight: () => void;
+  toggleSpotlight: () => void;
+  setSpotlightOpen: (open: boolean) => void;
+  setWidgetTemplate: (template: WidgetTemplateSize) => void;
+  triggerStartupIntro: () => void;
+  dismissStartupIntro: () => void;
 
   // Progress Tracker Actions
   toggleChapterComplete: (chapterId: string) => void;
@@ -78,6 +96,11 @@ export const useStudyStore = create<StudyStoreState>()(
       sidebarCollapsed: false,
       chapterSheetOpen: false,
       diagnosticsModalOpen: false,
+      isInspectorOpen: true,
+      isExamSprintActive: false,
+      isSpotlightOpen: false,
+      isStartupActive: true,
+      widgetTemplate: "medium",
 
       completedChapters: {},
       completedSubSections: {},
@@ -164,6 +187,66 @@ export const useStudyStore = create<StudyStoreState>()(
       setDiagnosticsModalOpen: (open) =>
         set({
           diagnosticsModalOpen: open,
+        }),
+
+      toggleInspector: () =>
+        set((state) => ({
+          isInspectorOpen: !state.isInspectorOpen,
+        })),
+
+      setInspectorOpen: (open) =>
+        set({
+          isInspectorOpen: open,
+        }),
+
+      openExamSprint: () =>
+        set({
+          isExamSprintActive: true,
+        }),
+
+      closeExamSprint: () =>
+        set({
+          isExamSprintActive: false,
+        }),
+
+      toggleExamSprint: () =>
+        set((state) => ({
+          isExamSprintActive: !state.isExamSprintActive,
+        })),
+
+      openSpotlight: () =>
+        set({
+          isSpotlightOpen: true,
+        }),
+
+      closeSpotlight: () =>
+        set({
+          isSpotlightOpen: false,
+        }),
+
+      toggleSpotlight: () =>
+        set((state) => ({
+          isSpotlightOpen: !state.isSpotlightOpen,
+        })),
+
+      setSpotlightOpen: (open) =>
+        set({
+          isSpotlightOpen: open,
+        }),
+
+      setWidgetTemplate: (template) =>
+        set({
+          widgetTemplate: template,
+        }),
+
+      triggerStartupIntro: () =>
+        set({
+          isStartupActive: true,
+        }),
+
+      dismissStartupIntro: () =>
+        set({
+          isStartupActive: false,
         }),
 
       toggleChapterComplete: (chapterId) =>

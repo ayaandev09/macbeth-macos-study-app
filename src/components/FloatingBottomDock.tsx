@@ -105,25 +105,27 @@ export function FloatingBottomDock() {
         </button>
 
         {/* Current Scene Badge & Mark Mastered Toggle */}
-        <div className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-slate-950/70 border border-white/15">
-          <button
-            onClick={() => toggleChapterComplete(currentChapter.id)}
-            title="Toggle scene complete"
-            className="cursor-pointer text-slate-300 hover:text-emerald-400 transition-colors"
-          >
-            {isCompleted ? (
-              <CheckCircle2 className="w-4 h-4 text-emerald-400" />
-            ) : (
-              <Circle className="w-4 h-4 text-slate-500 hover:text-amber-300" />
-            )}
-          </button>
+        <button
+          onClick={() => toggleChapterComplete(currentChapter.id)}
+          title={isCompleted ? "Scene Mastered (click to toggle)" : "Mark Scene Mastered"}
+          className={`flex items-center gap-2 px-3.5 py-1.5 rounded-full border transition-all cursor-pointer soft-tick-btn ${
+            isCompleted
+              ? "bg-emerald-950/80 border-emerald-400/50 text-emerald-300 shadow-[0_0_12px_rgba(52,211,153,0.3)]"
+              : "bg-slate-950/80 border-white/15 text-slate-300 hover:border-amber-400/40 hover:text-white"
+          }`}
+        >
+          {isCompleted ? (
+            <CheckCircle2 className="w-4 h-4 text-emerald-400 animate-tick-pop" />
+          ) : (
+            <Circle className="w-4 h-4 text-slate-400 hover:text-amber-300" />
+          )}
           <span className="font-mono text-xs font-bold text-white tracking-wide">
             {currentChapter.displayCode}
           </span>
           <span className="text-[10px] font-mono text-slate-400 hidden md:inline">
             ({totalDone}/{TOTAL_CHAPTERS_COUNT})
           </span>
-        </div>
+        </button>
 
         {/* Next Scene Button */}
         <button

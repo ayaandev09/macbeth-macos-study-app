@@ -1,6 +1,7 @@
 "use client";
 
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useEffect } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import {
   ALL_CHAPTERS,
   PRE_LESSON_BRIEFINGS,
@@ -96,6 +97,43 @@ export function RevisionCramView() {
     setFlashcardScore(cardId, status);
     nextCard();
   };
+
+  // Keyboard navigation for Flashcards (Space/Enter: Flip, ArrowRight: Next, ArrowLeft: Prev, Up/M: Mark Mastered)
+  useEffect(() => {
+    if (activeTab !== "flashcards") return;
+    const handleKeyDown = (e: KeyboardEvent) => {
+      const target = e.target as HTMLElement | null;
+      if (
+        target?.tagName === "INPUT" ||
+        target?.tagName === "TEXTAREA" ||
+        target?.isContentEditable
+      ) {
+        return;
+      }
+
+      if (e.code === "Space" || e.code === "Enter") {
+        e.preventDefault();
+        if (currentCard) {
+          toggleFlip(currentCard.id);
+        }
+      } else if (e.code === "ArrowRight") {
+        e.preventDefault();
+        nextCard();
+      } else if (e.code === "ArrowLeft") {
+        e.preventDefault();
+        prevCard();
+      } else if (e.code === "ArrowUp" || e.key.toLowerCase() === "m") {
+        e.preventDefault();
+        if (currentCard) {
+          const isMastered = flashcardScores[currentCard.id] === "known";
+          handleMarkScore(currentCard.id, isMastered ? "learning" : "known");
+        }
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [activeTab, currentCard, flashcardScores, cardIndex, filteredCards.length]);
 
   // Filter essay blueprints
   const filteredEssays = useMemo(() => {
@@ -364,101 +402,185 @@ export function RevisionCramView() {
             </div>
           </div>
 
-          {/* Interactive Flashcard */}
+          {/* Interactive Flashcard with Butter-Smooth Hardware Acceleration */}
           {currentCard ? (
-            <div className="liquid-glass-bento rounded-3xl p-6 lg:p-8 flex flex-col justify-between min-h-[380px] relative overflow-hidden">
-              <div>
-                {/* Card Header */}
-                <div className="flex items-center justify-between gap-2 mb-4">
-                  <div className="flex items-center gap-2">
-                    <span className="font-mono text-[10px] uppercase font-bold px-2 py-0.5 rounded-md bg-amber-500/20 text-amber-300 border border-amber-400/30">
-                      {currentCard.category}
-                    </span>
-                    <span className="font-mono text-xs text-slate-400">
-                      {currentCard.actSceneRef}
-                    </span>
-                  </div>
-                  <span className="font-mono text-xs text-slate-400">
-                    Card {cardIndex + 1} of {filteredCards.length}
-                  </span>
-                </div>
+            <div
+              className="w-full min-h-[380px] cursor-pointer select-none"
+              style={{ perspective: "1400px" }}
+              onClick={() => toggleFlip(currentCard.id)}
+            >
+              <AnimatePresence mode="wait" initial={false}>
+                {!isCurrentCardFlipped ? (
+                  <motion.div
+                    key={`front-${currentCard.id}`}
+                    initial={{ rotateY: -80, opacity: 0 }}
+                    animate={{ rotateY: 0, opacity: 1 }}
+                    exit={{ rotateY: 80, opacity: 0 }}
+                    transition={{ duration: 0.26, ease: [0.16, 1, 0.3, 1] }}
+                    className="liquid-glass-bento rounded-3xl p-6 lg:p-8 flex flex-col justify-between min-h-[380px] relative overflow-hidden border border-white/20 hover:border-amber-400/40 shadow-2xl"
+                  >
+                    <div>
+                      {/* Card Header */}
+                      <div className="flex items-center justify-between gap-2 mb-4">
+                        <div className="flex items-center gap-2">
+                          <span className="font-mono text-[10px] uppercase font-bold px-2 py-0.5 rounded-md bg-amber-500/20 text-amber-300 border border-amber-400/30">
+                            {currentCard.category}
+                          </span>
+                          <span className="font-mono text-xs text-slate-400">
+                            {currentCard.actSceneRef}
+                          </span>
+                        </div>
+                        <span className="font-mono text-xs text-slate-400">
+                          Card {cardIndex + 1} of {filteredCards.length}
+                        </span>
+                      </div>
 
-                {/* Question Area */}
-                <div className="space-y-3 mb-6">
-                  <h3 className="text-lg lg:text-xl font-bold text-white leading-relaxed">
-                    {currentCard.question}
-                  </h3>
-                </div>
+                      {/* Question Area */}
+                      <div className="space-y-3 mb-6">
+                        <h3 className="text-lg lg:text-xl font-bold text-white leading-relaxed">
+                          {currentCard.question}
+                        </h3>
+                      </div>
 
-                {/* Flip Reveal Button / Answer Display */}
-                {isCurrentCardFlipped ? (
-                  <div className="p-4 rounded-2xl bg-slate-900/90 border border-white/15 space-y-3 animate-in fade-in duration-200">
-                    <span className="font-mono text-[10px] uppercase tracking-wider text-emerald-300 font-bold block">
-                      ✦ Model Answer & Key Evidence
-                    </span>
-                    <p className="text-sm text-slate-100 whitespace-pre-line leading-relaxed">
-                      {currentCard.answer}
-                    </p>
-                    {currentCard.keyQuote && (
-                      <blockquote className="p-2.5 rounded-xl bg-amber-500/10 border border-amber-400/25 font-serif italic text-xs text-amber-200">
-                        “{currentCard.keyQuote}”
-                      </blockquote>
-                    )}
-                    <p className="text-xs text-slate-300 border-t border-white/[0.08] pt-2">
-                      <strong className="text-amber-300 font-mono text-[11px]">Exam Tip:</strong> {currentCard.examTip}
-                    </p>
-                  </div>
+                      <div className="w-full py-6 rounded-2xl border border-dashed border-white/20 bg-white/[0.02] flex flex-col items-center justify-center gap-1">
+                        <Sparkles className="w-5 h-5 text-amber-400 mb-1" />
+                        <span className="text-sm font-semibold text-white">
+                          Click or Press Spacebar to Reveal Answer
+                        </span>
+                        <span className="text-xs font-mono text-slate-400">
+                          3D Flip Recall Card
+                        </span>
+                      </div>
+                    </div>
+
+                    {/* Bottom Controls */}
+                    <div className="pt-6 border-t border-white/10 flex flex-wrap items-center justify-between gap-3">
+                      <div className="flex items-center gap-2">
+                        <button
+                          type="button"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            prevCard();
+                          }}
+                          className="liquid-glass-pill px-3 py-1.5 rounded-xl text-xs font-mono text-slate-300 hover:text-white cursor-pointer"
+                        >
+                          Previous
+                        </button>
+                        <button
+                          type="button"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            nextCard();
+                          }}
+                          className="liquid-glass-pill px-3 py-1.5 rounded-xl text-xs font-mono text-slate-300 hover:text-white cursor-pointer"
+                        >
+                          Next
+                        </button>
+                      </div>
+
+                      <span className="text-xs font-mono text-slate-400">
+                        Click card to flip
+                      </span>
+                    </div>
+                  </motion.div>
                 ) : (
-                  <button
-                    onClick={() => toggleFlip(currentCard.id)}
-                    className="w-full py-6 rounded-2xl border border-dashed border-white/20 bg-white/[0.02] hover:bg-white/[0.05] transition-all flex flex-col items-center justify-center gap-1 cursor-pointer"
+                  <motion.div
+                    key={`back-${currentCard.id}`}
+                    initial={{ rotateY: -80, opacity: 0 }}
+                    animate={{ rotateY: 0, opacity: 1 }}
+                    exit={{ rotateY: 80, opacity: 0 }}
+                    transition={{ duration: 0.26, ease: [0.16, 1, 0.3, 1] }}
+                    className="liquid-glass-bento rounded-3xl p-6 lg:p-8 flex flex-col justify-between min-h-[380px] relative overflow-hidden border border-amber-400/40 bg-slate-900/95 shadow-[0_0_35px_-5px_rgba(245,158,11,0.3)]"
                   >
-                    <Sparkles className="w-5 h-5 text-amber-400 mb-1" />
-                    <span className="text-sm font-semibold text-white">
-                      Click to Reveal Answer & Exam Tip
-                    </span>
-                    <span className="text-xs font-mono text-slate-400">
-                      Space / Click to Flip
-                    </span>
-                  </button>
+                    <div>
+                      {/* Card Header */}
+                      <div className="flex items-center justify-between gap-2 mb-4">
+                        <div className="flex items-center gap-2">
+                          <span className="font-mono text-[10px] uppercase font-bold px-2 py-0.5 rounded-md bg-amber-500/20 text-amber-300 border border-amber-400/30">
+                            {currentCard.category} Solution
+                          </span>
+                          <span className="font-mono text-xs text-slate-400">
+                            {currentCard.actSceneRef}
+                          </span>
+                        </div>
+                        <span className="font-mono text-xs text-slate-400">
+                          Card {cardIndex + 1} of {filteredCards.length}
+                        </span>
+                      </div>
+
+                      {/* Answer Area */}
+                      <div className="p-4 rounded-2xl bg-slate-900/90 border border-white/15 space-y-3">
+                        <span className="font-mono text-[10px] uppercase tracking-wider text-emerald-300 font-bold block">
+                          ✦ Model Answer &amp; Key Evidence
+                        </span>
+                        <p className="text-sm text-slate-100 whitespace-pre-line leading-relaxed">
+                          {currentCard.answer}
+                        </p>
+                        {currentCard.keyQuote && (
+                          <blockquote className="p-2.5 rounded-xl bg-amber-500/10 border border-amber-400/25 font-serif italic text-xs text-amber-200">
+                            &ldquo;{currentCard.keyQuote}&rdquo;
+                          </blockquote>
+                        )}
+                        <p className="text-xs text-slate-300 border-t border-white/[0.08] pt-2">
+                          <strong className="text-amber-300 font-mono text-[11px]">Exam Tip:</strong> {currentCard.examTip}
+                        </p>
+                      </div>
+                    </div>
+
+                    {/* Bottom Grading & Navigation Controls */}
+                    <div className="pt-6 border-t border-white/10 flex flex-wrap items-center justify-between gap-3">
+                      <div className="flex items-center gap-2">
+                        <button
+                          type="button"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            prevCard();
+                          }}
+                          className="liquid-glass-pill px-3 py-1.5 rounded-xl text-xs font-mono text-slate-300 hover:text-white cursor-pointer"
+                        >
+                          Previous
+                        </button>
+                        <button
+                          type="button"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            nextCard();
+                          }}
+                          className="liquid-glass-pill px-3 py-1.5 rounded-xl text-xs font-mono text-slate-300 hover:text-white cursor-pointer"
+                        >
+                          Next
+                        </button>
+                      </div>
+
+                      {/* Active Recall Self-Grading */}
+                      <div className="flex items-center gap-2">
+                        <button
+                          type="button"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handleMarkScore(currentCard.id, "learning");
+                          }}
+                          className="px-3 py-1.5 rounded-xl text-xs font-mono font-semibold bg-rose-500/20 text-rose-300 border border-rose-400/30 hover:bg-rose-500/30 flex items-center gap-1.5 cursor-pointer"
+                        >
+                          <XCircle className="w-3.5 h-3.5" />
+                          <span>Need Review</span>
+                        </button>
+                        <button
+                          type="button"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handleMarkScore(currentCard.id, "known");
+                          }}
+                          className="px-3 py-1.5 rounded-xl text-xs font-mono font-semibold bg-emerald-500/20 text-emerald-300 border border-emerald-400/30 hover:bg-emerald-500/30 flex items-center gap-1.5 cursor-pointer"
+                        >
+                          <CheckCircle2 className="w-3.5 h-3.5" />
+                          <span>Got It (Mastered)</span>
+                        </button>
+                      </div>
+                    </div>
+                  </motion.div>
                 )}
-              </div>
-
-              {/* Bottom Grading & Navigation Controls */}
-              <div className="pt-6 border-t border-white/10 flex flex-wrap items-center justify-between gap-3">
-                <div className="flex items-center gap-2">
-                  <button
-                    onClick={prevCard}
-                    className="liquid-glass-pill px-3 py-1.5 rounded-xl text-xs font-mono text-slate-300 hover:text-white cursor-pointer"
-                  >
-                    Previous
-                  </button>
-                  <button
-                    onClick={nextCard}
-                    className="liquid-glass-pill px-3 py-1.5 rounded-xl text-xs font-mono text-slate-300 hover:text-white cursor-pointer"
-                  >
-                    Next
-                  </button>
-                </div>
-
-                {/* Active Recall Self-Grading */}
-                <div className="flex items-center gap-2">
-                  <button
-                    onClick={() => handleMarkScore(currentCard.id, "learning")}
-                    className="px-3 py-1.5 rounded-xl text-xs font-mono font-semibold bg-rose-500/20 text-rose-300 border border-rose-400/30 hover:bg-rose-500/30 flex items-center gap-1.5 cursor-pointer"
-                  >
-                    <XCircle className="w-3.5 h-3.5" />
-                    <span>Need Review</span>
-                  </button>
-                  <button
-                    onClick={() => handleMarkScore(currentCard.id, "known")}
-                    className="px-3 py-1.5 rounded-xl text-xs font-mono font-semibold bg-emerald-500/20 text-emerald-300 border border-emerald-400/30 hover:bg-emerald-500/30 flex items-center gap-1.5 cursor-pointer"
-                  >
-                    <CheckCircle2 className="w-3.5 h-3.5" />
-                    <span>Mastered</span>
-                  </button>
-                </div>
-              </div>
+              </AnimatePresence>
             </div>
           ) : (
             <div className="liquid-glass-bento rounded-3xl p-8 text-center space-y-3">

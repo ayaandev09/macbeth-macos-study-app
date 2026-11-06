@@ -141,8 +141,23 @@ button, input, textarea, select {
   max-width: 100%;
   min-height: 100vh;
   margin-inline: auto;
-  padding: 0.75rem 1.25rem 5rem;
+  padding: 1.25rem 1.25rem 5rem;
   position: relative;
+}
+
+/* ==================== NATIVE MACOS WINDOW DRAG REGION ==================== */
+.mac-drag-region {
+  -webkit-app-region: drag;
+}
+
+.mac-no-drag {
+  -webkit-app-region: no-drag;
+}
+
+blockquote,
+.academic-quote,
+.academic-prose {
+  font-family: var(--active-academic-font);
 }
 
 .iphone-16e-shell {
@@ -276,7 +291,7 @@ button, input, textarea, select {
     inset 0 1.5px 2px rgba(255, 255, 255, 0.42),
     inset 0 -1px 2px rgba(0, 0, 0, 0.3);
   border-radius: 28px;
-  overflow: hidden;
+  overflow: visible !important;
   transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1),
               box-shadow 0.3s ease,
               border-color 0.3s ease;
@@ -429,20 +444,115 @@ button:active, summary:active, a[role="button"]:active {
   will-change: transform, opacity;
 }
 
-@keyframes view-enter-smooth {
+/* ==================== FLAGSHIP LIQUID GLASS 2.0 & JELLY SPOTLIGHT ==================== */
+@keyframes jellySpotlightEnter {
   0% {
-    opacity: 0.01;
-    transform: translate3d(0, 8px, 0);
+    opacity: 0;
+    transform: scale(0.92) translateY(-14px);
+  }
+  70% {
+    opacity: 1;
+    transform: scale(1.015) translateY(2px);
   }
   100% {
     opacity: 1;
-    transform: translate3d(0, 0, 0);
+    transform: scale(1) translateY(0);
   }
 }
 
-.view-enter-smooth {
-  animation: view-enter-smooth 0.18s cubic-bezier(0.16, 1, 0.3, 1) both;
+.jelly-spotlight-enter {
+  animation: jellySpotlightEnter 0.28s cubic-bezier(0.34, 1.4, 0.64, 1) both;
   will-change: transform, opacity;
+}
+
+@keyframes softFadeSlideIn {
+  0% {
+    opacity: 0;
+    transform: translateY(10px) scale(0.99);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.liquid-view-enter,
+.topic-transition-enter {
+  animation: softFadeSlideIn 0.26s cubic-bezier(0.16, 1, 0.3, 1) both;
+  will-change: opacity, transform;
+}
+
+/* Tactile Soft-Click & Tick Pop Mechanics */
+@keyframes tickPop {
+  0% {
+    transform: scale(0.65);
+    opacity: 0.2;
+  }
+  65% {
+    transform: scale(1.18);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.animate-tick-pop {
+  animation: tickPop 0.22s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+button, [role="button"], a {
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.soft-button {
+  transition: transform 0.15s cubic-bezier(0.16, 1, 0.3, 1),
+              background-color 0.15s ease,
+              border-color 0.15s ease,
+              box-shadow 0.15s ease;
+}
+
+.soft-button:active {
+  transform: scale(0.95);
+}
+
+.soft-tick-btn {
+  transition: transform 0.15s cubic-bezier(0.16, 1, 0.3, 1),
+              background-color 0.15s ease,
+              color 0.15s ease;
+}
+
+.soft-tick-btn:active {
+  transform: scale(0.85);
+}
+
+/* Flagship Liquid Glass Card 2.0 Specular Highlights */
+.liquid-card-flagship {
+  background: linear-gradient(
+    145deg,
+    rgba(255, 255, 255, 0.08) 0%,
+    rgba(22, 12, 18, 0.72) 40%,
+    rgba(10, 4, 8, 0.94) 100%
+  );
+  backdrop-filter: blur(28px) saturate(190%);
+  -webkit-backdrop-filter: blur(28px) saturate(190%);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  box-shadow:
+    0 24px 60px -12px rgba(0, 0, 0, 0.85),
+    0 0 35px -8px rgba(245, 158, 11, 0.12),
+    inset 0 1.5px 0 0 rgba(255, 255, 255, 0.28),
+    inset 0 -1px 0 0 rgba(255, 255, 255, 0.04);
+}
+
+.liquid-card-flagship:hover {
+  border-color: rgba(245, 158, 11, 0.35);
+  box-shadow:
+    0 28px 70px -12px rgba(0, 0, 0, 0.9),
+    0 0 45px -8px rgba(245, 158, 11, 0.22),
+    inset 0 1.5px 0 0 rgba(255, 255, 255, 0.4),
+    inset 0 -1px 0 0 rgba(255, 255, 255, 0.06);
 }
 
 @keyframes sheet-enter-smooth {
@@ -652,3 +762,52 @@ body {
     0 0 38px -6px rgba(128, 0, 0, 0.4),
     inset 0 1.5px 0 0 rgba(255, 220, 180, 0.4);
 }
+
+/* ==================== 120 FPS METAL HARDWARE-ACCELERATED LIQUID GLASS ==================== */
+@keyframes liquidCausticHalo {
+  0% { transform: rotate(0deg) scale(0.96) translateZ(0); opacity: 0.45; }
+  50% { transform: rotate(180deg) scale(1.08) translateZ(0); opacity: 0.72; }
+  100% { transform: rotate(360deg) scale(0.96) translateZ(0); opacity: 0.45; }
+}
+
+.liquid-caustic-halo {
+  animation: liquidCausticHalo 14s linear infinite;
+  will-change: transform, opacity;
+  transform: translateZ(0);
+}
+
+@keyframes liquidLogoFloat {
+  0%, 100% { transform: translate3d(0, 0, 0) scale(0.98); }
+  50% { transform: translate3d(0, -4px, 0) scale(1.03); }
+}
+
+.liquid-logo-float {
+  animation: liquidLogoFloat 5.2s ease-in-out infinite;
+  will-change: transform;
+  transform: translateZ(0);
+}
+
+@keyframes liquidGlassSheen {
+  0% { transform: translate3d(-160%, 0, 0) skewX(-20deg); }
+  35%, 100% { transform: translate3d(240%, 0, 0) skewX(-20deg); }
+}
+
+.liquid-glass-sheen {
+  animation: liquidGlassSheen 4.6s cubic-bezier(0.2, 0.8, 0.2, 1) infinite;
+  will-change: transform;
+  transform: translateZ(0);
+}
+
+@keyframes tuckedPillBeacon {
+  0%, 100% {
+    box-shadow: 0 0 0 0 rgba(245, 158, 11, 0.45), 0 0 16px rgba(245, 158, 11, 0.3);
+  }
+  50% {
+    box-shadow: 0 0 0 4px rgba(245, 158, 11, 0), 0 0 24px rgba(245, 158, 11, 0.55);
+  }
+}
+
+.tucked-pill-beacon {
+  animation: tuckedPillBeacon 2.8s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+

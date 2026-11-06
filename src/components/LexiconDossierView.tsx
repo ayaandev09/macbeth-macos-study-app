@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import {
   SYMBOLS_LEXICON,
   CHARACTERS_DOSSIER,
@@ -14,10 +14,16 @@ import {
   GitCompare,
   History,
   Milestone,
+  Drama,
+  Crown,
+  BookOpen,
 } from "lucide-react";
+import { GlobeStageScansionLab } from "./GlobeStageScansionLab";
 
 export function LexiconDossierView() {
+  const [activeCategory, setActiveCategory] = useState<"globe" | "symbols" | "characters" | "rhetoric">("globe");
   const { searchQuery } = useStudyStore();
+
   const q = searchQuery.trim().toLowerCase();
 
   const filteredSymbols = SYMBOLS_LEXICON.filter(
@@ -46,9 +52,65 @@ export function LexiconDossierView() {
 
   return (
     <div className="space-y-6">
+      {/* Category Navigation Bar */}
+      <div className="flex flex-wrap items-center justify-between gap-3 p-3 rounded-2xl bg-black/40 border border-white/10">
+        <div className="flex flex-wrap items-center gap-2">
+          <span className="text-xs font-mono font-bold text-amber-400 uppercase tracking-wider px-2">
+            Jacobean Dramaturgy Module:
+          </span>
+          <button
+            onClick={() => setActiveCategory("globe")}
+            className={`px-3.5 py-1.5 rounded-xl text-xs font-semibold flex items-center gap-2 transition-all cursor-pointer ${
+              activeCategory === "globe"
+                ? "bg-gradient-to-r from-amber-500/30 to-rose-500/30 text-white border border-amber-400/40 shadow-md"
+                : "text-slate-400 hover:text-white"
+            }`}
+          >
+            <Drama className="w-3.5 h-3.5 text-amber-400" />
+            Globe Theatre &amp; Metric Scansion Studio
+          </button>
+          <button
+            onClick={() => setActiveCategory("symbols")}
+            className={`px-3.5 py-1.5 rounded-xl text-xs font-semibold flex items-center gap-2 transition-all cursor-pointer ${
+              activeCategory === "symbols"
+                ? "bg-gradient-to-r from-amber-500/30 to-purple-500/30 text-white border border-amber-400/40 shadow-md"
+                : "text-slate-400 hover:text-white"
+            }`}
+          >
+            <Sparkles className="w-3.5 h-3.5 text-amber-400" />
+            Symbols &amp; Props ({filteredSymbols.length})
+          </button>
+          <button
+            onClick={() => setActiveCategory("characters")}
+            className={`px-3.5 py-1.5 rounded-xl text-xs font-semibold flex items-center gap-2 transition-all cursor-pointer ${
+              activeCategory === "characters"
+                ? "bg-gradient-to-r from-rose-500/30 to-purple-500/30 text-white border border-rose-400/40 shadow-md"
+                : "text-slate-400 hover:text-white"
+            }`}
+          >
+            <Users className="w-3.5 h-3.5 text-rose-400" />
+            Dramatis Personae Dossiers ({filteredCharacters.length})
+          </button>
+          <button
+            onClick={() => setActiveCategory("rhetoric")}
+            className={`px-3.5 py-1.5 rounded-xl text-xs font-semibold flex items-center gap-2 transition-all cursor-pointer ${
+              activeCategory === "rhetoric"
+                ? "bg-gradient-to-r from-emerald-500/30 to-teal-500/30 text-white border border-emerald-400/40 shadow-md"
+                : "text-slate-400 hover:text-white"
+            }`}
+          >
+            <BookMarked className="w-3.5 h-3.5 text-emerald-400" />
+            Rhetoric &amp; Prosody Lexicon ({filteredRhetoric.length})
+          </button>
+        </div>
+      </div>
+
       {/* =====================================================================
-          1. RECURRING SYMBOLS & STAGE ARTIFACTS
+          0. GLOBE THEATRE 3D STAGE & SCANSION LAB
           ===================================================================== */}
+      {activeCategory === "globe" && <GlobeStageScansionLab />}
+
+      {activeCategory === "symbols" && (
       <section className="liquid-glass-bento rounded-3xl p-6">
         <div className="flex items-center gap-2 mb-1">
           <Sparkles className="w-4 h-4 text-amber-400" />
@@ -99,9 +161,12 @@ export function LexiconDossierView() {
         </div>
       </section>
 
+      )}
+
       {/* =====================================================================
           2. DRAMATIS PERSONAE PSYCHOLOGICAL DOSSIERS
           ===================================================================== */}
+      {activeCategory === "characters" && (
       <section className="liquid-glass-bento rounded-3xl p-6">
         <div className="flex items-center gap-2 mb-1">
           <Users className="w-4 h-4 text-rose-400" />
@@ -251,9 +316,12 @@ export function LexiconDossierView() {
         </div>
       </section>
 
+      )}
+
       {/* =====================================================================
           3. SHAKESPEAREAN RHETORIC, PROSODY & JACOBEAN COSMOLOGY LEXICON
           ===================================================================== */}
+      {activeCategory === "rhetoric" && (
       <section className="liquid-glass-bento rounded-3xl p-6">
         <div className="flex items-center gap-2 mb-1">
           <BookMarked className="w-4 h-4 text-emerald-400" />
@@ -299,6 +367,7 @@ export function LexiconDossierView() {
           ))}
         </div>
       </section>
+      )}
     </div>
   );
 }

@@ -11,6 +11,7 @@ import {
 import { useStudyStore } from "@/store/useStudyStore";
 import { ActId } from "@/data/types";
 import { ChromaticButton } from "./chromatic-button";
+import { MacbethAppLogo } from "./MacbethAppLogo";
 import {
   CheckCircle2,
   Circle,
@@ -41,6 +42,8 @@ export function FloatingSidebar({ isMobileSheet = false }: FloatingSidebarProps)
     resetAllProgress,
     chapterSheetOpen,
     setChapterSheetOpen,
+    sidebarCollapsed,
+    toggleSidebar,
   } = useStudyStore();
 
   const [expandedParts, setExpandedParts] = useState<Record<ActId, boolean>>({
@@ -175,12 +178,12 @@ export function FloatingSidebar({ isMobileSheet = false }: FloatingSidebarProps)
                         ? "Mark Act as uncompleted"
                         : "Mark all scenes in Act complete"
                     }
-                    className="p-1 rounded-lg hover:bg-white/10 transition-colors cursor-pointer"
+                    className="w-8 h-8 rounded-xl flex items-center justify-center hover:bg-white/10 transition-colors cursor-pointer soft-tick-btn"
                   >
                     {isAllPartDone ? (
-                      <CheckCircle2 className="w-4 h-4 text-emerald-400" />
+                      <CheckCircle2 className="w-4 h-4 text-emerald-400 animate-tick-pop" />
                     ) : (
-                      <Circle className="w-4 h-4 text-slate-500" />
+                      <Circle className="w-4 h-4 text-slate-500 hover:text-amber-300" />
                     )}
                   </button>
                 </div>
@@ -240,12 +243,12 @@ export function FloatingSidebar({ isMobileSheet = false }: FloatingSidebarProps)
                           title={
                             isDone ? "Mark as unread" : "Mark as completed"
                           }
-                          className="p-1 rounded-lg hover:bg-white/10 transition-colors shrink-0 cursor-pointer"
+                          className="w-8 h-8 rounded-xl flex items-center justify-center hover:bg-white/10 transition-colors shrink-0 cursor-pointer soft-tick-btn"
                         >
                           {isDone ? (
-                            <CheckCircle2 className="w-4 h-4 text-emerald-400" />
+                            <CheckCircle2 className="w-4 h-4 text-emerald-400 animate-tick-pop" />
                           ) : (
-                            <Circle className="w-4 h-4 text-slate-500 group-hover:text-slate-300" />
+                            <Circle className="w-4 h-4 text-slate-500 group-hover:text-amber-300" />
                           )}
                         </button>
                       </div>
@@ -312,35 +315,41 @@ export function FloatingSidebar({ isMobileSheet = false }: FloatingSidebarProps)
   }
 
   return (
-    <aside className="hidden lg:flex w-full lg:w-[300px] xl:w-[330px] shrink-0 lg:sticky lg:top-5 lg:h-[calc(100vh-2.5rem)] flex-col liquid-glass-sidebar rounded-3xl p-4 overflow-hidden select-none z-20">
+    <aside
+      className={`hidden lg:flex shrink-0 lg:sticky lg:top-5 lg:h-[calc(100vh-2.5rem)] flex-col liquid-glass-sidebar rounded-3xl p-4 overflow-hidden select-none z-20 transition-all duration-300 ${
+        sidebarCollapsed ? "w-20 items-center px-2" : "w-64 xl:w-72"
+      }`}
+    >
       {/* Top Dunsinane Royal Identity Header */}
-      <div className="flex items-center justify-between pb-3 mb-3 border-b border-white/10 shrink-0">
-        <div className="flex items-center gap-2.5">
-          <div className="w-9 h-9 rounded-2xl bg-gradient-to-br from-rose-500/25 to-amber-500/20 border border-amber-400/30 flex items-center justify-center overflow-hidden p-1">
-            <img src="/logo.svg" alt="Dunsinane Crown Logo" className="w-full h-full object-contain" />
+      <div className="flex items-center justify-between pb-3 mb-3 border-b border-white/10 shrink-0 min-h-[44px] w-full mac-drag-region">
+        <div className="flex items-center gap-2.5 min-w-0">
+          <div className="w-10 h-10 rounded-2xl bg-gradient-to-br from-rose-500/25 to-amber-500/20 border border-amber-400/30 flex items-center justify-center overflow-hidden p-1 mac-no-drag shrink-0">
+            <MacbethAppLogo className="w-full h-full object-contain" />
           </div>
-          <div>
-            <span className="font-mono text-[10px] tracking-[0.22em] uppercase text-amber-300 font-semibold block">
-              DUNSINANE // 1606
-            </span>
-            <h1 className="text-sm font-bold text-white tracking-tight">
-              Macbeth Codex
-            </h1>
-          </div>
+          {!sidebarCollapsed && (
+            <div className="min-w-0">
+              <span className="font-mono text-[10px] tracking-[0.22em] uppercase text-amber-300 font-semibold block truncate">
+                DUNSINANE // 1606
+              </span>
+              <h1 className="text-sm font-bold text-white tracking-tight truncate">
+                Macbeth Codex
+              </h1>
+            </div>
+          )}
         </div>
 
-        {completedCount > 0 && (
+        {!sidebarCollapsed && completedCount > 0 && (
           <button
             onClick={resetAllProgress}
             title="Reset progress"
-            className="p-2 rounded-xl text-slate-400 hover:text-white hover:bg-white/10 transition-colors cursor-pointer"
+            className="p-1.5 rounded-xl text-slate-400 hover:text-white hover:bg-white/10 transition-colors cursor-pointer shrink-0"
           >
             <RotateCcw className="w-3.5 h-3.5" />
           </button>
         )}
       </div>
 
-      {sidebarBody}
+      {!sidebarCollapsed && sidebarBody}
     </aside>
   );
 }
