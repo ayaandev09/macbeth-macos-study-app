@@ -165,9 +165,9 @@ export function TopCommandBar({ onOpenWalkthrough }: TopCommandBarProps = {}) {
 
   return (
     <>
-      <header className="liquid-card-flagship !rounded-3xl p-3 sm:p-4 mb-5 flex flex-col gap-3 shadow-2xl relative mac-drag-region transition-all z-20">
+      <header className="liquid-card-flagship !rounded-3xl overflow-hidden p-2.5 sm:p-3 mb-3 flex flex-col gap-2 shadow-xl relative mac-drag-region transition-all z-20 w-full max-w-full">
       {/* Top Segment: Brand & Status (Left) & Compact Ergonomic Action Cluster (Right) */}
-      <div className="flex items-center justify-between gap-3 w-full pb-2.5 border-b border-white/10 min-h-[44px]">
+      <div className="flex items-center justify-between gap-3 w-full pb-2 border-b border-white/10 min-h-[44px]">
         {/* Brand & Breadcrumbs (Left) */}
         <div className="flex items-center gap-2 shrink-0 mac-no-drag">
           {/* Native macOS Sidebar Toggle (⌘B) */}
@@ -207,8 +207,39 @@ export function TopCommandBar({ onOpenWalkthrough }: TopCommandBarProps = {}) {
           </button>
         </div>
 
+        {/* Center: Integrated Spotlight Quick Search Pill */}
+        <button
+          type="button"
+          onClick={openSpotlight}
+          title="Spotlight Search 31 Scenes, Quotes & Themes (⌘K)"
+          className="flex-1 max-w-[220px] 2xl:max-w-xs hidden 2xl:flex items-center justify-between gap-2 px-3 py-1.5 rounded-xl bg-black/50 hover:bg-black/70 border border-white/10 hover:border-amber-400/40 transition-all text-left cursor-pointer group mac-no-drag shadow-inner"
+        >
+          <div className="flex items-center gap-2 min-w-0">
+            <Search className="w-3.5 h-3.5 text-amber-400 group-hover:scale-110 transition-transform shrink-0" />
+            <span className="text-xs text-slate-300 group-hover:text-white transition-colors truncate">
+              Search scenes, quotes...
+            </span>
+          </div>
+          <kbd className="inline-flex items-center gap-0.5 px-1.5 py-0.5 rounded text-[10px] font-mono font-bold text-amber-300 bg-amber-500/15 border border-amber-400/25 shrink-0">
+            ⌘K
+          </kbd>
+        </button>
+
         {/* Right Section: Compact Ergonomic Modality Switchers & Action Pills */}
         <div className="flex items-center justify-end gap-1.5 sm:gap-2 shrink-0 mac-no-drag">
+          {/* Quick Spotlight Trigger Button (Compact for non-2xl viewports) */}
+          <button
+            onClick={openSpotlight}
+            title="Search Scenes & Quotes (⌘K)"
+            className="flex 2xl:hidden items-center gap-1.5 px-2.5 py-1.5 rounded-xl bg-black/50 hover:bg-black/70 border border-white/10 hover:border-amber-400/40 text-slate-300 hover:text-white cursor-pointer transition-all"
+          >
+            <Search className="w-3.5 h-3.5 text-amber-400" />
+            <span className="text-[11px] font-medium text-slate-300 hidden sm:inline">Search</span>
+            <kbd className="inline-flex items-center px-1 py-0.2 rounded text-[9px] font-mono font-bold text-amber-300 bg-amber-500/15 border border-amber-400/25">
+              ⌘K
+            </kbd>
+          </button>
+
           {/* Study Goal Switcher: Revision vs Study (Compact Segmented Pill) */}
           <div className="flex items-center p-0.5 rounded-full bg-black/60 border border-white/12 text-xs">
             <button
@@ -221,7 +252,7 @@ export function TopCommandBar({ onOpenWalkthrough }: TopCommandBarProps = {}) {
               }`}
             >
               <Zap className="w-3 h-3 text-amber-300" />
-              <span className="hidden lg:inline text-[11px]">Revise</span>
+              <span className="text-[11px]">Revise</span>
             </button>
             <button
               onClick={() => setStudyGoal("learn")}
@@ -233,12 +264,12 @@ export function TopCommandBar({ onOpenWalkthrough }: TopCommandBarProps = {}) {
               }`}
             >
               <BookOpen className="w-3 h-3 text-emerald-300" />
-              <span className="hidden lg:inline text-[11px]">Study</span>
+              <span className="text-[11px]">Study</span>
             </button>
           </div>
 
-          {/* Academic Typography Switcher (Compact Dropdown) */}
-          <div className="flex items-center p-0.5 rounded-full bg-black/60 border border-white/12 text-xs">
+          {/* Academic Typography Switcher (Compact Dropdown, shown on wide screens) */}
+          <div className="hidden 2xl:flex items-center p-0.5 rounded-full bg-black/60 border border-white/12 text-xs">
             <span className="pl-2 text-slate-400 flex items-center">
               <BookA className="w-3 h-3 text-amber-400" />
             </span>
@@ -267,10 +298,10 @@ export function TopCommandBar({ onOpenWalkthrough }: TopCommandBarProps = {}) {
           <button
             onClick={openExamSprint}
             title="Launch Timed Exam Sprint (⌘E)"
-            className="flex items-center gap-1 px-2.5 py-1.5 rounded-full text-xs font-bold transition-all cursor-pointer border bg-amber-500/15 text-amber-200 border-amber-400/35 hover:bg-amber-500/25 shadow-sm soft-button shrink-0"
+            className="hidden sm:flex items-center gap-1 px-2.5 py-1.5 rounded-full text-xs font-bold transition-all cursor-pointer border bg-amber-500/15 text-amber-200 border-amber-400/35 hover:bg-amber-500/25 shadow-sm soft-button shrink-0"
           >
             <Timer className="w-3.5 h-3.5 text-amber-300 animate-pulse" />
-            <span className="hidden xl:inline text-[11px]">Sprint</span>
+            <span className="hidden 2xl:inline text-[11px]">Sprint</span>
             <span className="text-[10px] font-mono text-amber-400/70">⌘E</span>
           </button>
 
@@ -300,10 +331,10 @@ export function TopCommandBar({ onOpenWalkthrough }: TopCommandBarProps = {}) {
             <button
               onClick={onOpenWalkthrough}
               title="Interactive App Walkthrough & Guide (Tour)"
-              className="hidden sm:flex items-center gap-1.5 px-2.5 sm:px-3 py-1.5 rounded-full text-xs font-bold transition-all cursor-pointer border bg-amber-500/10 hover:bg-amber-500/20 text-amber-300 border-amber-400/35 shadow-sm soft-button shrink-0"
+              className="hidden 2xl:flex items-center gap-1.5 px-2.5 sm:px-3 py-1.5 rounded-full text-xs font-bold transition-all cursor-pointer border bg-amber-500/10 hover:bg-amber-500/20 text-amber-300 border-amber-400/35 shadow-sm soft-button shrink-0"
             >
               <Compass className="w-3.5 h-3.5 text-amber-400" />
-              <span className="hidden xl:inline text-[11px]">Tour</span>
+              <span className="text-[11px]">Tour</span>
             </button>
           )}
 
@@ -311,7 +342,7 @@ export function TopCommandBar({ onOpenWalkthrough }: TopCommandBarProps = {}) {
           <button
             onClick={() => setIsShortcutsOpen((prev) => !prev)}
             title="Keyboard Shortcuts Cheatsheet (?)"
-            className="flex items-center justify-center w-8 h-8 rounded-full text-xs font-bold transition-all cursor-pointer border bg-white/5 hover:bg-white/10 text-slate-300 hover:text-white border-white/10 shadow-sm soft-button shrink-0"
+            className="flex items-center justify-center w-7 h-7 sm:w-8 sm:h-8 rounded-full text-xs font-bold transition-all cursor-pointer border bg-white/5 hover:bg-white/10 text-slate-300 hover:text-white border-white/10 shadow-sm soft-button shrink-0"
           >
             <span className="text-xs font-mono font-bold text-slate-300">?</span>
           </button>
@@ -351,35 +382,6 @@ export function TopCommandBar({ onOpenWalkthrough }: TopCommandBarProps = {}) {
           );
         })}
       </nav>
-
-      {/* Row 3: Flagship Spacious Jelly Spotlight Command Pill (Raycast / Spotlight Ergonomics) */}
-      <div className="w-full">
-        <button
-          type="button"
-          onClick={openSpotlight}
-          className="w-full px-4 py-2.5 rounded-2xl bg-black/55 hover:bg-black/70 border border-white/12 hover:border-amber-400/40 text-left flex items-center justify-between gap-3 shadow-inner transition-all group cursor-pointer soft-button"
-        >
-          <div className="flex items-center gap-3 min-w-0">
-            <div className="w-7 h-7 rounded-xl bg-amber-500/15 border border-amber-400/30 flex items-center justify-center text-amber-300 group-hover:scale-105 transition-transform shrink-0">
-              <Search className="w-3.5 h-3.5" />
-            </div>
-            <div className="min-w-0 truncate">
-              <span className="text-xs text-slate-300 group-hover:text-white transition-colors">
-                Spotlight Search 31 Macbeth scenes, iconic quotes, soliloquies, themes...
-              </span>
-              <span className="hidden lg:inline text-[11px] text-slate-400 ml-2 font-mono">
-                (e.g. &ldquo;dagger&rdquo;, &ldquo;unsex me here&rdquo;, &ldquo;Banquo&rdquo;, &ldquo;I.2&rdquo;)
-              </span>
-            </div>
-          </div>
-
-          <div className="flex items-center gap-2 shrink-0">
-            <span className="hidden sm:inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-[10px] font-mono font-bold text-amber-300 bg-amber-500/15 border border-amber-400/30 group-hover:bg-amber-500/25 transition-all">
-              <kbd className="font-sans text-[11px]">⌘</kbd>K
-            </span>
-          </div>
-        </button>
-      </div>
 
       {/* Global Native Keyboard Shortcuts Cheatsheet Modal */}
       <KeyboardShortcutsModal
