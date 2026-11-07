@@ -152,60 +152,60 @@ export function RevisionCramView() {
       {/* =====================================================================
           1. HEADER BANNER: REVISION & TEST PREP ENGINE
           ===================================================================== */}
-      <section className="liquid-glass-bento rounded-3xl p-6 lg:p-7 relative overflow-hidden">
-        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 relative z-10">
+      <section className="liquid-glass-bento rounded-3xl p-5 sm:p-6 relative overflow-hidden">
+        <div className="flex flex-col gap-3.5 relative z-10">
           <div>
-            <div className="flex items-center gap-2 mb-2">
-              <span className="font-mono text-xs font-bold px-2.5 py-1 rounded-xl bg-amber-500/20 text-amber-300 border border-amber-400/30 flex items-center gap-1.5">
+            <div className="flex flex-wrap items-center gap-2 mb-2">
+              <span className="whitespace-nowrap font-mono text-xs font-bold px-2.5 py-1 rounded-xl bg-amber-500/20 text-amber-300 border border-amber-400/30 flex items-center gap-1.5 shrink-0">
                 <Zap className="w-3.5 h-3.5 text-amber-400" />
-                RAPID REVISION & TEST ACCELERATOR
+                RAPID REVISION &amp; TEST ACCELERATOR
               </span>
-              <span className="font-mono text-xs text-slate-400">
+              <span className="whitespace-nowrap font-mono text-xs text-slate-400 bg-white/5 px-2.5 py-0.5 rounded-full border border-white/5 shrink-0">
                 Pre-Lesson • Active Recall • Exam Blueprints
               </span>
             </div>
-            <h1 className="text-xl lg:text-2xl font-bold text-white tracking-tight font-display">
-              Macbeth Revision Hub & 5-Minute Briefings
+            <h1 className="text-xl sm:text-2xl font-bold text-white tracking-tight font-display">
+              Macbeth Revision Hub &amp; 5-Minute Briefings
             </h1>
-            <p className="text-xs lg:text-sm text-slate-300 mt-1 max-w-2xl leading-relaxed">
+            <p className="text-xs sm:text-sm text-slate-300/90 mt-1 max-w-3xl leading-relaxed">
               Designed for high-speed review 5 minutes before class, active recall test cramming, or structuring full GCSE / A-Level essay responses.
             </p>
           </div>
 
-          {/* Quick Tab Selector */}
-          <div className="flex items-center gap-1.5 p-1.5 rounded-2xl bg-black/40 border border-white/10 shrink-0">
+          {/* Quick Tab Selector - Full-Width Responsive Segmented Bar */}
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-1.5 p-1 rounded-2xl bg-black/50 border border-white/10 max-w-xl">
             <button
               onClick={() => setActiveTab("briefings")}
-              className={`px-3 py-1.5 rounded-xl text-xs font-mono font-semibold flex items-center gap-1.5 transition-all cursor-pointer ${
+              className={`px-3 py-2 rounded-xl text-xs font-mono font-semibold flex items-center justify-center gap-2 transition-all cursor-pointer min-w-0 ${
                 activeTab === "briefings"
                   ? "bg-amber-500/25 text-amber-300 border border-amber-400/40 shadow-sm"
-                  : "text-slate-400 hover:text-white"
+                  : "text-slate-400 hover:text-white hover:bg-white/5"
               }`}
             >
-              <Zap className="w-3.5 h-3.5" />
-              <span>5-Min Briefing</span>
+              <Zap className="w-3.5 h-3.5 shrink-0" />
+              <span className="truncate">5-Min Briefing</span>
             </button>
             <button
               onClick={() => setActiveTab("flashcards")}
-              className={`px-3 py-1.5 rounded-xl text-xs font-mono font-semibold flex items-center gap-1.5 transition-all cursor-pointer ${
+              className={`px-3 py-2 rounded-xl text-xs font-mono font-semibold flex items-center justify-center gap-2 transition-all cursor-pointer min-w-0 ${
                 activeTab === "flashcards"
                   ? "bg-rose-500/25 text-rose-300 border border-rose-400/40 shadow-sm"
-                  : "text-slate-400 hover:text-white"
+                  : "text-slate-400 hover:text-white hover:bg-white/5"
               }`}
             >
-              <Flame className="w-3.5 h-3.5" />
-              <span>Flashcards ({knownCount}/{MASTER_FLASHCARDS.length})</span>
+              <Flame className="w-3.5 h-3.5 shrink-0" />
+              <span className="truncate">Flashcards ({knownCount}/{MASTER_FLASHCARDS.length})</span>
             </button>
             <button
               onClick={() => setActiveTab("essays")}
-              className={`px-3 py-1.5 rounded-xl text-xs font-mono font-semibold flex items-center gap-1.5 transition-all cursor-pointer ${
+              className={`px-3 py-2 rounded-xl text-xs font-mono font-semibold flex items-center justify-center gap-2 transition-all cursor-pointer min-w-0 ${
                 activeTab === "essays"
                   ? "bg-purple-500/25 text-purple-300 border border-purple-400/40 shadow-sm"
-                  : "text-slate-400 hover:text-white"
+                  : "text-slate-400 hover:text-white hover:bg-white/5"
               }`}
             >
-              <GraduationCap className="w-3.5 h-3.5" />
-              <span>Exam Blueprints</span>
+              <GraduationCap className="w-3.5 h-3.5 shrink-0" />
+              <span className="truncate">Exam Blueprints</span>
             </button>
           </div>
         </div>

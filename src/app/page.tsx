@@ -247,7 +247,9 @@ export default function MacbethStudyDashboardMacPage() {
         {/* Main Content Column */}
         <main className="flex-1 min-w-0 w-full pb-36">
             <WidgetBridge />
-            <TopCommandBar onOpenWalkthrough={() => setIsWalkthroughOpen(true)} />
+            <div className="sticky top-2 z-30 mb-4">
+              <TopCommandBar onOpenWalkthrough={() => setIsWalkthroughOpen(true)} />
+            </div>
 
             {/* Mini Homepage & Live Widget Telemetry Hub */}
             {!searchQuery.trim() && <StudyMiniHomepage />}

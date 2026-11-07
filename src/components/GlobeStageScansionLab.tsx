@@ -243,63 +243,63 @@ export const GlobeStageScansionLab: React.FC = () => {
   return (
     <div className="space-y-6">
       {/* Flagship Hero Header */}
-      <div className="liquid-glass-bento rounded-3xl p-6 relative overflow-hidden border border-amber-400/30">
+      <div className="liquid-glass-bento rounded-3xl p-5 sm:p-6 relative overflow-hidden border border-amber-400/30">
         <div className="absolute top-0 right-0 w-96 h-96 bg-gradient-to-bl from-amber-500/15 via-rose-500/10 to-transparent blur-3xl pointer-events-none" />
 
-        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 relative z-10">
+        <div className="flex flex-col gap-3.5 relative z-10">
           <div>
-            <div className="flex items-center gap-2 mb-1.5">
-              <span className="px-2.5 py-0.5 rounded-full text-[10px] font-mono font-bold uppercase tracking-widest bg-amber-500/20 text-amber-300 border border-amber-400/30">
+            <div className="flex flex-wrap items-center gap-2 mb-2">
+              <span className="whitespace-nowrap px-2.5 py-1 rounded-full text-[10px] font-mono font-bold uppercase tracking-widest bg-amber-500/20 text-amber-300 border border-amber-400/30 shrink-0">
                 Dunsinane Folio // Stage &amp; Metric Scansion Studio
               </span>
-              <span className="flex items-center gap-1 text-[11px] font-mono text-amber-400">
-                <Crown className="w-3.5 h-3.5 text-amber-400" />
+              <span className="whitespace-nowrap inline-flex items-center gap-1.5 text-[11px] font-mono text-amber-400/90 bg-white/5 px-2.5 py-0.5 rounded-full border border-white/5 shrink-0">
+                <Crown className="w-3.5 h-3.5 text-amber-400 shrink-0" />
                 JACOBEAN GLOBE ENGINE
               </span>
             </div>
-            <h1 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight flex items-center gap-3">
-              <Drama className="w-8 h-8 text-amber-400" />
-              Globe Theatre Stage Blocking &amp; Iambic Scansion
+            <h1 className="text-xl sm:text-2xl font-extrabold text-white tracking-tight flex items-center gap-2.5">
+              <Drama className="w-6 h-6 text-amber-400 shrink-0" />
+              <span>Globe Theatre Stage Blocking &amp; Iambic Scansion</span>
             </h1>
-            <p className="text-xs sm:text-sm text-slate-300 mt-1 max-w-2xl leading-relaxed">
+            <p className="text-xs sm:text-sm text-slate-300/90 mt-1 max-w-3xl leading-relaxed">
               Experience Shakespeare&rsquo;s tragic masterpiece as living theatre: explore spatial power dynamics across the Globe&rsquo;s thrust stage, and analyze syllable-by-syllable iambic pentameter breakdowns.
             </p>
           </div>
 
-          {/* Sub-tab Navigation */}
-          <div className="flex items-center gap-1.5 p-1 bg-black/40 rounded-2xl border border-white/10 shrink-0 self-start md:self-auto">
+          {/* Sub-tab Navigation - Full-Width Responsive Segmented Track */}
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-1.5 p-1 bg-black/50 rounded-2xl border border-white/10 max-w-2xl">
             <button
               onClick={() => setActiveTab("staging")}
-              className={`px-3.5 py-2 rounded-xl text-xs font-semibold flex items-center gap-2 transition-all cursor-pointer ${
+              className={`px-3 py-2 rounded-xl text-xs font-semibold flex items-center justify-center gap-2 transition-all cursor-pointer min-w-0 ${
                 activeTab === "staging"
                   ? "bg-gradient-to-r from-amber-500/30 to-rose-500/30 text-white border border-amber-400/40 shadow-lg"
-                  : "text-slate-400 hover:text-white"
+                  : "text-slate-400 hover:text-white hover:bg-white/5"
               }`}
             >
-              <Compass className="w-3.5 h-3.5 text-amber-400" />
-              Globe Stage Blocking
+              <Compass className="w-3.5 h-3.5 text-amber-400 shrink-0" />
+              <span className="truncate">Globe Stage Blocking</span>
             </button>
             <button
               onClick={() => setActiveTab("scansion")}
-              className={`px-3.5 py-2 rounded-xl text-xs font-semibold flex items-center gap-2 transition-all cursor-pointer ${
+              className={`px-3 py-2 rounded-xl text-xs font-semibold flex items-center justify-center gap-2 transition-all cursor-pointer min-w-0 ${
                 activeTab === "scansion"
                   ? "bg-gradient-to-r from-rose-500/30 to-purple-500/30 text-white border border-rose-400/40 shadow-lg"
-                  : "text-slate-400 hover:text-white"
+                  : "text-slate-400 hover:text-white hover:bg-white/5"
               }`}
             >
-              <Activity className="w-3.5 h-3.5 text-rose-400" />
-              The Metre Meter (Scansion)
+              <Activity className="w-3.5 h-3.5 text-rose-400 shrink-0" />
+              <span className="truncate">The Metre Meter (Scansion)</span>
             </button>
             <button
               onClick={() => setActiveTab("tragedy")}
-              className={`px-3.5 py-2 rounded-xl text-xs font-semibold flex items-center gap-2 transition-all cursor-pointer ${
+              className={`px-3 py-2 rounded-xl text-xs font-semibold flex items-center justify-center gap-2 transition-all cursor-pointer min-w-0 ${
                 activeTab === "tragedy"
                   ? "bg-gradient-to-r from-purple-500/30 to-amber-500/30 text-white border border-purple-400/40 shadow-lg"
-                  : "text-slate-400 hover:text-white"
+                  : "text-slate-400 hover:text-white hover:bg-white/5"
               }`}
             >
-              <Flame className="w-3.5 h-3.5 text-amber-400" />
-              Blood On The Crown Arc
+              <Flame className="w-3.5 h-3.5 text-amber-400 shrink-0" />
+              <span className="truncate">Blood On The Crown</span>
             </button>
           </div>
         </div>
@@ -352,7 +352,7 @@ export const GlobeStageScansionLab: React.FC = () => {
                 </div>
 
                 {/* Jacobean Stage Top-Down Architectural Diagram */}
-                <div className="relative w-full aspect-[4/3] rounded-2xl bg-gradient-to-b from-stone-950 via-slate-950 to-neutral-950 border border-amber-500/30 p-4 flex flex-col justify-between overflow-hidden shadow-2xl">
+                <div className="relative w-full min-h-[300px] sm:min-h-[340px] max-h-[400px] rounded-2xl bg-gradient-to-b from-stone-950 via-slate-950 to-neutral-950 border border-amber-500/30 p-3.5 sm:p-4 flex flex-col justify-between overflow-hidden shadow-2xl">
                   {/* Subtle Woodgrain & Architectural Guides */}
                   <div className="absolute inset-0 opacity-10 bg-[radial-gradient(#d97706_1px,transparent_1px)] [background-size:16px_16px] pointer-events-none" />
 
@@ -571,20 +571,20 @@ export const GlobeStageScansionLab: React.FC = () => {
 
           {/* Interactive Metric Scansion Workbench */}
           <div className="liquid-glass-bento rounded-3xl p-6 border border-rose-500/30 space-y-6">
-            <div className="flex flex-col md:flex-row md:items-center justify-between gap-3 pb-4 border-b border-white/10">
-              <div>
-                <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-rose-400 block mb-1">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 border-b border-white/10">
+              <div className="min-w-0">
+                <span className="whitespace-nowrap text-[10px] font-mono font-bold uppercase tracking-wider text-rose-400 block mb-1">
                   Metric Classification // {currentScansion.actScene}
                 </span>
-                <h3 className="text-xl font-bold text-white flex items-center gap-2 font-display">
+                <h3 className="text-lg sm:text-xl font-bold text-white flex items-center gap-2 font-display">
                   {currentScansion.meterType}
                 </h3>
-                <p className="text-xs text-slate-300 mt-1">
+                <p className="text-xs text-slate-300 mt-1 max-w-xl">
                   {currentScansion.meterDescription}
                 </p>
               </div>
 
-              <div className="px-3.5 py-1.5 rounded-xl bg-black/50 border border-white/15 text-xs font-mono text-slate-300 self-start md:self-auto">
+              <div className="whitespace-nowrap px-3.5 py-1.5 rounded-xl bg-black/50 border border-white/15 text-xs font-mono text-slate-300 self-start sm:self-auto shrink-0">
                 <span className="text-rose-400 font-bold">{currentScansion.feet.length} Metrical Feet</span> | <span className="text-amber-300 font-bold">{currentScansion.feet.reduce((acc, f) => acc + f.syllables.length, 0)} Syllables</span>
               </div>
             </div>
