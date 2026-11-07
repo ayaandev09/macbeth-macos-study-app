@@ -223,7 +223,7 @@ export default function MacbethStudyDashboardMacPage() {
 
       {/* 2. Main Study Dashboard - Fluid Liquid Glass Reveal */}
       <div
-        className={`mac-dashboard-shell transition-opacity duration-300 ease-out ${
+        className={`mac-dashboard-shell ${showMainUI ? "app-revealed" : ""} transition-opacity duration-300 ease-out ${
           showMainUI
             ? "opacity-100 pointer-events-auto"
             : "opacity-0 pointer-events-none select-none"
