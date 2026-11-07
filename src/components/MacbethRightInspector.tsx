@@ -84,6 +84,7 @@ export function MacbethRightInspector({
             ease: [0.16, 1, 0.3, 1],
           }}
           style={{ willChange: "transform, opacity" }}
+          data-tour="inspector"
           className="hidden xl:block w-[320px] xl:w-[340px] shrink-0 sticky top-5 z-20"
         >
           <div className="w-[320px] xl:w-[340px] liquid-card-flagship rounded-3xl p-4 border border-amber-500/40 bg-slate-950/85 backdrop-blur-2xl shadow-2xl flex flex-col max-h-[calc(100vh-2.5rem)] overflow-hidden">

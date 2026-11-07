@@ -350,7 +350,7 @@ export default function MacbethStudyDashboardMacPage() {
                   </div>
 
                   {/* Active Scene Bento Grid */}
-                  <div key={activeChapter.id} className="liquid-chapter-swap">
+                  <div key={activeChapter.id} data-tour="study-bento" className="liquid-chapter-swap">
                     <ChapterBentoCard chapter={activeChapter} isDeferred={false} />
                   </div>
 
@@ -554,6 +554,10 @@ export default function MacbethStudyDashboardMacPage() {
       isOpen={isWalkthroughOpen}
       onClose={() => setIsWalkthroughOpen(false)}
       onSelectGoal={(goal) => setStudyGoal(goal)}
+      isInspectorOpen={isInspectorOpen}
+      onOpenInspector={() => {
+        if (!isInspectorOpen) toggleInspector();
+      }}
     />
     </>
   );
