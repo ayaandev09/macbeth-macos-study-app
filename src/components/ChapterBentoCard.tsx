@@ -10,6 +10,7 @@ import {
 } from "@/data";
 import { useStudyStore } from "@/store/useStudyStore";
 import { RecallFlipCard } from "@/components/RecallFlipCard";
+import { AcademicNotesSurface } from "@/components/AcademicNotesSurface";
 import {
   CheckCircle2,
   Circle,
@@ -283,16 +284,14 @@ export const ChapterBentoCard = React.memo(function ChapterBentoCard({
 
         {/* Collapsible Personal Study Scratchpad */}
         {showScratchpad && (
-          <div className="mt-4 pt-4 border-t border-white/10">
-            <label className="block font-mono text-[11px] uppercase tracking-wider text-amber-300 mb-2">
-              Personal Seminar & Essay Scratchpad ({chapter.displayCode}) — Saved Automatically
-            </label>
-            <textarea
-              value={noteText}
-              onChange={(e) => setChapterNote(chapter.id, e.target.value)}
-              rows={3}
-              placeholder="Write your essay thesis hooks, meter/scansion observations, or Jacobean context notes for this scene..."
-              className="w-full rounded-2xl bg-slate-950/80 border border-white/15 p-3.5 text-xs text-slate-100 placeholder:text-slate-500 focus:outline-none focus:border-amber-400/50 shadow-inner"
+          <div className="mt-4 pt-4 border-t border-white/10 animate-in fade-in slide-in-from-top-2 duration-200">
+            <AcademicNotesSurface
+              note={noteText}
+              onChange={(text) => setChapterNote(chapter.id, text)}
+              title="Personal Seminar & Essay Marginalia"
+              itemCode={chapter.displayCode}
+              minRows={5}
+              accentColor="#f59e0b"
             />
           </div>
         )}

@@ -4,3 +4,13 @@ out/
 .env*.local
 .DS_Store
 *.log
+
+
+# Tauri & Rust build artifacts
+src-tauri/target/
+target/
+*.exe
+*.dmg
+*.app
+*.pdb
+Cargo.lock
