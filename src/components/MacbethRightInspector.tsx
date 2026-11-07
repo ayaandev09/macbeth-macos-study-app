@@ -15,6 +15,7 @@ import {
   CheckCircle2,
   BookOpen,
   PanelRightClose,
+  X,
   Edit3,
   Flame,
   AlertCircle,
@@ -85,30 +86,30 @@ export function MacbethRightInspector({
           }}
           style={{ willChange: "transform, opacity" }}
           data-tour="inspector"
-          className="hidden xl:block w-[320px] xl:w-[340px] shrink-0 sticky top-5 z-20"
+          className="w-80 lg:w-88 shrink-0 sticky top-3 select-none overflow-hidden transition-all z-10"
         >
-          <div className="w-[320px] xl:w-[340px] liquid-card-flagship rounded-3xl p-4 border border-amber-500/40 bg-slate-950/85 backdrop-blur-2xl shadow-2xl flex flex-col max-h-[calc(100vh-2.5rem)] overflow-hidden">
+          <div className="liquid-card-flagship rounded-3xl p-4 border border-amber-500/40 bg-slate-950/85 backdrop-blur-2xl shadow-2xl flex flex-col max-h-[calc(100vh-1.5rem)] overflow-hidden">
             {/* Top Header */}
-            <div className="flex items-center justify-between gap-2 pb-3 mb-3 border-b border-white/10 shrink-0 min-h-[46px]">
-              <div className="flex items-center gap-2.5 min-w-0">
-                <span className="w-10 h-10 rounded-2xl bg-amber-500/20 text-amber-300 border border-amber-400/35 flex items-center justify-center shrink-0 shadow-inner">
-                  <Sparkles className="w-5 h-5" />
-                </span>
+            <div className="flex items-center justify-between gap-2 pb-2.5 mb-3 border-b border-white/10 shrink-0 min-h-[44px]">
+              <div className="flex items-center gap-2 min-w-0">
+                <div className="p-1.5 rounded-xl bg-amber-500/20 border border-amber-400/35 text-amber-300 shrink-0 shadow-inner">
+                  <Sparkles className="w-4 h-4" />
+                </div>
                 <div className="min-w-0">
-                  <span className="text-[10px] font-mono font-bold tracking-wider text-amber-400 uppercase block">
-                    Folio Analytical Inspector
+                  <span className="text-[10px] font-mono font-bold tracking-wider text-amber-400 uppercase block truncate">
+                    FOLIO INSPEKTOR
                   </span>
-                  <h3 className="text-xs font-bold text-white truncate">
+                  <h3 className="text-xs font-semibold text-white tracking-tight truncate">
                     {chapter.displayCode} · {chapter.title.replace(/^Act \d+, Scene \d+:\s*/, "")}
                   </h3>
                 </div>
               </div>
 
-              <div className="flex items-center gap-2 shrink-0">
+              <div className="flex items-center gap-1 shrink-0">
                 <button
                   onClick={() => toggleChapterComplete(chapter.id)}
                   title={isCompleted ? "Mark Incomplete" : "Mark Scene Mastered"}
-                  className={`w-9 h-9 rounded-xl flex items-center justify-center text-xs font-mono transition-all cursor-pointer soft-button ${
+                  className={`p-1.5 rounded-xl flex items-center justify-center text-xs font-mono transition-all cursor-pointer soft-button ${
                     isCompleted
                       ? "bg-emerald-500/25 text-emerald-300 border border-emerald-400/40 shadow-sm"
                       : "bg-white/5 text-slate-400 hover:text-white border border-white/10"
@@ -118,11 +119,10 @@ export function MacbethRightInspector({
                 </button>
                 <button
                   onClick={onToggle}
-                  title="Tuck Away into Top Command Bar (⌘I / Esc)"
-                  className="px-3 py-1.5 rounded-xl text-amber-200 hover:text-white bg-amber-500/15 hover:bg-amber-500/25 border border-amber-400/35 transition-all cursor-pointer flex items-center gap-1.5 text-xs font-mono soft-button group"
+                  title="Tuck Inspector away (⌘I)"
+                  className="p-1.5 rounded-xl text-slate-400 hover:text-white hover:bg-white/10 transition-colors cursor-pointer"
                 >
-                  <PanelRightClose className="w-4 h-4 text-amber-300 group-hover:-translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
-                  <span className="text-[11px] font-semibold">Tuck to Bar ↑</span>
+                  <X className="w-4 h-4" />
                 </button>
               </div>
             </div>
