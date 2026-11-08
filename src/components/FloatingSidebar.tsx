@@ -317,17 +317,23 @@ export function FloatingSidebar({ isMobileSheet = false }: FloatingSidebarProps)
   return (
     <aside
       data-tour="sidebar"
-      className={`hidden lg:flex shrink-0 lg:sticky lg:top-5 lg:h-[calc(100vh-2.5rem)] flex-col liquid-glass-sidebar rounded-3xl p-4 overflow-hidden select-none z-20 transition-all duration-300 ${
-        sidebarCollapsed ? "w-20 items-center px-2" : "w-64 xl:w-72"
+      className={`hidden lg:flex shrink-0 lg:sticky lg:top-5 lg:h-[calc(100vh-2.5rem)] flex-col liquid-glass-sidebar rounded-3xl overflow-hidden select-none z-20 transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] ${
+        sidebarCollapsed
+          ? "w-0 max-w-0 p-0 -mr-4 xl:-mr-5 border-0 opacity-0 pointer-events-none"
+          : "w-64 xl:w-72 p-4 opacity-100"
       }`}
     >
-      {/* Top Dunsinane Royal Identity Header */}
-      <div className="flex items-center justify-between pb-3 mb-3 border-b border-white/10 shrink-0 min-h-[44px] w-full mac-drag-region">
-        <div className="flex items-center gap-2.5 min-w-0">
-          <div className="w-10 h-10 rounded-2xl bg-gradient-to-br from-rose-500/25 to-amber-500/20 border border-amber-400/30 flex items-center justify-center overflow-hidden p-1 mac-no-drag shrink-0">
-            <MacbethAppLogo className="w-full h-full object-contain" />
-          </div>
-          {!sidebarCollapsed && (
+      <div
+        className={`w-64 xl:w-72 flex flex-col h-full min-h-0 shrink-0 transition-opacity duration-200 ${
+          sidebarCollapsed ? "opacity-0 pointer-events-none invisible" : "opacity-100 visible"
+        }`}
+      >
+        {/* Top Dunsinane Royal Identity Header */}
+        <div className="flex items-center justify-between pb-3 mb-3 border-b border-white/10 shrink-0 min-h-[44px] w-full mac-drag-region">
+          <div className="flex items-center gap-2.5 min-w-0">
+            <div className="w-10 h-10 rounded-2xl bg-gradient-to-br from-rose-500/25 to-amber-500/20 border border-amber-400/30 flex items-center justify-center overflow-hidden p-1 mac-no-drag shrink-0">
+              <MacbethAppLogo className="w-full h-full object-contain" />
+            </div>
             <div className="min-w-0">
               <span className="font-mono text-[10px] tracking-[0.22em] uppercase text-amber-300 font-semibold block truncate">
                 DUNSINANE // 1606
@@ -336,21 +342,21 @@ export function FloatingSidebar({ isMobileSheet = false }: FloatingSidebarProps)
                 Macbeth Codex
               </h1>
             </div>
+          </div>
+
+          {completedCount > 0 && (
+            <button
+              onClick={resetAllProgress}
+              title="Reset progress"
+              className="p-1.5 rounded-xl text-slate-400 hover:text-white hover:bg-white/10 transition-colors cursor-pointer shrink-0"
+            >
+              <RotateCcw className="w-3.5 h-3.5" />
+            </button>
           )}
         </div>
 
-        {!sidebarCollapsed && completedCount > 0 && (
-          <button
-            onClick={resetAllProgress}
-            title="Reset progress"
-            className="p-1.5 rounded-xl text-slate-400 hover:text-white hover:bg-white/10 transition-colors cursor-pointer shrink-0"
-          >
-            <RotateCcw className="w-3.5 h-3.5" />
-          </button>
-        )}
+        {sidebarBody}
       </div>
-
-      {!sidebarCollapsed && sidebarBody}
     </aside>
   );
 }
