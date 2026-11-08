@@ -618,9 +618,9 @@ export const ChapterBentoCard = React.memo(function ChapterBentoCard({
             </span>
           </div>
 
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-4">
+          <div className="bento-adaptive-12">
             {/* Story So Far & Character Roll Call (5 cols) */}
-            <div className="lg:col-span-5 space-y-3.5">
+            <div className="bento-span-5 space-y-3.5">
               {/* Who's in the scene */}
               <div className="p-4 rounded-2xl bg-slate-950/60 border border-white/10">
                 <span className="font-mono text-[10px] uppercase tracking-wider text-amber-300 font-bold flex items-center gap-1.5 mb-2">
@@ -674,7 +674,7 @@ export const ChapterBentoCard = React.memo(function ChapterBentoCard({
             </div>
 
             {/* Plain Modern English Walkthrough (7 cols) */}
-            <div className="lg:col-span-7 p-5 rounded-2xl bg-emerald-950/20 border border-emerald-400/25 flex flex-col justify-between">
+            <div className="bento-span-7 p-5 rounded-2xl bg-emerald-950/20 border border-emerald-400/25 flex flex-col justify-between">
               <div>
                 <span className="font-mono text-[11px] uppercase tracking-wider text-emerald-300 font-bold flex items-center gap-1.5 mb-3">
                   <Sparkles className="w-3.5 h-3.5 text-emerald-400" />
@@ -809,9 +809,9 @@ export const ChapterBentoCard = React.memo(function ChapterBentoCard({
       {/* =====================================================================
           BENTO ROW 1: EXECUTIVE SUMMARY + SPEED-READ BULLETS + THEME TRACKER
           ===================================================================== */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-4">
+      <div className="bento-adaptive-12">
         {/* Executive Summary & High-Velocity Speed-Read Bullets (7 Cols) */}
-        <div className="lg:col-span-7 liquid-glass-bento rounded-3xl p-6 flex flex-col justify-between">
+        <div className="bento-span-7 liquid-glass-bento rounded-3xl p-6 flex flex-col justify-between">
           <div>
             <div className="flex items-center justify-between gap-2 mb-3">
               <span className="font-mono text-[11px] uppercase tracking-widest text-amber-300 font-semibold flex items-center gap-1.5">
@@ -867,7 +867,7 @@ export const ChapterBentoCard = React.memo(function ChapterBentoCard({
         </div>
 
         {/* Theme Radar & Active Symbols (5 Cols) */}
-        <div className="lg:col-span-5 liquid-glass-bento rounded-3xl p-6 flex flex-col justify-between gap-5">
+        <div className="bento-span-5 liquid-glass-bento rounded-3xl p-6 flex flex-col justify-between gap-5">
           <div>
             <div className="flex items-center justify-between mb-3">
               <span className="font-mono text-[11px] uppercase tracking-widest text-rose-300 font-semibold">
@@ -1116,9 +1116,9 @@ export const ChapterBentoCard = React.memo(function ChapterBentoCard({
           BENTO ROW 3: QUAD-SOURCE CRITICAL ANALYSIS + FIRST FOLIO QUOTES
           ===================================================================== */}
       {!speedReadMode && (
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-4">
+        <div className="bento-adaptive-12">
           {/* Quad-Source Critical Analysis (6 Cols) */}
-          <div className="lg:col-span-6 liquid-glass-bento rounded-3xl p-6 space-y-4">
+          <div className="bento-span-6 liquid-glass-bento rounded-3xl p-6 space-y-4">
             <div className="flex items-center gap-2">
               <BookOpenCheck className="w-4 h-4 text-emerald-400" />
               <h3 className="text-sm font-semibold uppercase tracking-wider text-white font-mono">
@@ -1186,7 +1186,7 @@ export const ChapterBentoCard = React.memo(function ChapterBentoCard({
           </div>
 
           {/* Annotated Verbatim Quotes (6 Cols) */}
-          <div className="lg:col-span-6 liquid-glass-bento rounded-3xl p-6 flex flex-col justify-between">
+          <div className="bento-span-6 liquid-glass-bento rounded-3xl p-6 flex flex-col justify-between">
             <div>
               <div className="flex items-center justify-between gap-2 mb-4">
                 <div className="flex items-center gap-2">

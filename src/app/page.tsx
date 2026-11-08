@@ -245,7 +245,10 @@ export default function MacbethStudyDashboardMacPage() {
         <FloatingSidebar isMobileSheet={false} />
 
         {/* Main Content Column */}
-        <main className="flex-1 min-w-0 w-full pb-36">
+        <main
+          className="flex-1 min-w-0 w-full pb-36 transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)]"
+          style={{ containerType: "inline-size" }}
+        >
             <WidgetBridge />
             <div className="sticky top-2 z-30 mb-4">
               <TopCommandBar onOpenWalkthrough={() => setIsWalkthroughOpen(true)} />
