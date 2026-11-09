@@ -1145,6 +1145,12 @@ input, textarea, select { transition: border-color var(--dur-fast) ease, box-sha
   letter-spacing: 0.015em;
 }
 
+.font-handwriting-comic {
+  font-family: 'Comic Neue', 'Patrick Hand', 'Chalkboard SE', 'Segoe Print', system-ui, sans-serif !important;
+  font-style: normal !important;
+  letter-spacing: 0.01em;
+}
+
 .font-handwriting-architect {
   font-family: 'Architects Daughter', 'Patrick Hand', system-ui, sans-serif !important;
   font-style: normal !important;

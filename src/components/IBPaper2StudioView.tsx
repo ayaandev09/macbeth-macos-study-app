@@ -38,7 +38,7 @@ import {
   ListPlus,
 } from "lucide-react";
 
-type FontStyleOption = "handwriting-upright" | "handwriting-architect" | "regular-sans" | "scholarly-serif";
+type FontStyleOption = "handwriting-upright" | "handwriting-comic" | "handwriting-architect" | "regular-sans" | "scholarly-serif";
 
 interface EssayDraftState {
   plan: string;
@@ -67,6 +67,8 @@ export function IBPaper2StudioView() {
   const [copiedQuoteIndex, setCopiedQuoteIndex] = useState<number | null>(null);
   const [copiedEssayText, setCopiedEssayText] = useState(false);
   const [copiedSectionIndex, setCopiedSectionIndex] = useState<number | null>(null);
+  const [copiedTransitionIndex, setCopiedTransitionIndex] = useState<string | null>(null);
+  const [confirmClearSection, setConfirmClearSection] = useState(false);
 
   // Timer State for Timed Paper 2 Practice (105 mins total for IB Paper 2 = 6300 seconds)
   const [timerSeconds, setTimerSeconds] = useState<number>(0);
@@ -207,11 +209,19 @@ export function IBPaper2StudioView() {
     setTimeout(() => setCopiedSectionIndex(null), 2000);
   };
 
-  // Handwriting font styling resolver
+  const handleCopyTransitionPhrase = (phrase: string, key: string) => {
+    navigator.clipboard.writeText(phrase);
+    setCopiedTransitionIndex(key);
+    setTimeout(() => setCopiedTransitionIndex(null), 2000);
+  };
+
+  // Handwriting font styling resolver (Strictly clean upright handwriting with zero slant)
   const getWritingFontClass = () => {
     switch (fontStyle) {
       case "handwriting-upright":
         return "font-handwriting-upright";
+      case "handwriting-comic":
+        return "font-handwriting-comic";
       case "handwriting-architect":
         return "font-handwriting-architect";
       case "scholarly-serif":
@@ -619,7 +629,18 @@ export function IBPaper2StudioView() {
                   }`}
                   title="Patrick Hand / Clean upright legible handwriting (no slant)"
                 >
-                  Clean Upright Hand
+                  Patrick Hand
+                </button>
+                <button
+                  onClick={() => handleFontChange("handwriting-comic")}
+                  className={`px-2.5 py-1 rounded-lg text-xs font-mono transition-all cursor-pointer ${
+                    fontStyle === "handwriting-comic"
+                      ? "bg-amber-500/25 text-amber-300 border border-amber-400/40 font-bold"
+                      : "text-slate-400 hover:text-white"
+                  }`}
+                  title="Comic Neue / Upright clean rounded school script (no slant)"
+                >
+                  Comic Neue Upright
                 </button>
                 <button
                   onClick={() => handleFontChange("handwriting-architect")}
@@ -751,7 +772,31 @@ export function IBPaper2StudioView() {
               </div>
 
               {/* Quick Insert Snippet Actions */}
-              <div className="flex items-center gap-2">
+              <div className="flex flex-wrap items-center gap-2">
+                {/* Quick Insert Best Quote Dropdown */}
+                <select
+                  aria-label="Insert Curated Quote from Question"
+                  onChange={(e) => {
+                    const quote = e.target.value;
+                    if (quote) {
+                      const text = activeDraft[activeDraftSection];
+                      updateDraftSection(activeDraftSection, text + (text && !text.endsWith(" ") ? " " : "") + quote + " ");
+                      e.target.value = "";
+                    }
+                  }}
+                  defaultValue=""
+                  className="bg-black/80 text-amber-300 font-mono text-xs px-2.5 py-1 rounded-lg border border-amber-400/30 focus:outline-none cursor-pointer max-w-[190px] truncate"
+                >
+                  <option value="" disabled>
+                    + Insert Question Quote
+                  </option>
+                  {currentQuestion.bestQuotes.map((q, idx) => (
+                    <option key={idx} value={`"${q.quote}" (${q.speaker}, ${q.lineRef})`}>
+                      {q.speaker}: &ldquo;{q.quote.slice(0, 32)}...&rdquo;
+                    </option>
+                  ))}
+                </select>
+
                 <button
                   onClick={() => {
                     const text = activeDraft[activeDraftSection];
@@ -770,19 +815,37 @@ export function IBPaper2StudioView() {
                   className="px-2 py-1 rounded-lg bg-white/5 hover:bg-white/10 text-slate-300 hover:text-white text-xs font-mono flex items-center gap-1 cursor-pointer"
                 >
                   <Quote className="w-3 h-3 text-amber-300" />
-                  <span>Insert Quote</span>
+                  <span>Quote Slot</span>
                 </button>
-                <button
-                  onClick={() => {
-                    if (window.confirm(`Clear your writing in the ${activeDraftSection} section?`)) {
-                      updateDraftSection(activeDraftSection, "");
-                    }
-                  }}
-                  className="p-1.5 rounded-lg text-slate-500 hover:text-rose-400 hover:bg-rose-500/10 cursor-pointer transition-colors"
-                  title="Clear Section"
-                >
-                  <Trash2 className="w-3.5 h-3.5" />
-                </button>
+
+                {confirmClearSection ? (
+                  <div className="flex items-center gap-1 bg-rose-950/80 border border-rose-400/40 px-2 py-0.5 rounded-lg text-xs font-mono">
+                    <span className="text-rose-200 text-[10px]">Clear?</span>
+                    <button
+                      onClick={() => {
+                        updateDraftSection(activeDraftSection, "");
+                        setConfirmClearSection(false);
+                      }}
+                      className="px-1.5 py-0.5 rounded bg-rose-600 hover:bg-rose-500 text-white text-[10px] font-bold cursor-pointer"
+                    >
+                      Yes
+                    </button>
+                    <button
+                      onClick={() => setConfirmClearSection(false)}
+                      className="px-1.5 py-0.5 rounded bg-white/10 text-slate-300 text-[10px] cursor-pointer"
+                    >
+                      No
+                    </button>
+                  </div>
+                ) : (
+                  <button
+                    onClick={() => setConfirmClearSection(true)}
+                    className="p-1.5 rounded-lg text-slate-500 hover:text-rose-400 hover:bg-rose-500/10 cursor-pointer transition-colors"
+                    title="Clear Section"
+                  >
+                    <Trash2 className="w-3.5 h-3.5" />
+                  </button>
+                )}
               </div>
             </div>
 
@@ -1136,19 +1199,29 @@ export function IBPaper2StudioView() {
                     {cat.category}
                   </h4>
                   <ul className="text-xs text-slate-300 space-y-2">
-                    {cat.phrases.map((phrase, pIdx) => (
-                      <li
-                        key={pIdx}
-                        onClick={() => {
-                          navigator.clipboard.writeText(phrase);
-                          alert(`Copied transitional phrase: "${phrase}"`);
-                        }}
-                        className="p-2 rounded-xl bg-white/[0.02] hover:bg-white/[0.06] border border-white/5 transition-all cursor-pointer text-[11px] leading-relaxed italic"
-                        title="Click to copy phrase"
-                      >
-                        &ldquo;{phrase}&rdquo;
-                      </li>
-                    ))}
+                    {cat.phrases.map((phrase, pIdx) => {
+                      const itemKey = `${cIdx}-${pIdx}`;
+                      const isCopied = copiedTransitionIndex === itemKey;
+                      return (
+                        <li
+                          key={pIdx}
+                          onClick={() => handleCopyTransitionPhrase(phrase, itemKey)}
+                          className={`p-2 rounded-xl border transition-all cursor-pointer text-[11px] leading-relaxed italic flex items-center justify-between gap-2 ${
+                            isCopied
+                              ? "bg-emerald-500/15 border-emerald-400/40 text-emerald-200"
+                              : "bg-white/[0.02] hover:bg-white/[0.06] border-white/5"
+                          }`}
+                          title="Click to copy phrase"
+                        >
+                          <span>&ldquo;{phrase}&rdquo;</span>
+                          {isCopied && (
+                            <span className="shrink-0 text-[10px] font-mono font-bold text-emerald-400 bg-emerald-500/20 px-1.5 py-0.5 rounded">
+                              Copied!
+                            </span>
+                          )}
+                        </li>
+                      );
+                    })}
                   </ul>
                 </div>
               ))}
