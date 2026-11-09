@@ -6,6 +6,7 @@ import {
   IB_GUIDING_QUESTIONS,
   IB_PAPER_2_RUBRIC,
   OPTIMAL_900_WORD_EXEMPLAR_ESSAY,
+  UNIVERSAL_IB_PAPER_2_TEMPLATE,
   IBQuestionData,
 } from "@/data";
 import {
@@ -36,17 +37,22 @@ import {
   Palette,
   Type,
   ListPlus,
+  Eye,
+  EyeOff,
+  Compass,
+  Lightbulb,
 } from "lucide-react";
 
 type FontStyleOption = "handwriting-upright" | "handwriting-comic" | "handwriting-architect" | "regular-sans" | "scholarly-serif";
 
 interface EssayDraftState {
-  plan: string;
-  intro: string;
-  body1: string;
-  body2: string;
-  body3: string;
-  conclusion: string;
+  plan?: string;
+  intro?: string;
+  body1?: string;
+  body2?: string;
+  body3?: string;
+  conclusion?: string;
+  continuousEssay: string;
 }
 
 const DEFAULT_DRAFT: EssayDraftState = {
@@ -56,6 +62,7 @@ const DEFAULT_DRAFT: EssayDraftState = {
   body2: "",
   body3: "",
   conclusion: "",
+  continuousEssay: "",
 };
 
 export function IBPaper2StudioView() {
@@ -69,6 +76,11 @@ export function IBPaper2StudioView() {
   const [copiedSectionIndex, setCopiedSectionIndex] = useState<number | null>(null);
   const [copiedTransitionIndex, setCopiedTransitionIndex] = useState<string | null>(null);
   const [confirmClearSection, setConfirmClearSection] = useState(false);
+  const [isTemplateVisible, setIsTemplateVisible] = useState(true);
+  const [expandedTemplateIndex, setExpandedTemplateIndex] = useState<number | null>(0);
+  const [copiedTemplateSection, setCopiedTemplateSection] = useState<number | null>(null);
+  const [copiedStemIndex, setCopiedStemIndex] = useState<string | null>(null);
+  const [templateLoadedFeedback, setTemplateLoadedFeedback] = useState(false);
 
   // Timer State for Timed Paper 2 Practice (105 mins total for IB Paper 2 = 6300 seconds)
   const [timerSeconds, setTimerSeconds] = useState<number>(0);
@@ -76,7 +88,6 @@ export function IBPaper2StudioView() {
 
   // User Essay Drafting State per question (persisted in localStorage)
   const [draftsByQuestion, setDraftsByQuestion] = useState<Record<string, EssayDraftState>>({});
-  const [activeDraftSection, setActiveDraftSection] = useState<keyof EssayDraftState>("intro");
 
   // Selected Question Data
   const currentQuestion = useMemo(
@@ -84,13 +95,36 @@ export function IBPaper2StudioView() {
     [selectedQuestionId]
   );
 
-  // Load saved drafts and font from localStorage on mount
+  // Load saved drafts and font from localStorage on mount (with backwards compatibility)
   useEffect(() => {
     if (typeof window === "undefined") return;
     try {
       const savedDrafts = localStorage.getItem("macbeth_ib_paper2_drafts_v1");
       if (savedDrafts) {
-        setDraftsByQuestion(JSON.parse(savedDrafts));
+        const parsed = JSON.parse(savedDrafts);
+        // Normalize any old segmented drafts into continuous canvas if continuousEssay is not yet populated
+        const normalized: Record<string, EssayDraftState> = {};
+        Object.entries(parsed).forEach(([qId, val]: [string, any]) => {
+          if (val && typeof val === "object") {
+            let continuous = val.continuousEssay || "";
+            if (!continuous) {
+              const parts = [
+                val.intro ? `### INTRODUCTION\n${val.intro}` : "",
+                val.body1 ? `### BODY PARAGRAPH 1\n${val.body1}` : "",
+                val.body2 ? `### BODY PARAGRAPH 2\n${val.body2}` : "",
+                val.body3 ? `### BODY PARAGRAPH 3\n${val.body3}` : "",
+                val.conclusion ? `### CONCLUSION\n${val.conclusion}` : "",
+              ].filter(Boolean);
+              continuous = parts.join("\n\n");
+            }
+            normalized[qId] = {
+              ...DEFAULT_DRAFT,
+              ...val,
+              continuousEssay: continuous,
+            };
+          }
+        });
+        setDraftsByQuestion(normalized);
       }
       const savedFont = localStorage.getItem("macbeth_ib_font_preference_v1") as FontStyleOption;
       if (savedFont) {
@@ -101,15 +135,15 @@ export function IBPaper2StudioView() {
     }
   }, []);
 
-  // Save drafts to localStorage whenever updated
-  const updateDraftSection = (section: keyof EssayDraftState, value: string) => {
+  // Update Continuous Essay draft
+  const updateContinuousEssay = (value: string) => {
     setDraftsByQuestion((prev) => {
       const current = prev[selectedQuestionId] || { ...DEFAULT_DRAFT };
       const updated = {
         ...prev,
         [selectedQuestionId]: {
           ...current,
-          [section]: value,
+          continuousEssay: value,
         },
       };
       if (typeof window !== "undefined") {
@@ -155,17 +189,11 @@ export function IBPaper2StudioView() {
 
   // Current draft calculation
   const activeDraft = draftsByQuestion[selectedQuestionId] || DEFAULT_DRAFT;
+  const continuousText = activeDraft.continuousEssay || "";
 
   const totalWords = useMemo(() => {
-    const combined = [
-      activeDraft.intro,
-      activeDraft.body1,
-      activeDraft.body2,
-      activeDraft.body3,
-      activeDraft.conclusion,
-    ].join(" ");
-    return combined.trim() ? combined.trim().split(/\s+/).length : 0;
-  }, [activeDraft]);
+    return continuousText.trim() ? continuousText.trim().split(/\s+/).length : 0;
+  }, [continuousText]);
 
   const handleCopyFullEssayDraft = () => {
     const fullText = [
@@ -173,28 +201,28 @@ export function IBPaper2StudioView() {
       `QUESTION: ${currentQuestion.question}`,
       `WORD COUNT: ${totalWords} words`,
       "",
-      "--- OUTLINE / PLAN ---",
-      activeDraft.plan || "(No outline provided)",
-      "",
-      "--- INTRODUCTION ---",
-      activeDraft.intro || "",
-      "",
-      "--- BODY PARAGRAPH 1 ---",
-      activeDraft.body1 || "",
-      "",
-      "--- BODY PARAGRAPH 2 ---",
-      activeDraft.body2 || "",
-      "",
-      "--- BODY PARAGRAPH 3 ---",
-      activeDraft.body3 || "",
-      "",
-      "--- CONCLUSION ---",
-      activeDraft.conclusion || "",
+      continuousText || "(No essay text written yet)",
     ].join("\n");
 
     navigator.clipboard.writeText(fullText);
     setCopiedEssayText(true);
     setTimeout(() => setCopiedEssayText(false), 2000);
+  };
+
+  const handleLoadTemplateIntoCanvas = () => {
+    const templateText = UNIVERSAL_IB_PAPER_2_TEMPLATE.rawFullTemplateText;
+    if (!continuousText.trim() || window.confirm("Load the universal 900-word template framework into your writing canvas? This will populate the editor with the complete structured guide.")) {
+      updateContinuousEssay(templateText);
+      setTemplateLoadedFeedback(true);
+      setTimeout(() => setTemplateLoadedFeedback(false), 2500);
+    }
+  };
+
+  const handleInsertSentenceStem = (stem: string, stemId: string) => {
+    const separator = continuousText && !continuousText.endsWith("\n") ? (continuousText.endsWith(" ") ? "" : " ") : "";
+    updateContinuousEssay(continuousText + separator + stem + " ");
+    setCopiedStemIndex(stemId);
+    setTimeout(() => setCopiedStemIndex(null), 1500);
   };
 
   const handleCopyQuote = (quoteText: string, index: number) => {
@@ -699,61 +727,69 @@ export function IBPaper2StudioView() {
           </div>
 
           {/* Active Question Banner In Writing Mode */}
-          <div className="p-4 rounded-2xl bg-amber-500/10 border border-amber-400/25 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+          <div className="p-4 rounded-2xl bg-amber-500/10 border border-amber-400/25 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
             <div>
               <span className="font-mono text-[10px] text-amber-400 uppercase font-bold tracking-wider block">
-                Prompt In Focus
+                Continuous Writing Canvas • IB Paper 2 Prompt
               </span>
               <p className="text-xs sm:text-sm text-amber-100 font-medium">
                 {currentQuestion.question}
               </p>
             </div>
-            <div className="flex items-center gap-3 font-mono text-xs shrink-0 text-slate-300">
-              <span>Total Words: <strong className="text-amber-300">{totalWords}</strong> / ~900</span>
+            <div className="flex flex-wrap items-center gap-3 font-mono text-xs shrink-0 text-slate-300">
+              <span className="px-2.5 py-1 rounded-lg bg-black/60 border border-white/10">
+                Word Count: <strong className={totalWords >= 850 && totalWords <= 1000 ? "text-emerald-400 font-bold" : "text-amber-300 font-bold"}>{totalWords}</strong> / ~900w
+              </span>
               <span className="text-slate-500">•</span>
-              <span className="text-emerald-400">Autosaved to LocalStorage</span>
+              <span className="text-emerald-400 flex items-center gap-1">
+                <Check className="w-3 h-3 text-emerald-400" /> Continuous Autosave
+              </span>
             </div>
           </div>
 
-          {/* Section Navigation Tabs for Writing */}
-          <div className="grid grid-cols-2 sm:grid-cols-6 gap-2">
-            {(
-              [
-                { id: "plan", label: "0. Essay Plan", target: "~80w" },
-                { id: "intro", label: "1. Intro", target: "~120w" },
-                { id: "body1", label: "2. Body I", target: "~220w" },
-                { id: "body2", label: "3. Body II", target: "~220w" },
-                { id: "body3", label: "4. Body III", target: "~220w" },
-                { id: "conclusion", label: "5. Conclusion", target: "~120w" },
-              ] as { id: keyof EssayDraftState; label: string; target: string }[]
-            ).map((sec) => {
-              const isCurrent = activeDraftSection === sec.id;
-              const words = activeDraft[sec.id]?.trim()
-                ? activeDraft[sec.id].trim().split(/\s+/).length
-                : 0;
-              return (
-                <button
-                  key={sec.id}
-                  onClick={() => setActiveDraftSection(sec.id)}
-                  className={`p-3 rounded-2xl text-left transition-all cursor-pointer border flex flex-col justify-between ${
-                    isCurrent
-                      ? "bg-amber-500/20 text-white border-amber-400/60 shadow-md"
-                      : "bg-black/40 text-slate-400 border-white/10 hover:border-white/20 hover:text-white"
-                  }`}
-                >
-                  <span className="font-mono text-xs font-bold block">{sec.label}</span>
-                  <div className="flex items-center justify-between text-[10px] font-mono mt-2 text-slate-400">
-                    <span className={words > 0 ? "text-amber-300 font-bold" : "text-slate-500"}>
-                      {words} words
-                    </span>
-                    <span className="text-slate-500">{sec.target}</span>
-                  </div>
-                </button>
-              );
-            })}
+          {/* Quick Writing Studio Controls: Template Quick-Actions */}
+          <div className="flex flex-wrap items-center justify-between gap-2.5 px-1">
+            <div className="flex flex-wrap items-center gap-2">
+              <button
+                onClick={handleLoadTemplateIntoCanvas}
+                className="px-3.5 py-1.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-mono text-xs font-bold flex items-center gap-1.5 cursor-pointer shadow-md transition-all"
+                title="Populate the continuous canvas with the complete universal IB Paper 2 ~900-word template framework"
+              >
+                <FileText className="w-3.5 h-3.5" />
+                <span>{templateLoadedFeedback ? "✓ Template Loaded!" : "Load Universal 900w Template"}</span>
+              </button>
+
+              <button
+                onClick={() => {
+                  navigator.clipboard.writeText(UNIVERSAL_IB_PAPER_2_TEMPLATE.rawFullTemplateText);
+                  setTemplateLoadedFeedback(true);
+                  setTimeout(() => setTemplateLoadedFeedback(false), 2000);
+                }}
+                className="px-3 py-1.5 rounded-xl bg-white/10 hover:bg-white/15 text-slate-200 hover:text-white font-mono text-xs flex items-center gap-1.5 cursor-pointer transition-all border border-white/10"
+                title="Copy entire universal template to clipboard without overwriting canvas"
+              >
+                <Copy className="w-3.5 h-3.5 text-amber-300" />
+                <span>Copy Full Template</span>
+              </button>
+            </div>
+
+            <div className="flex items-center gap-2">
+              <button
+                onClick={() => setIsTemplateVisible(!isTemplateVisible)}
+                className={`px-3 py-1.5 rounded-xl font-mono text-xs flex items-center gap-1.5 cursor-pointer transition-all border ${
+                  isTemplateVisible
+                    ? "bg-amber-500/20 text-amber-300 border-amber-400/40"
+                    : "bg-black/50 text-slate-400 border-white/10 hover:text-white"
+                }`}
+                title="Toggle universal template guide display below canvas"
+              >
+                {isTemplateVisible ? <EyeOff className="w-3.5 h-3.5" /> : <Eye className="w-3.5 h-3.5" />}
+                <span>{isTemplateVisible ? "Hide Template Guide" : "Show Template Guide"}</span>
+              </button>
+            </div>
           </div>
 
-          {/* Clean Upright Handwritten Canvas Surface */}
+          {/* Clean Upright Handwritten Canvas Surface (Continuous Single Canvas for Accessibility & Flow) */}
           <div className="rounded-3xl border border-white/15 bg-gradient-to-b from-amber-500/[0.03] via-black/60 to-black/80 backdrop-blur-xl overflow-hidden shadow-2xl space-y-0">
             {/* Canvas Header */}
             <div className="px-5 py-3 border-b border-white/10 flex flex-wrap items-center justify-between gap-2 bg-white/[0.02]">
@@ -762,11 +798,14 @@ export function IBPaper2StudioView() {
                   ✍️
                 </div>
                 <div>
-                  <h4 className="text-xs sm:text-sm font-bold text-white uppercase font-mono tracking-wider">
-                    {activeDraftSection.toUpperCase()} — {fontStyle === "handwriting-upright" ? "Clean Upright Script (Patrick Hand)" : fontStyle}
+                  <h4 className="text-xs sm:text-sm font-bold text-white uppercase font-mono tracking-wider flex items-center gap-2">
+                    <span>Continuous Writing Canvas</span>
+                    <span className="text-[10px] px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-400/30 font-normal">
+                      Accessibility &amp; Flow Mode
+                    </span>
                   </h4>
                   <span className="text-[10px] text-slate-400">
-                    Autosaving continuously • Clear, upright, legible font (not slanted)
+                    One unified exam canvas • Real-time autosave to localStorage • Upright clean script
                   </span>
                 </div>
               </div>
@@ -779,13 +818,13 @@ export function IBPaper2StudioView() {
                   onChange={(e) => {
                     const quote = e.target.value;
                     if (quote) {
-                      const text = activeDraft[activeDraftSection];
-                      updateDraftSection(activeDraftSection, text + (text && !text.endsWith(" ") ? " " : "") + quote + " ");
+                      const separator = continuousText && !continuousText.endsWith("\n") ? (continuousText.endsWith(" ") ? "" : " ") : "";
+                      updateContinuousEssay(continuousText + separator + quote + " ");
                       e.target.value = "";
                     }
                   }}
                   defaultValue=""
-                  className="bg-black/80 text-amber-300 font-mono text-xs px-2.5 py-1 rounded-lg border border-amber-400/30 focus:outline-none cursor-pointer max-w-[190px] truncate"
+                  className="bg-black/80 text-amber-300 font-mono text-xs px-2.5 py-1 rounded-lg border border-amber-400/30 focus:outline-none cursor-pointer max-w-[210px] truncate"
                 >
                   <option value="" disabled>
                     + Insert Question Quote
@@ -799,20 +838,22 @@ export function IBPaper2StudioView() {
 
                 <button
                   onClick={() => {
-                    const text = activeDraft[activeDraftSection];
-                    updateDraftSection(activeDraftSection, text + (text ? "\n• " : "• "));
+                    const separator = continuousText && !continuousText.endsWith("\n") ? "\n• " : "• ";
+                    updateContinuousEssay(continuousText + separator);
                   }}
-                  className="px-2 py-1 rounded-lg bg-white/5 hover:bg-white/10 text-slate-300 hover:text-white text-xs font-mono flex items-center gap-1 cursor-pointer"
+                  className="px-2.5 py-1 rounded-lg bg-white/5 hover:bg-white/10 text-slate-300 hover:text-white text-xs font-mono flex items-center gap-1 cursor-pointer transition-colors"
+                  title="Insert Bullet Point"
                 >
                   <ListPlus className="w-3 h-3 text-amber-300" />
                   <span>Bullet</span>
                 </button>
                 <button
                   onClick={() => {
-                    const text = activeDraft[activeDraftSection];
-                    updateDraftSection(activeDraftSection, text + ' "[Quote]" ');
+                    const separator = continuousText && !continuousText.endsWith(" ") ? " " : "";
+                    updateContinuousEssay(continuousText + separator + '"[Quote]" ');
                   }}
-                  className="px-2 py-1 rounded-lg bg-white/5 hover:bg-white/10 text-slate-300 hover:text-white text-xs font-mono flex items-center gap-1 cursor-pointer"
+                  className="px-2.5 py-1 rounded-lg bg-white/5 hover:bg-white/10 text-slate-300 hover:text-white text-xs font-mono flex items-center gap-1 cursor-pointer transition-colors"
+                  title="Insert Quotation Placeholder"
                 >
                   <Quote className="w-3 h-3 text-amber-300" />
                   <span>Quote Slot</span>
@@ -820,10 +861,10 @@ export function IBPaper2StudioView() {
 
                 {confirmClearSection ? (
                   <div className="flex items-center gap-1 bg-rose-950/80 border border-rose-400/40 px-2 py-0.5 rounded-lg text-xs font-mono">
-                    <span className="text-rose-200 text-[10px]">Clear?</span>
+                    <span className="text-rose-200 text-[10px]">Clear Canvas?</span>
                     <button
                       onClick={() => {
-                        updateDraftSection(activeDraftSection, "");
+                        updateContinuousEssay("");
                         setConfirmClearSection(false);
                       }}
                       className="px-1.5 py-0.5 rounded bg-rose-600 hover:bg-rose-500 text-white text-[10px] font-bold cursor-pointer"
@@ -841,7 +882,7 @@ export function IBPaper2StudioView() {
                   <button
                     onClick={() => setConfirmClearSection(true)}
                     className="p-1.5 rounded-lg text-slate-500 hover:text-rose-400 hover:bg-rose-500/10 cursor-pointer transition-colors"
-                    title="Clear Section"
+                    title="Clear Canvas"
                   >
                     <Trash2 className="w-3.5 h-3.5" />
                   </button>
@@ -849,56 +890,254 @@ export function IBPaper2StudioView() {
               </div>
             </div>
 
-            {/* The Writing Surface Textarea */}
-            <div className="relative p-5">
+            {/* The Unified Continuous Writing Textarea */}
+            <div className="relative p-5 sm:p-6">
               <textarea
-                value={activeDraft[activeDraftSection]}
-                onChange={(e) => updateDraftSection(activeDraftSection, e.target.value)}
-                rows={14}
-                placeholder={
-                  activeDraftSection === "plan"
-                    ? "Outline your 3 body paragraph arguments, comparative texts, key quotes, and thesis statement here..."
-                    : activeDraftSection === "intro"
-                    ? "Write your Introduction (~120 words): Hook, conceptual premise, comparative thesis statement, and structural roadmap..."
-                    : activeDraftSection === "conclusion"
-                    ? "Write your Conclusion (~120 words): Synthesis of arguments without mechanical repetition, universal human condition, Jacobean ideological takeaway..."
-                    : `Write your ${activeDraftSection.toUpperCase()} (~220 words): Conceptual topic sentence, textual evidence, granular technique scrutiny (meter, diction, dramatic irony), theatrical effect, link to thesis...`
-                }
+                value={continuousText}
+                onChange={(e) => updateContinuousEssay(e.target.value)}
+                rows={22}
+                placeholder={`Draft your complete ~900-word IB English Paper 2 response here seamlessly...\n\nStructure Guide:\n• Introduction (~120 words): Conceptual thesis, Jacobean historical context, and tripartite roadmap\n• Body Paragraph 1 (~220 words): Metaphysical genesis, trochaic meter, and dramatic irony\n• Body Paragraph 2 (~220 words): Domestic performativity, somatic optical hallucination, and the ruined banquet\n• Body Paragraph 3 (~220 words): Equivocal apparitions, Lady Macbeth's prose somnambulism, and anagnorisis\n• Conclusion (~120 words): Elevated philosophical synthesis, metatheatrical reflection ('poor player'), and cathartic resolution\n\nClick "Load Universal 900w Template" above to start typing directly inside the fill-in framework!`}
                 style={{
-                  fontSize: fontStyle.startsWith("handwriting") ? "1.25rem" : "1.02rem",
-                  lineHeight: fontStyle.startsWith("handwriting") ? "32px" : "28px",
+                  fontSize: fontStyle.startsWith("handwriting") ? "1.25rem" : "1.05rem",
+                  lineHeight: fontStyle.startsWith("handwriting") ? "34px" : "30px",
                   fontStyle: "normal",
                   letterSpacing: fontStyle === "handwriting-upright" ? "0.02em" : "normal",
                   backgroundImage:
-                    "repeating-linear-gradient(transparent, transparent 31px, rgba(255, 255, 255, 0.06) 32px)",
+                    "repeating-linear-gradient(transparent, transparent 33px, rgba(255, 255, 255, 0.06) 34px)",
                   backgroundAttachment: "local",
                 }}
-                className={`w-full bg-transparent text-amber-100 placeholder:text-amber-200/25 focus:outline-none resize-y transition-all ${getWritingFontClass()}`}
+                className={`w-full bg-transparent text-amber-100 placeholder:text-amber-200/25 focus:outline-none resize-y transition-all min-h-[500px] ${getWritingFontClass()}`}
               />
 
-              {/* Bottom Canvas Telemetry */}
-              <div className="mt-3 pt-3 border-t border-white/5 flex flex-wrap items-center justify-between text-xs font-mono text-slate-400">
-                <div className="flex items-center gap-3">
+              {/* Bottom Canvas Telemetry Bar */}
+              <div className="mt-4 pt-3 border-t border-white/5 flex flex-wrap items-center justify-between text-xs font-mono text-slate-400 gap-3">
+                <div className="flex flex-wrap items-center gap-3">
                   <span>
-                    Section Words:{" "}
-                    <strong className="text-white">
-                      {activeDraft[activeDraftSection]?.trim()
-                        ? activeDraft[activeDraftSection].trim().split(/\s+/).length
-                        : 0}
-                    </strong>
+                    Total Words:{" "}
+                    <strong className="text-white text-sm">
+                      {totalWords}
+                    </strong>{" "}
+                    / 900 words
                   </span>
                   <span>•</span>
                   <span>
-                    Chars: {activeDraft[activeDraftSection]?.length || 0}
+                    Characters: <strong className="text-slate-300">{continuousText.length}</strong>
+                  </span>
+                  <span>•</span>
+                  <span>
+                    Estimated Reading Time:{" "}
+                    <strong className="text-slate-300">
+                      {Math.max(1, Math.ceil(totalWords / 180))} min
+                    </strong>
                   </span>
                 </div>
-                <div className="flex items-center gap-1.5 text-amber-300/80">
-                  <Sparkles className="w-3.5 h-3.5 text-amber-400" />
-                  <span>High-Mark Criterion D Academic Register</span>
+                <div className="flex items-center gap-2">
+                  <span className="px-2 py-0.5 rounded text-[10px] bg-amber-500/15 text-amber-300 border border-amber-400/25 flex items-center gap-1">
+                    <Sparkles className="w-3 h-3 text-amber-400" />
+                    Criterion D Academic Register
+                  </span>
+                  <span className="text-slate-500">•</span>
+                  <span className="text-[11px] text-slate-400">
+                    Exam Target: 850–1,000 words
+                  </span>
                 </div>
               </div>
             </div>
           </div>
+
+          {/* =====================================================================
+              UNIVERSAL 900-WORD TEMPLATE (DIRECTLY ACCESSIBLE UNDER THE CANVAS)
+              ===================================================================== */}
+          {isTemplateVisible && (
+            <section className="liquid-glass-bento rounded-3xl p-6 lg:p-7 space-y-6 border border-amber-400/35 bg-gradient-to-b from-amber-950/20 via-black/80 to-slate-950/90 shadow-2xl">
+              {/* Template Header Banner */}
+              <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-4 border-b border-white/10">
+                <div className="space-y-1">
+                  <div className="flex flex-wrap items-center gap-2">
+                    <span className="font-mono text-xs px-3 py-1 rounded-full bg-amber-500/25 text-amber-300 border border-amber-400/40 font-bold uppercase tracking-wider flex items-center gap-1.5">
+                      <Sparkles className="w-3.5 h-3.5 text-amber-400" />
+                      Universal IB Paper 2 Formula • Works for Any Prompt
+                    </span>
+                    <span className="font-mono text-xs px-2.5 py-1 rounded-full bg-white/5 text-slate-300 border border-white/10">
+                      {UNIVERSAL_IB_PAPER_2_TEMPLATE.totalTargetWords}
+                    </span>
+                  </div>
+                  <h3 className="text-lg sm:text-xl font-bold text-white font-display">
+                    {UNIVERSAL_IB_PAPER_2_TEMPLATE.name}
+                  </h3>
+                  <p className="text-xs text-slate-300 leading-relaxed max-w-3xl">
+                    {UNIVERSAL_IB_PAPER_2_TEMPLATE.frameworkSummary} Look at these structural formulas and modular sentence stems while drafting above, or click any sentence stem to append it directly into your canvas.
+                  </p>
+                </div>
+
+                <div className="flex flex-wrap items-center gap-2 shrink-0">
+                  <button
+                    onClick={handleLoadTemplateIntoCanvas}
+                    className="px-3.5 py-2 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-mono text-xs font-bold flex items-center gap-1.5 cursor-pointer shadow-md transition-all"
+                  >
+                    <FileText className="w-3.5 h-3.5" />
+                    <span>Fill Template Into Canvas</span>
+                  </button>
+                  <button
+                    onClick={() => {
+                      navigator.clipboard.writeText(UNIVERSAL_IB_PAPER_2_TEMPLATE.rawFullTemplateText);
+                      setTemplateLoadedFeedback(true);
+                      setTimeout(() => setTemplateLoadedFeedback(false), 2000);
+                    }}
+                    className="px-3 py-2 rounded-xl bg-white/10 hover:bg-white/15 text-white font-mono text-xs flex items-center gap-1.5 cursor-pointer transition-all border border-white/15"
+                  >
+                    <Copy className="w-3.5 h-3.5 text-amber-300" />
+                    <span>Copy Template</span>
+                  </button>
+                </div>
+              </div>
+
+              {/* Interactive Modular Sections Accordion */}
+              <div className="space-y-3">
+                {UNIVERSAL_IB_PAPER_2_TEMPLATE.sections.map((sec, idx) => {
+                  const isExpanded = expandedTemplateIndex === idx;
+                  const isCopied = copiedTemplateSection === idx;
+                  return (
+                    <div
+                      key={sec.sectionId}
+                      className={`rounded-2xl border transition-all overflow-hidden ${
+                        isExpanded
+                          ? "bg-black/60 border-amber-400/50 shadow-lg"
+                          : "bg-black/40 border-white/10 hover:border-white/20"
+                      }`}
+                    >
+                      {/* Section Accordion Title Bar */}
+                      <div
+                        onClick={() => setExpandedTemplateIndex(isExpanded ? null : idx)}
+                        className="p-4 flex flex-wrap items-center justify-between gap-3 cursor-pointer select-none"
+                      >
+                        <div className="flex items-center gap-3">
+                          <span className="w-7 h-7 rounded-lg bg-amber-500/20 text-amber-300 border border-amber-400/40 flex items-center justify-center font-mono text-xs font-bold">
+                            0{idx + 1}
+                          </span>
+                          <div>
+                            <h4 className="text-sm font-bold text-white flex items-center gap-2">
+                              <span>{sec.title}</span>
+                              <span className="font-mono text-[10px] px-2 py-0.5 rounded-full bg-amber-500/15 text-amber-300 border border-amber-400/20">
+                                {sec.targetWords}
+                              </span>
+                            </h4>
+                            <p className="text-[11px] text-slate-400 font-mono mt-0.5 line-clamp-1">
+                              {sec.formula}
+                            </p>
+                          </div>
+                        </div>
+
+                        <div className="flex items-center gap-2">
+                          <button
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              navigator.clipboard.writeText(sec.exemplarFill);
+                              setCopiedTemplateSection(idx);
+                              setTimeout(() => setCopiedTemplateSection(null), 2000);
+                            }}
+                            className="px-2.5 py-1 rounded-lg bg-white/5 hover:bg-white/10 text-slate-300 hover:text-white text-xs font-mono flex items-center gap-1 cursor-pointer transition-colors"
+                            title="Copy this section's exemplar text"
+                          >
+                            {isCopied ? (
+                              <>
+                                <Check className="w-3 h-3 text-emerald-400" />
+                                <span className="text-emerald-300 text-[10px]">Copied!</span>
+                              </>
+                            ) : (
+                              <>
+                                <Copy className="w-3 h-3 text-amber-300" />
+                                <span className="text-[10px]">Copy Text</span>
+                              </>
+                            )}
+                          </button>
+                          {isExpanded ? (
+                            <ChevronUp className="w-4 h-4 text-amber-400" />
+                          ) : (
+                            <ChevronDown className="w-4 h-4 text-slate-400" />
+                          )}
+                        </div>
+                      </div>
+
+                      {/* Expanded Section Details */}
+                      {isExpanded && (
+                        <div className="p-4 sm:p-5 pt-0 space-y-4 border-t border-white/10 bg-white/[0.01]">
+                          {/* Structural Architectural Formula */}
+                          <div className="p-3 rounded-xl bg-amber-500/10 border border-amber-400/25 space-y-1">
+                            <span className="font-mono text-[10px] text-amber-300 uppercase font-bold tracking-wider block">
+                              Architectural Formula (Always Follow This Sequence):
+                            </span>
+                            <p className="text-xs text-amber-100 font-mono leading-relaxed">
+                              {sec.formula}
+                            </p>
+                          </div>
+
+                          {/* Plug-and-Play Modular Sentence Stems */}
+                          <div className="space-y-2">
+                            <div className="flex items-center justify-between">
+                              <span className="font-mono text-xs uppercase tracking-wider text-slate-400 block font-bold">
+                                Plug-and-Play Sentence Stems (Click to Insert directly into your draft):
+                              </span>
+                              <span className="text-[10px] font-mono text-amber-300/80">Click any stem to append</span>
+                            </div>
+                            <div className="grid grid-cols-1 gap-2">
+                              {sec.sentenceStems.map((stem, sIdx) => {
+                                const stemKey = `${idx}-${sIdx}`;
+                                const isStemCopied = copiedStemIndex === stemKey;
+                                return (
+                                  <div
+                                    key={sIdx}
+                                    onClick={() => handleInsertSentenceStem(stem, stemKey)}
+                                    className={`p-3 rounded-xl border text-xs leading-relaxed transition-all cursor-pointer flex items-center justify-between gap-3 ${
+                                      isStemCopied
+                                        ? "bg-emerald-500/20 border-emerald-400/50 text-emerald-200"
+                                        : "bg-black/40 hover:bg-white/[0.06] border-white/10 text-slate-200"
+                                    }`}
+                                    title="Click to insert into continuous canvas"
+                                  >
+                                    <span className="italic font-serif">&ldquo;{stem}&rdquo;</span>
+                                    <span className="shrink-0 font-mono text-[10px] px-2 py-0.5 rounded bg-amber-500/20 text-amber-300 border border-amber-400/30 flex items-center gap-1">
+                                      {isStemCopied ? <Check className="w-3 h-3 text-emerald-400" /> : <ListPlus className="w-3 h-3" />}
+                                      {isStemCopied ? "Inserted!" : "+ Insert"}
+                                    </span>
+                                  </div>
+                                );
+                              })}
+                            </div>
+                          </div>
+
+                          {/* Exemplar Fill-in Demonstration */}
+                          <div className="space-y-1.5">
+                            <span className="font-mono text-xs uppercase tracking-wider text-slate-400 block font-bold">
+                              Full Exemplar Text Demonstration:
+                            </span>
+                            <div className="p-4 rounded-xl bg-black/60 border border-white/10">
+                              <p className="text-xs sm:text-sm text-slate-200 font-serif leading-relaxed text-justify">
+                                {sec.exemplarFill}
+                              </p>
+                            </div>
+                          </div>
+
+                          {/* Examiner Marking Insight */}
+                          <div className="p-3 rounded-xl bg-purple-950/30 border border-purple-400/25 flex items-start gap-2.5">
+                            <Lightbulb className="w-4 h-4 text-purple-400 shrink-0 mt-0.5" />
+                            <div>
+                              <span className="font-mono text-[10px] uppercase font-bold text-purple-300 block">
+                                IB Examiner Marking Insight
+                              </span>
+                              <p className="text-xs text-purple-100/90 leading-relaxed">
+                                {sec.examinerInsight}
+                              </p>
+                            </div>
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  );
+                })}
+              </div>
+            </section>
+          )}
         </div>
       )}
 
