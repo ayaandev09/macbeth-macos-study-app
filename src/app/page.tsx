@@ -11,6 +11,7 @@ import { StudyMiniHomepage } from "@/components/StudyMiniHomepage";
 import { ThemeMatrixView } from "@/components/ThemeMatrixView";
 import { LexiconDossierView } from "@/components/LexiconDossierView";
 import { RevisionCramView } from "@/components/RevisionCramView";
+import { IBPaper2StudioView } from "@/components/IBPaper2StudioView";
 import { FloatingBottomDock } from "@/components/FloatingBottomDock";
 import { StartupDiagnosticIntro } from "@/components/StartupDiagnosticIntro";
 import { CinematicStartupIntro } from "@/components/CinematicStartupIntro";
@@ -544,6 +545,11 @@ export default function MacbethStudyDashboardMacPage() {
                   MODE 5: REVISION MATERIAL, FLASHCARDS & EXAM ESSAYS
                   =============================================================== */}
               {viewMode === "revision" && <RevisionCramView />}
+
+              {/* ===============================================================
+                  MODE 6: OFFICIAL IB PAPER 2 COMPARATIVE STUDIO & EXEMPLAR
+                  =============================================================== */}
+              {viewMode === "paper2" && <IBPaper2StudioView />}
             </div>
           </main>
 

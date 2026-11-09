@@ -17,6 +17,7 @@ import {
   ListFilter,
   Crown,
   GraduationCap,
+  Award,
   BookOpen,
   BookA,
   ArrowRight,
@@ -51,6 +52,12 @@ const VIEW_MODES: {
     label: "Revision & Cram Hub",
     shortLabel: "Revision Hub",
     icon: <GraduationCap className="w-3.5 h-3.5" />,
+  },
+  {
+    id: "paper2",
+    label: "IB Paper 2 Studio",
+    shortLabel: "Paper 2 Studio",
+    icon: <Award className="w-3.5 h-3.5" />,
   },
   {
     id: "matrix",
@@ -151,8 +158,11 @@ export function TopCommandBar({ onOpenWalkthrough }: TopCommandBarProps = {}) {
           setViewMode("revision");
         } else if (e.key === "4") {
           e.preventDefault();
-          setViewMode("matrix");
+          setViewMode("paper2");
         } else if (e.key === "5") {
+          e.preventDefault();
+          setViewMode("matrix");
+        } else if (e.key === "6") {
           e.preventDefault();
           setViewMode("lexicon");
         }
@@ -283,11 +293,11 @@ export function TopCommandBar({ onOpenWalkthrough }: TopCommandBarProps = {}) {
         </div>
       </div>
 
-      {/* Row 2: Symmetrical 5-Column Navigation Grid - 100% Adaptive to Any Mac Screen */}
+      {/* Row 2: Symmetrical 6-Column Navigation Grid - 100% Adaptive to Any Mac Screen */}
       <nav
         data-tour="nav-tabs"
         aria-label="Integrated Main Sections Bar"
-        className="w-full grid grid-cols-5 gap-1 p-1 bg-black/60 border border-white/12 rounded-2xl shadow-inner relative max-w-full overflow-hidden"
+        className="w-full grid grid-cols-3 sm:grid-cols-6 gap-1 p-1 bg-black/60 border border-white/12 rounded-2xl shadow-inner relative max-w-full overflow-hidden"
       >
         {VIEW_MODES.map((mode) => {
           const isActive = viewMode === mode.id;

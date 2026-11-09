@@ -22,6 +22,7 @@ import {
   Flame,
   RotateCcw,
   GraduationCap,
+  Award,
   X,
 } from "lucide-react";
 
@@ -261,8 +262,29 @@ export function FloatingSidebar({ isMobileSheet = false }: FloatingSidebarProps)
         })}
       </div>
 
+      {/* IB Paper 2 Studio Quick Access Button */}
+      <button
+        onClick={() => {
+          setViewMode("paper2");
+          if (isMobileSheet) setChapterSheetOpen(false);
+        }}
+        className={`w-full mt-2 p-2.5 rounded-2xl border text-xs font-mono font-bold flex items-center justify-between transition-all cursor-pointer ${
+          viewMode === "paper2"
+            ? "bg-amber-500/25 text-amber-200 border-amber-400/50 shadow-md"
+            : "bg-white/[0.03] hover:bg-white/[0.07] text-slate-300 border-white/10"
+        }`}
+      >
+        <span className="flex items-center gap-2">
+          <Award className="w-4 h-4 text-amber-400" />
+          <span>IB Paper 2 Studio</span>
+        </span>
+        <span className="text-[10px] px-1.5 py-0.5 rounded bg-amber-500/20 text-amber-300 border border-amber-400/30">
+          Rubric &amp; 900w
+        </span>
+      </button>
+
       {/* Footer Attribution */}
-      <div className="pt-3 mt-3 border-t border-white/10 flex items-center justify-between text-[11px] text-slate-400 font-mono shrink-0">
+      <div className="pt-3 mt-2 border-t border-white/10 flex items-center justify-between text-[11px] text-slate-400 font-mono shrink-0">
         <span>FIRST FOLIO 1623</span>
         <span className="text-amber-300/90">5 ACTS • 31 SCENES</span>
       </div>

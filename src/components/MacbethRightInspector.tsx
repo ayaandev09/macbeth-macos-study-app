@@ -22,6 +22,7 @@ import {
   Copy,
   Check,
   Timer,
+  Award,
 } from "lucide-react";
 
 interface MacbethRightInspectorProps {
@@ -48,6 +49,7 @@ export function MacbethRightInspector({
     completedChapters,
     toggleChapterComplete,
     openExamSprint,
+    setViewMode,
   } = useStudyStore();
 
   const sceneBriefing = PRE_LESSON_BRIEFINGS[chapter.id];
@@ -357,14 +359,26 @@ export function MacbethRightInspector({
 
           {/* TAB 4: PERSONAL NOTES */}
           {activeTab === "notes" && (
-            <AcademicNotesSurface
-              note={userNote}
-              onChange={(text) => setChapterNote(chapter.id, text)}
-              title="Scene Essay Notes"
-              itemCode={chapter.displayCode}
-              minRows={10}
-              accentColor="#f59e0b"
-            />
+            <div className="space-y-3">
+              <AcademicNotesSurface
+                note={userNote}
+                onChange={(text) => setChapterNote(chapter.id, text)}
+                title="Scene Essay Notes"
+                itemCode={chapter.displayCode}
+                minRows={10}
+                accentColor="#f59e0b"
+              />
+              <button
+                onClick={() => setViewMode("paper2")}
+                className="w-full p-2.5 rounded-xl bg-amber-500/15 hover:bg-amber-500/25 border border-amber-400/30 text-amber-300 font-mono text-xs font-bold flex items-center justify-between transition-colors cursor-pointer"
+              >
+                <span className="flex items-center gap-1.5">
+                  <Award className="w-3.5 h-3.5 text-amber-400" />
+                  <span>Open IB Paper 2 Studio</span>
+                </span>
+                <span className="text-[10px] text-slate-400">Rubric &amp; 900w ➔</span>
+              </button>
+            </div>
           )}
         </div>
       </div>

@@ -4,7 +4,7 @@ import { create } from "zustand";
 import { persist, createJSONStorage } from "zustand/middleware";
 import { ALL_CHAPTERS, BOOK_PARTS, ThemeId, ActId } from "@/data";
 
-export type ViewMode = "focus" | "stream" | "matrix" | "lexicon" | "revision";
+export type ViewMode = "focus" | "stream" | "matrix" | "lexicon" | "revision" | "paper2";
 export type StudyLensMode = "primer" | "revision" | "deep";
 export type StudyGoal = "learn" | "revise";
 export type AcademicStyle = "newsreader" | "garamond" | "jakarta" | "cinzel";

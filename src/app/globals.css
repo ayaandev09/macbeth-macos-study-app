@@ -1133,8 +1133,25 @@ input, textarea, select { transition: border-color var(--dur-fast) ease, box-sha
 
 /* ===== Academic Handwritten Marginalia & Notes ===== */
 .font-academic-hand {
-  font-family: 'Caveat', 'Kalam', 'Noteworthy', 'Snell Roundhand', 'Chalkboard', cursive, sans-serif !important;
+  font-family: 'Patrick Hand', 'Comic Neue', 'Chalkboard SE', 'Noteworthy', system-ui, sans-serif !important;
+  font-style: normal !important;
   font-feature-settings: "calt" 1, "liga" 1;
+}
+
+/* Explicit clean upright handwriting font (easy to read, not slanted) */
+.font-handwriting-upright {
+  font-family: 'Patrick Hand', 'Comic Neue', 'Segoe Print', 'Chalkboard SE', system-ui, sans-serif !important;
+  font-style: normal !important;
+  letter-spacing: 0.015em;
+}
+
+.font-handwriting-architect {
+  font-family: 'Architects Daughter', 'Patrick Hand', system-ui, sans-serif !important;
+  font-style: normal !important;
+}
+
+.font-handwriting-cursive {
+  font-family: 'Caveat', 'Kalam', 'Noteworthy', cursive, sans-serif !important;
 }
 
 .academic-notebook-surface {

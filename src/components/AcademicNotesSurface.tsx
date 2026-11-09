@@ -175,15 +175,16 @@ export function AcademicNotesSurface({
           rows={minRows}
           style={{
             fontFamily:
-              "'Caveat', 'Kalam', 'Noteworthy', 'Snell Roundhand', 'Chalkboard', cursive, sans-serif",
-            fontSize: "1.2rem",
+              "'Patrick Hand', 'Comic Neue', 'Segoe Print', 'Chalkboard SE', -apple-system, sans-serif",
+            fontSize: "1.22rem",
             lineHeight: "28px",
-            letterSpacing: "0.025em",
+            fontStyle: "normal",
+            letterSpacing: "0.02em",
             backgroundImage:
               "repeating-linear-gradient(transparent, transparent 27px, rgba(255, 255, 255, 0.06) 28px)",
             backgroundAttachment: "local",
           }}
-          className="w-full bg-transparent text-amber-100 placeholder:text-amber-200/25 placeholder:italic focus:outline-none resize-y transition-all leading-[28px]"
+          className="w-full bg-transparent text-amber-100 placeholder:text-amber-200/25 focus:outline-none resize-y transition-all leading-[28px]"
         />
 
         {/* Bottom Footer Info */}

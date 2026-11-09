@@ -7,6 +7,8 @@ import { ACT_5_SCENES } from "./act5Scenes";
 export * from "./types";
 export * from "./metadata";
 export * from "./revisionData";
+export * from "./ibPaper2Data";
+export * from "./ibSampleEssayTemplate";
 
 export const BOOK_PARTS: BookPart[] = [
   {

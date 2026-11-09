@@ -26,6 +26,7 @@ import {
   Flame,
   ArrowRight,
   Filter,
+  Award,
 } from "lucide-react";
 
 type RevisionTab = "briefings" | "flashcards" | "essays";
@@ -603,6 +604,26 @@ export function RevisionCramView() {
           ===================================================================== */}
       {activeTab === "essays" && (
         <div className="space-y-4">
+          {/* IB Paper 2 Studio Interactive Quick-Launch Callout */}
+          <div className="liquid-glass-bento rounded-3xl p-5 border border-amber-400/40 bg-gradient-to-r from-amber-500/15 via-black/60 to-purple-500/15 flex flex-col sm:flex-row items-center justify-between gap-4 shadow-lg">
+            <div className="space-y-1">
+              <span className="font-mono text-xs font-bold text-amber-300 uppercase tracking-wider flex items-center gap-1.5">
+                <Award className="w-4 h-4 text-amber-400" />
+                Dedicated IB Paper 2 Comparative Studio Available
+              </span>
+              <p className="text-xs text-slate-200">
+                Practice the 4 official guiding questions with the official 30-mark IB rubric, clean upright handwriting studio, and the complete 900-word exemplar essay.
+              </p>
+            </div>
+            <button
+              onClick={() => setViewMode("paper2")}
+              className="px-4 py-2 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-mono text-xs font-bold flex items-center gap-2 cursor-pointer shrink-0 shadow-md transition-all"
+            >
+              <span>Launch Paper 2 Studio</span>
+              <ArrowRight className="w-3.5 h-3.5" />
+            </button>
+          </div>
+
           {/* Essay Search Bar */}
           <div className="liquid-glass-bento rounded-2xl p-4 flex items-center gap-3">
             <Search className="w-4 h-4 text-amber-400 shrink-0" />
