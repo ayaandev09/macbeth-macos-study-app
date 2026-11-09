@@ -24,120 +24,234 @@ export interface UniversalTemplateSection {
 export interface UniversalEssayTemplate {
   name: string;
   tagline: string;
+  mnemonic: string;
+  mnemonicMeaning: string;
   totalTargetWords: string;
   frameworkSummary: string;
+  cheatSheet: {
+    step: string;
+    mnemonicLetter: string;
+    targetWords: string;
+    role: string;
+    coreRule: string;
+    universalBracketFormula: string;
+  }[];
   sections: UniversalTemplateSection[];
   rawFullTemplateText: string;
 }
 
 export const UNIVERSAL_IB_PAPER_2_TEMPLATE: UniversalEssayTemplate = {
   name: "Universal Grade 7 IB English Paper 2 Comparative Formula",
-  tagline: "A foolproof, ~900-word architectural template guaranteed to satisfy Criteria A–D for any prompt",
+  tagline: "The C-O-R-E-S 5-Step System: Easy to memorize, works on any prompt, clear Level 7 language",
+  mnemonic: "C-O-R-E-S",
+  mnemonicMeaning: "Context & Thesis ➔ Origin & Craft ➔ Rupture & Staging ➔ Exposure & Climax ➔ Synthesis & Catharsis",
   totalTargetWords: "~900 words (Intro ~120w + 3x Body ~220w + Concl ~120w)",
-  frameworkSummary: "Engineered specifically for the IB Literature Paper 2 rubric: pairs prompt unpack with authorial craft, granular linguistic/dramatic devices, theatrical/reader reception, socio-historical context, and philosophical synthesis.",
+  frameworkSummary: "A foolproof, 5-step universal structure designed for exam conditions. Fits every IB Paper 2 question (appearance vs reality, power, conflict, gender, guilt, setting). Clean, powerful, grounded academic language that satisfies Criteria A–D without convoluted jargon.",
+  cheatSheet: [
+    {
+      step: "Step 1 (Intro)",
+      mnemonicLetter: "C",
+      targetWords: "~120w",
+      role: "Context & Tripartite Thesis",
+      coreRule: "Hook with author's purpose, ground in historical context, deliver a 3-part roadmap.",
+      universalBracketFormula: "[Author] explores [Prompt Concept] in [Work] through [Authorial Technique] to demonstrate how [Human Truth/Message].",
+    },
+    {
+      step: "Step 2 (Body 1)",
+      mnemonicLetter: "O",
+      targetWords: "~220w",
+      role: "Origin & Authorial Craft",
+      coreRule: "Analyze where the theme starts: meter, atmosphere, opening tone, and first key choice.",
+      universalBracketFormula: "[Author] establishes [Prompt Concept] at the outset through [Technique/Form], showing that [Character/Society] begins by [Initial Action/Flaw].",
+    },
+    {
+      step: "Step 3 (Body 2)",
+      mnemonicLetter: "R",
+      targetWords: "~220w",
+      role: "Rupture & Visceral Staging",
+      coreRule: "Escalate from internal thought to staged action: turning point, symbols, dramatic spectacle.",
+      universalBracketFormula: "When [Prompt Concept] intensifies, [Author] shifts from inward conflict to dramatic spectacle, using [Visual Symbol/Staging] to expose [Psychological/Moral Rupture].",
+    },
+    {
+      step: "Step 4 (Body 3)",
+      mnemonicLetter: "E",
+      targetWords: "~220w",
+      role: "Exposure & Tragic Climax",
+      coreRule: "Expose the consequences: unraveling of language (verse to prose), tragic recognition (anagnorisis).",
+      universalBracketFormula: "In the climax, [Author] exposes the ultimate cost of [Prompt Concept] through [Structural Shift/Irony], culminating in [Character's] realization that [Universal Truth].",
+    },
+    {
+      step: "Step 5 (Concl)",
+      mnemonicLetter: "S",
+      targetWords: "~120w",
+      role: "Synthesis & Catharsis",
+      coreRule: "Connect back to the human condition and restoration of moral balance. No simple re-listing.",
+      universalBracketFormula: "Ultimately, [Author] uses [Play/Work] not merely to depict [Prompt Event], but to warn audiences that [Enduring Truth about Human Nature].",
+    },
+  ],
   sections: [
     {
       sectionId: "intro",
-      title: "1. Introduction: Conceptual Hook, Comparative Grounding & Tripartite Thesis",
+      title: "1. Introduction [C — Context & Thesis]: Hook, Historical Anchor & Tripartite Roadmap",
       targetWords: "~120 words",
-      formula: "Universal Hook / Provocative Conceptual Axiom ➔ Contextual Tethering (Post-1605 Jacobean Anxieties & Jesuitical Equivocation) ➔ Core Comparative Thesis ➔ Tripartite Analytical Roadmap (Body 1, 2, 3 preview)",
+      formula: "Conceptual Hook ➔ Historical Context Anchor ➔ Comparative Thesis ➔ 3-Part Roadmap (Body 1, 2, 3 preview)",
       sentenceStems: [
-        "In William Shakespeare’s Jacobean tragedy Macbeth, [PROMPT THEME / DIRECTIVE] operates not merely as a superficial narrative catalyst, but as the governing structural and philosophical mechanism through which...",
-        "Composed in the fraught sociopolitical aftermath of [CONTEXT: e.g. 1605 Gunpowder Plot / Divine Right of Kings], the drama externalizes the acute ideological anxiety surrounding...",
-        "Whereas [COMPARATIVE TEXT / EARLIER WORK] interrogates [THEME] through [TECHNIQUE/GENRE], Shakespeare dramatizes the inevitable collapse of [VALUE] through three distinct movements: first, [ARGUMENT 1]; second, [ARGUMENT 2]; and ultimately, [ARGUMENT 3].",
-        "By systematically exposing the fissure between [CONCEPT A] and [CONCEPT B], the playwright demonstrates that [PROMPT PHENOMENON] inexorably precipitates both psychic disintegration and cosmic retribution.",
+        "In William Shakespeare’s tragedy Macbeth, [PROMPT CONCEPT] is not merely a plot device, but the central mechanism through which the playwright examines [HUMAN TRUTH / MORAL DILEMMA].",
+        "Written in the shadow of the 1605 Gunpowder Plot and the accession of King James I, the drama reflects acute Jacobean anxieties over [HISTORICAL ANXIETY: e.g. legitimate rule, treason, and the supernatural].",
+        "While [COMPARATIVE TEXT/AUTHOR] addresses [PROMPT TOPIC] through [TECHNIQUE/GENRE], Shakespeare traces its destructive trajectory through three movements: first, [STAGE 1: origin/instigation]; second, [STAGE 2: domestic and public escalation]; and finally, [STAGE 3: psychological collapse and retribution].",
+        "Ultimately, Shakespeare demonstrates that [PROMPT ACTION / FLAW] offers only an illusion of control, leading inevitably to moral disintegration and social rupture.",
       ],
-      exemplarFill: `In William Shakespeare’s Jacobean tragedy Macbeth, the exploration of [PROMPT TOPIC / e.g. the corruptive allure of illegitimate ambition] operates not merely as a character flaw, but as the governing metaphysical mechanism of the play. Composed in the fraught wake of the 1605 Gunpowder Plot and the ascension of King James I, the drama externalizes Jacobean terrors of regicide, spiritual apostasy, and moral inversion. Through the discord of demonic trochaic solicitation, the tactical performativity of domestic murder, and the frantic nihilism of the besieged tyrant, Shakespeare exposes how [PROMPT PHENOMENON] reduces heroic potential to existential annihilation. Ultimately, the dramatist reveals that while [SUPERFICIAL POWER / VIOLENCE / APPEARANCE] may temporarily subjugate mortal authority, the sovereign mechanisms of natural and divine order inevitably reassert cosmic equilibrium.`,
-      examinerInsight: "Examiners award top Criterion A and C marks when an introduction avoids empty plot summary, defines the prompt conceptually rather than literally, and provides a clear tripartite trajectory."
+      exemplarFill: `In William Shakespeare’s tragedy Macbeth, the conflict between appearance and reality is not merely a plot device, but the central dramatic mechanism through which the playwright examines the destructive nature of unchecked ambition. Written in the shadow of the 1605 Gunpowder Plot and the accession of King James I, the drama reflects acute Jacobean anxieties over treason, equivocation, and divine order. Shakespeare traces this deception through three distinct stages: first, the supernatural poisoning of perception on the blasted heath; second, the domestic hypocrisy and psychological rupture inside Inverness and the banquet hall; and finally, the collapse of equivocal promises during the tyrant's downfall. Ultimately, Shakespeare demonstrates that masking violent ambition behind false surfaces provides only temporary control, inevitably precipitating psychological ruin and the restoration of natural order.`,
+      examinerInsight: "Level 7 examiners reward introductions that define the prompt conceptually, ground it in historical context, and give a distinct 3-part roadmap without mechanical plot summary.",
     },
     {
       sectionId: "body1",
-      title: "2. Body Paragraph 1: Cosmic Inversion, Genesis of Conflict & Prosodic/Metrical Craft",
+      title: "2. Body Paragraph 1 [O — Origin & Craft]: Establishing the Theme & Dramatic Techniques",
       targetWords: "~220 words",
-      formula: "Analytical Topic Sentence (Metaphysical Genesis) ➔ Textual Anchor 1 (Quote + Metric/Prosodic dissection) ➔ Micro-Technique Analysis (Chiasmus, Trochaic Meter, Diction) ➔ Dramatic Irony / Reception ➔ Comparative Link to Thesis",
+      formula: "Analytical Topic Sentence ➔ Textual Quote 1 (Metric/Atmospheric choice) ➔ Close Word/Technique Analysis ➔ Dramatic Irony / Audience Reaction ➔ Link to Thesis",
       sentenceStems: [
-        "The dramatic inception of [PROMPT TOPIC] originates not in mortal desire alone, but within the corrupted metaphysical atmosphere of the Jacobean cosmos.",
-        "This thematic destabilization is crystallized through the dramatist's deliberate prosodic shift into [METER: e.g. trochaic tetrameter / fractured blank verse], as evidenced when [SPEAKER] declares: \"[QUOTE]\" ([ACT.SCENE]).",
-        "Here, the employment of [LITERARY DEVICE: e.g. chiasmus / antithesis / apostrophe] serves to...",
-        "The auditory impact upon the Jacobean audience is palpable: the jarring cadence mimics [EFFECT], actively disorienting conventional moral boundaries.",
-        "This cognitive disorientation is further compounded by devastating dramatic irony when [CHARACTER] blindly asserts \"[QUOTE]\" ([ACT.SCENE]), mistaking [SURFACE ILLUSION] for [MORAL TRUTH].",
+        "Shakespeare establishes [PROMPT CONCEPT] at the very start of the drama, creating an atmosphere where [NORMAL ORDER / VALUES] are immediately destabilized.",
+        "This distortion is heightened by the playwright's choice of [TECHNIQUE / METER: e.g. trochaic tetrameter / chiasmus], as the Weird Sisters chant: \"[QUOTE]\" ([ACT.SCENE]).",
+        "The use of [LITERARY DEVICE: e.g. chiasmus / juxtaposition] in the line \"[MICRO-QUOTE]\" highlights how...",
+        "When Macbeth echoes this language in his first line—\"[QUOTE]\" ([ACT.SCENE])—the audience immediately recognizes that [CHARACTER'S CONSCIENCE / MIND] has already been compromised.",
+        "This vulnerability is deepened by dramatic irony when King Duncan arrives at Inverness and observes: \"[QUOTE]\" ([ACT.SCENE]), naively trusting the surface atmosphere of the castle while the audience knows that murder is being planned within.",
       ],
-      exemplarFill: `The thematic destabilization of [PROMPT TOPIC] originates not in mortal hesitation, but within the corrupted metaphysical atmosphere of the drama's opening movement. In the play's genesis, Shakespeare introduces the Weird Sisters chanting in discordant trochaic tetrameter: "Fair is foul, and foul is fair: / Hover through the fog and filthy air" (1.1.10–11). This arresting chiasmus immediately ruptures conventional moral dualisms, establishing an all-encompassing miasma where human perception is fatally clouded. When Macbeth unconsciously echoes this exact demonic rhythm in his first spoken line—"So foul and fair a day I have not seen" (1.3.38)—Shakespeare utilizes prosodic mimicry to signal that the protagonist's conscience is already infected by metaphysical equivocations. This vulnerability is mirrored in King Duncan's naive political blindness; reflecting on the traitorous Cawdor, Duncan laments: "There's no art / To find the mind's construction in the face: / He was a gentleman on whom I built / An absolute trust" (1.4.11–14). The architectural metaphor of "construction" confirms that physical physiognomy functions as an impenetrable disguise. In an exhibition of razor-sharp dramatic irony, Macbeth crosses the stage at the exact climax of Duncan’s lament—creating a visual and thematic tableau where the monarch rewards the very traitor destined to annihilate him.`,
-      examinerInsight: "Criterion B demands explicit scrutiny of authorial craft: naming meter (trochaic vs. iambic), prosody, staging entrances, and acoustic choices lifts this paragraph to Band 5 (10/10)."
+      exemplarFill: `Shakespeare establishes the theme of deceptive appearances at the very start of the drama, creating an atmosphere where moral boundaries are immediately destabilized. This distortion is announced through the Weird Sisters' chant in discordant trochaic tetrameter: "Fair is foul, and foul is fair: / Hover through the fog and filthy air" (1.1.10–11). The chiasmus overturns moral values, while the "fog" symbolizes the spiritual blindness that engulfs Scotland. When Macbeth echoes this demonic cadence in his opening line—"So foul and fair a day I have not seen" (1.3.38)—the audience recognizes that his mind is already attuned to supernatural equivocation. This vulnerability is deepened by dramatic irony when King Duncan reflects naively on the traitorous Thane of Cawdor: "There's no art / To find the mind's construction in the face: / He was a gentleman on whom I built / An absolute trust" (1.4.11–14). The architectural metaphor of "construction" emphasizes that a person's outer appearance is an impenetrable facade. At the exact moment Duncan finishes this lament, Macbeth enters the stage; the king embraces him with warmth, visually demonstrating to the Jacobean audience that trusting deceptive appearances invites fatal danger into the heart of the kingdom.`,
+      examinerInsight: "Criterion B requires direct analysis of authorial craft: cite meter (trochaic vs. iambic), specific diction, and staging moments like entrances to hit the highest mark band.",
     },
     {
       sectionId: "body2",
-      title: "3. Body Paragraph 2: Domestic Performativity, Somatic Hallucination & Staging Fracture",
+      title: "3. Body Paragraph 2 [R — Rupture & Staging]: Escalation from Private Guilt to Public Spectacle",
       targetWords: "~220 words",
-      formula: "Dynamic Topic Sentence (Internalization into Staged Action) ➔ Textual Anchor 2 (Domestic Duplicity & Somatic Imagery) ➔ Symbolic Close Analysis (Biblical/Numismatic Allusion) ➔ Onstage Spectacle / Climax (Peripeteia / Banquo's Ghost) ➔ Theatrical Reception",
+      formula: "Dynamic Topic Sentence (Escalation to action) ➔ Textual Quote 2 (Domestic mask / Command) ➔ Symbol / Imagery Analysis ➔ Turning Point Spectacle (Banquet / Hallucination) ➔ Theatrical Reception",
       sentenceStems: [
-        "Once internalised, [PROMPT TOPIC] ceases to be an abstract philosophical dilemma and translates into visceral domestic stagecraft.",
-        "Lady Macbeth explicitly weaponises this theatrical duplicity, commanding her husband to \"[QUOTE]\" ([ACT.SCENE]), an injunction that invokes both [BIBLICAL/HISTORICAL ALLUSION] and...",
-        "However, Shakespeare demonstrates that psychic reality violently revolts against such calculated theatricality; Macbeth's suppressed moral horror somatizes into optical hallucination: \"[QUOTE]\" ([ACT.SCENE]).",
-        "The tactile apostrophe in \"[MICRO-PHRASE]\" reveals that the boundary between empirical reality and inward psychomachia has completely fractured.",
-        "This private breakdown erupts into public catastrophe during the ceremonial state banquet (3.4), where the bloody apparition of [CHARACTER] visually usurps the royal throne, signifying that...",
+        "As the drama progresses, [PROMPT CONCEPT] shifts from internal contemplation into deliberate domestic deception and physical action.",
+        "Lady Macbeth explicitly instructs her husband to weaponize false appearances, commanding him to: \"[QUOTE]\" ([ACT.SCENE]), an image that evokes [HISTORICAL/BIBLICAL ALLUSION].",
+        "Yet Shakespeare insists that the human conscience cannot sustain such duplicity without breaking; Macbeth's private terror manifests as a hallucination: \"[QUOTE]\" ([ACT.SCENE]).",
+        "The vivid sensory imagery in \"[MICRO-QUOTE]\" confirms that internal guilt is now overwhelming his perception of reality.",
+        "This private psychological fracture erupts into public catastrophe during the royal banquet (3.4), where the entrance of [CHARACTER / GHOST] shatters courtly decorum and visually proves to the audience that...",
       ],
-      exemplarFill: `Once internalized, [PROMPT TOPIC] ceases to be an abstract temptation and transforms into lethal domestic theatricality. Lady Macbeth systematically weaponizes calculated performance, commanding her wavering husband to "Look like th' innocent flower, / But be the serpent under't" (1.5.63–64). The visual juxtaposition directly evokes both the Edenic serpent of Genesis and King James I's commemorative 1605 Gunpowder Plot medal, which depicted a venomous snake coiled beneath defensive lilies. Yet Shakespeare insists that the human psyche violently revolts against such artificial masking. When Macbeth attempts regicide, his repressed moral guilt somatizes into tactile optical illusion: "Is this a dagger which I see before me, / The handle toward my hand?... A dagger of the mind, a false creation" (2.1.33–38). The frantic rhetorical interrogation reveals that the boundary between empirical setting and internal psychomachia has dissolved. This private mental fracture erupts into public catastrophe during the royal banquet of Act 3, Scene 4. As Macbeth attempts to authenticate his stolen sovereignty through communal feudal feast, the silent, blood-boltered Ghost of Banquo occupies the royal throne. Macbeth’s public hysteria dismantles aristocratic decorum, visually proving to the assembled lords and the Jacobean playhouse that illegitimate authority shatters under the unbearable weight of unatoned violence.`,
-      examinerInsight: "Connect textual analysis to physical staging: the banquet table, blood, lighting, and props ensure you evaluate drama as performance (Criterion B)."
+      exemplarFill: `As the drama progresses, the tension between appearance and reality shifts from private temptation into calculated domestic performance. Lady Macbeth explicitly instructs her husband to adopt a deceptive mask, commanding him to "Look like th' innocent flower, / But be the serpent under't" (1.5.63–64). This imagery evokes both the biblical serpent in Eden and King James I's commemorative 1605 Gunpowder Plot medal, warning that treachery hides beneath polite hospitality. Macbeth confirms this deceit by declaring: "False face must hide what the false heart doth know" (1.7.82). Yet Shakespeare demonstrates that the human conscience cannot sustain such duplicity without breaking. Before the murder, Macbeth's repressed guilt somatizes into an optical illusion: "Is this a dagger which I see before me, / The handle toward my hand?... A dagger of the mind, a false creation" (2.1.33–38). The rhetorical questioning reveals his inability to distinguish between physical reality and internal terror. This private psychological rupture turns into public disaster during the Act 3 banquet. As Macbeth attempts to project the image of a secure, generous monarch, the bloody Ghost of Banquo occupies the throne. Macbeth's terrified outbursts dismantle courtly decorum, proving to the assembled lords and the audience that illegitimate power built on deception inevitably collapses from within.`,
+      examinerInsight: "Always connect language to physical staging: mention props, costumes, lighting, or the banquet table to show examiners you understand drama as a performed art.",
     },
     {
       sectionId: "body3",
-      title: "4. Body Paragraph 3: Double Equivocation, Somnambulism & Climactic Anagnorisis",
+      title: "4. Body Paragraph 3 [E — Exposure & Climax]: Breakdown of Language, Guilt & Tragic Recognition",
       targetWords: "~220 words",
-      formula: "Climactic Topic Sentence (Inevitable Denouement & Reversal) ➔ Textual Anchor 3 (Cavern Apparitions vs. Nocturnal Somnambulism) ➔ Linguistic Analysis (Prose Breakdown, Sensory/Olfactory Imagery) ➔ Tragic Recognition (*Anagnorisis*) ➔ Restorative Inevitability",
+      formula: "Climactic Topic Sentence (Inevitable retribution) ➔ Textual Quote 3 (Supernatural riddle vs. psychological collapse) ➔ Linguistic Analysis (Verse to prose / Sensory diction) ➔ Tragic Recognition (Anagnorisis) ➔ Moral Inevitability",
       sentenceStems: [
-        "In the tragedy’s culminating movements, Shakespeare accelerates the denouement by confronting [PROMPT TOPIC] with its own inevitable moral and physical retribution.",
-        "Lured by the cauldron apparitions' equivocal riddles—that \"[QUOTE]\" ([ACT.SCENE])—Macbeth descends into blinding tyrannical hubris, fatally mistaking metaphor for literal invulnerability.",
-        "Concurrently, Shakespeare mirrors this delusion through Lady Macbeth’s catastrophic nocturnal somnambulism (5.1), where verse dissolves into fragmented prose: \"[QUOTE]\".",
-        "The visceral olfactory agony of \"[MICRO-PHRASE]\" exposes the irreversible permanence of sin, proving that conscious repression cannot purge somatic guilt.",
-        "When the physical landscape itself fulfills the supernatural riddle through [EVENT: e.g. Birnam Wood boughs / Macduff's Caesarean birth], Macbeth undergoes crushing anagnorisis: \"[QUOTE]\" ([ACT.SCENE]).",
+        "In the final movement of the play, Shakespeare accelerates the tragic denouement by exposing the ultimate futility of [PROMPT CONCEPT].",
+        "Macbeth clings blindly to the cavern apparitions' equivocal prophecies—that \"[QUOTE]\" ([ACT.SCENE])—mistaking ambiguous words for absolute protection.",
+        "In stark contrast to his bravado, Lady Macbeth's psychological breakdown in Act 5 Scene 1 strips away all composure, causing her speech to collapse from verse into disjointed prose: \"[QUOTE]\".",
+        "The haunting olfactory detail in \"[MICRO-QUOTE]\" reveals that guilt has permanently poisoned her senses, showing that...",
+        "When the prophecies unravel with Birnam Wood moving and Macduff revealing his birth, Macbeth experiences crushing tragic recognition (*anagnorisis*): \"[QUOTE]\" ([ACT.SCENE]), finally realizing that...",
       ],
-      exemplarFill: `In the tragedy's culminating movement, Shakespeare accelerates the dramatic denouement by exposing how [PROMPT TOPIC] inevitably consumes its architects from within. Seduced by the cavern apparitions' double-edged riddles—that "none of woman born / Shall harm Macbeth" (4.1.79–80)—the tyrant retreats into psychotic overconfidence, fatally mistaking poetic metaphor for literal invincibility. Simultaneously, Shakespeare charts the irreversible psychic cost of this delusion through Lady Macbeth's nocturnal somnambulism (5.1). Stripped of daytime control, her speech collapses from authoritative iambic verse into incoherent, guilt-ridden prose: "Out, damned spot! out, I say!... All the perfumes of Arabia will not sweeten this little hand" (5.1.31–45). The synaesthetic and olfactory torment of "Arabia's perfumes" exposes the sensory permanence of Duncan's spilled blood, proving that mortal willpower cannot cleanse spiritual damnation. When Malcolm's liberation force camouflages under boughs from Birnam Wood, the physical landscape itself seems to uproot to avenge natural law. Confronted finally by Macduff—who was from his mother's womb "untimely ripped" (5.8.15–16)—Macbeth experiences harrowing anagnorisis: "And be these juggling fiends no more believed, / That palter with us in a double sense" (5.8.19–20). The deceptive rhetoric that once promised eternal dominion is unmasked as infernal mockery, sealing the tyrant's decapitation.`,
-      examinerInsight: "Demonstrating how linguistic structure (verse-to-prose transition) mirrors psychological collapse guarantees the highest mark bands in Criteria A and B."
+      exemplarFill: `In the play's final movement, Shakespeare accelerates the tragic denouement by exposing the ultimate futility of deceptive ambition. Desperate for certainty, Macbeth clings blindly to the Witches' cavern prophecies—that "none of woman born / Shall harm Macbeth" (4.1.80)—mistaking equivocal riddles for absolute invulnerability. However, Shakespeare balances this hubris against Lady Macbeth's complete psychological collapse in Act 5, Scene 1. Deprived of conscious control, her regal verse deteriorates into fragmented, guilt-ridden prose: "Out, damned spot! out, I say!... All the perfumes of Arabia will not sweeten this little hand" (5.1.31–45). The olfactory imagery of "perfumes of Arabia" emphasizes that mortal willpower cannot wash away the sensory stain of regicide; her daytime facade is obliterated by subconscious truth. When Malcolm’s advancing army cuts branches from Birnam Wood for camouflage, the physical landscape itself seems to fulfill the supernatural prophecy. Confronted by Macduff—who was from his mother's womb "untimely ripped" (5.8.15–16)—Macbeth undergoes harrowing tragic recognition (*anagnorisis*): "And be these juggling fiends no more believed, / That palter with us in a double sense" (5.8.19–20). The deceptive words that fueled his rise are unmasked as mockery, sealing the tyrant's death and ending his reign of terror.`,
+      examinerInsight: "Highlighting how Shakespeare changes form—such as shifting Lady Macbeth from blank verse to prose—proves deep command of Criterion B and C.",
     },
     {
       sectionId: "conclusion",
-      title: "5. Conclusion: Philosophical Synthesis, Catharsis & Ideological Takeaway",
+      title: "5. Conclusion [S — Synthesis & Catharsis]: Universal Human Truth & Moral Restoration",
       targetWords: "~120 words",
-      formula: "Philosophical Synthesis (No mechanical re-listing of points) ➔ Re-evaluation of the Human Condition (Nihilism vs. Cosmic Grace) ➔ Metatheatrical Resonance (\"Poor Player\") ➔ Final Cathartic Restoration (Malcolm at Scone)",
+      formula: "Philosophical Synthesis ➔ Universal Human Truth (Ambition / Guilt / Deception) ➔ Metatheatrical Reflection (\"Poor Player\") ➔ Final Restoration of Order & Catharsis",
       sentenceStems: [
-        "In the final analysis, Shakespeare’s Macbeth demonstrates that [PROMPT PHENOMENON] is fundamentally an unsustainable transgression that devours its own agents.",
-        "What began as an alluring promise on the blasted heath terminates in utter spiritual paralysis, leading the tyrant to reduce mortal existence itself to \"[QUOTE]\" ([ACT.SCENE]).",
-        "By contrasting the ephemeral fragility of [HUMAN DECEPTION / TYRANNY] against the enduring moral equilibrium of the universe, the dramatist reassures his Jacobean audience that...",
-        "With Malcolm's rightful coronation at Scone and the invocation of divine grace, natural succession is restored, achieving profound catharsis and dispelling the moral darkness that engulfed Scotland.",
+        "In conclusion, Shakespeare’s Macbeth demonstrates that [PROMPT CONCEPT] is ultimately an unsustainable path that consumes those who practice it.",
+        "Rather than delivering lasting authority or peace, [PROMPT ACTION] reduces human existence to spiritual emptiness, prompting Macbeth to lament that life is merely \"[QUOTE]\" ([ACT.SCENE]).",
+        "By contrasting the short-lived triumphs of mortal ambition against the permanent laws of nature and morality, the play offers a timeless warning that...",
+        "With Malcolm crowned at Scone and order restored to Scotland, Shakespeare leaves the audience with a profound sense of catharsis, confirming that truth and justice outlast the darkest deceptions.",
       ],
-      exemplarFill: `In the final analysis, Shakespeare’s Macbeth demonstrates that [PROMPT TOPIC / e.g. the unchecked pursuit of illegitimate power] is an unsustainable metaphysical transgression that devours its own perpetrators from within. What began as seductive supernatural solicitations terminates in existential bankruptcy, leaving Macbeth to reduce mortal human life itself to "a poor player / That struts and frets his hour upon the stage / And then is heard no more" (5.5.24–26). By juxtaposing the theatrical fragility of mortal vanity against the enduring moral architecture of the cosmos, Shakespeare reassures his Jacobean audience that legitimate order cannot be permanently usurped. As Malcolm is hailed King of Scotland at Scone and vows to govern through the restorative grace of heaven, the infectious darkness is dispelled, returning spiritual sanity and political renewal to the commonwealth.`,
-      examinerInsight: "A Grade 7 conclusion elevates the argument to universal human truth, incorporates metatheatrical reflection ('poor player'), and establishes final cathartic restoration."
-    }
+      exemplarFill: `In conclusion, Shakespeare’s Macbeth demonstrates that the pursuit of power through deceit is an unsustainable violation that consumes those who practice it. Rather than delivering lasting glory, Macbeth’s surrender to equivocation and false appearances leaves him in total spiritual exhaustion, lamenting that human life is merely "a poor player / That struts and frets his hour upon the stage / And then is heard no more" (5.5.24–26). By contrasting the brief theatricality of mortal ambition against the enduring order of the cosmos, Shakespeare provides a timeless warning to both Jacobean and modern audiences: deception cannot overturn moral truth. With Malcolm crowned at Scone and legitimate order restored to Scotland, the drama achieves true catharsis, confirming that clarity and justice will always dispel the fog of falsehood.`,
+      examinerInsight: "A Grade 7 conclusion avoids repetitive summary by synthesizing authorial message, metatheatrical reflection, and the final restoration of order.",
+    },
   ],
-  rawFullTemplateText: `TITLE: IB English Literature Paper 2 — Universal 900-Word Comparative Essay Formula
-TEXTS: William Shakespeare, Macbeth (1606) & Comparative Core Text
-TOTAL TARGET: ~900 Words (Intro: ~120w | Body 1: ~220w | Body 2: ~220w | Body 3: ~220w | Conclusion: ~120w)
+  rawFullTemplateText: `================================================================================
+IB ENGLISH LITERATURE PAPER 2: THE UNIVERSAL "C-O-R-E-S" ESSAY TEMPLATE
+Target Length: ~900 Words (Intro: ~120w | Body 1: ~220w | Body 2: ~220w | Body 3: ~220w | Concl: ~120w)
+Works for ANY prompt: Appearance vs Reality, Power & Ambition, Guilt, Gender, Conflict, Setting
+================================================================================
 
-================================================================================
-1. INTRODUCTION (~120 words)
-================================================================================
-In William Shakespeare’s Jacobean tragedy Macbeth, the exploration of [INSERT PROMPT TOPIC / e.g. the tension between appearance and reality / the destructive allure of unchecked ambition] operates not merely as a superficial narrative catalyst, but as the governing metaphysical mechanism of the play. Composed in the fraught sociopolitical wake of the 1605 Gunpowder Plot and the ascension of King James I, the drama externalizes acute Jacobean terrors of regicide, spiritual apostasy, and moral equivocation. Through the discord of demonic trochaic solicitation, the tactical performativity of domestic murder, and the frantic nihilism of the besieged tyrant, Shakespeare exposes how [PROMPT PHENOMENON] reduces heroic potential to existential annihilation. Ultimately, the dramatist reveals that while [SUPERFICIAL POWER / DECEPTION / VIOLENCE] may temporarily subjugate mortal authority, the sovereign mechanisms of natural and divine order inevitably reassert cosmic equilibrium.
+[MEMORY ANCHOR: THE C-O-R-E-S FORMULA (Memorize in 2 Minutes)]
+  • C — Context & Thesis (Intro ~120w): Hook + 1605 Jacobean Context + 3-Part Roadmap
+  • O — Origin & Craft (Body 1 ~220w): Where the theme begins + Meter/Atmosphere + Early Irony
+  • R — Rupture & Staging (Body 2 ~220w): Domestic masking + Somatic Hallucination + Banquet Climax
+  • E — Exposure & Climax (Body 3 ~220w): Cavern Prophecies + Sleepwalking Prose + Anagnorisis
+  • S — Synthesis & Catharsis (Concl ~120w): "Poor Player" Metatheater + Restoration of Order
 
-================================================================================
-2. BODY PARAGRAPH 1: COSMIC INVERSION & PROSODIC CRAFT (~220 words)
-================================================================================
-The thematic destabilization of [PROMPT TOPIC] originates not in mortal hesitation, but within the corrupted metaphysical atmosphere of the drama's opening movement. In the play's genesis, Shakespeare introduces the Weird Sisters chanting in discordant trochaic tetrameter: "Fair is foul, and foul is fair: / Hover through the fog and filthy air" (1.1.10–11). This arresting chiasmus immediately ruptures conventional moral dualisms, establishing an all-encompassing miasma where human perception is fatally clouded. When Macbeth unconsciously echoes this exact demonic rhythm in his first spoken line—"So foul and fair a day I have not seen" (1.3.38)—Shakespeare utilizes prosodic mimicry to signal that the protagonist's conscience is already infected by metaphysical equivocations. This vulnerability is mirrored in King Duncan's naive political blindness; reflecting on the traitorous Cawdor, Duncan laments: "There's no art / To find the mind's construction in the face: / He was a gentleman on whom I built / An absolute trust" (1.4.11–14). The architectural metaphor of "construction" confirms that physical physiognomy functions as an impenetrable disguise. In an exhibition of razor-sharp dramatic irony, Macbeth crosses the stage at the exact climax of Duncan’s lament—creating a visual and thematic tableau where the monarch rewards the very traitor destined to annihilate him.
+--------------------------------------------------------------------------------
+1. INTRODUCTION: [C — CONTEXT & THESIS] (~120 words)
+--------------------------------------------------------------------------------
+[HOOK & PURPOSE]
+In William Shakespeare’s tragedy Macbeth, the exploration of [INSERT PROMPT TOPIC: e.g. the conflict between appearance and reality / the destructive allure of unchecked ambition] is not merely a plot device, but the central dramatic mechanism through which the playwright examines [INSERT THEMATIC TRUTH: e.g. how moral compromise destroys the human conscience].
 
-================================================================================
-3. BODY PARAGRAPH 2: DOMESTIC THEATRICALITY & SOMATIC RUPTURE (~220 words)
-================================================================================
-Once internalized, [PROMPT TOPIC] ceases to be an abstract temptation and transforms into lethal domestic theatricality. Lady Macbeth systematically weaponizes calculated performance, commanding her wavering husband to "Look like th' innocent flower, / But be the serpent under't" (1.5.63–64). The visual juxtaposition directly evokes both the Edenic serpent of Genesis and King James I's commemorative 1605 Gunpowder Plot medal, which depicted a venomous snake coiled beneath defensive lilies. Yet Shakespeare insists that the human psyche violently revolts against such artificial masking. When Macbeth attempts regicide, his repressed moral guilt somatizes into tactile optical illusion: "Is this a dagger which I see before me, / The handle toward my hand?... A dagger of the mind, a false creation" (2.1.33–38). The frantic rhetorical interrogation reveals that the boundary between empirical setting and internal psychomachia has dissolved. This private mental fracture erupts into public catastrophe during the royal banquet of Act 3, Scene 4. As Macbeth attempts to authenticate his stolen sovereignty through communal feudal feast, the silent, blood-boltered Ghost of Banquo occupies the royal throne. Macbeth’s public hysteria dismantles aristocratic decorum, visually proving to the assembled lords and the Jacobean playhouse that illegitimate authority shatters under the unbearable weight of unatoned violence.
+[HISTORICAL CONTEXT ANCHOR]
+Written in the shadow of the 1605 Gunpowder Plot and the accession of King James I, the drama reflects acute Jacobean anxieties over [INSERT CONTEXT: e.g. treason, equivocation, and the preservation of natural order].
 
-================================================================================
-4. BODY PARAGRAPH 3: EQUIVOCATION, SOMNAMBULISM & ANAGNORISIS (~220 words)
-================================================================================
-In the tragedy's culminating movement, Shakespeare accelerates the dramatic denouement by exposing how [PROMPT TOPIC] inevitably consumes its architects from within. Seduced by the cavern apparitions' double-edged riddles—that "none of woman born / Shall harm Macbeth" (4.1.79–80)—the tyrant retreats into psychotic overconfidence, fatally mistaking poetic metaphor for literal invincibility. Simultaneously, Shakespeare charts the irreversible psychic cost of this delusion through Lady Macbeth's nocturnal somnambulism (5.1). Stripped of daytime control, her speech collapses from authoritative iambic verse into incoherent, guilt-ridden prose: "Out, damned spot! out, I say!... All the perfumes of Arabia will not sweeten this little hand" (5.1.31–45). The synaesthetic and olfactory torment of "Arabia's perfumes" exposes the sensory permanence of Duncan's spilled blood, proving that mortal willpower cannot cleanse spiritual damnation. When Malcolm's liberation force camouflages under boughs from Birnam Wood, the physical landscape itself seems to uproot to avenge natural law. Confronted finally by Macduff—who was from his mother's womb "untimely ripped" (5.8.15–16)—Macbeth experiences harrowing anagnorisis: "And be these juggling fiends no more believed, / That palter with us in a double sense" (5.8.19–20). The deceptive rhetoric that once promised eternal dominion is unmasked as infernal mockery, sealing the tyrant's decapitation.
+[CORE COMPARATIVE THESIS & 3-PART ROADMAP]
+While [COMPARATIVE TEXT/AUTHOR] explores [TOPIC] through [TECHNIQUE/GENRE], Shakespeare traces its destructive trajectory across three distinct movements:
+  1. First, [ORIGIN: e.g. the supernatural subversion of moral values on the blasted heath];
+  2. Second, [ESCALATION: e.g. the domestic hypocrisy and psychological rupture in Inverness and at the royal banquet];
+  3. And finally, [RESOLUTION: e.g. the unmasking of equivocation and the tyrant's tragic recognition during the fall of Dunsinane].
+Ultimately, Shakespeare shows that [INSERT OVERALL MESSAGE: e.g. illegitimate power built on deceit offers only the illusion of control before collapsing into spiritual ruin].
 
-================================================================================
-5. CONCLUSION: PHILOSOPHICAL SYNTHESIS & CATHARSIS (~120 words)
-================================================================================
-In the final analysis, Shakespeare’s Macbeth demonstrates that [PROMPT TOPIC / e.g. the unchecked pursuit of illegitimate power] is an unsustainable metaphysical transgression that devours its own perpetrators from within. What began as seductive supernatural solicitations terminates in existential bankruptcy, leaving Macbeth to reduce mortal human life itself to "a poor player / That struts and frets his hour upon the stage / And then is heard no more" (5.5.24–26). By juxtaposing the theatrical fragility of mortal vanity against the enduring moral architecture of the cosmos, Shakespeare reassures his Jacobean audience that legitimate order cannot be permanently usurped. As Malcolm is hailed King of Scotland at Scone and vows to govern through the restorative grace of heaven, the infectious darkness is dispelled, returning spiritual sanity and political renewal to the commonwealth.`
+--------------------------------------------------------------------------------
+2. BODY PARAGRAPH 1: [O — ORIGIN & CRAFT] (~220 words)
+--------------------------------------------------------------------------------
+[TOPIC SENTENCE: THEMATIC GENESIS]
+Shakespeare establishes [PROMPT TOPIC] at the very start of the drama, creating a corrupted atmosphere where [NORMAL MORAL ORDER / REASON] is immediately destabilized.
+
+[EVIDENCE 1 & LITERARY/METRICAL CRAFT]
+This distortion is announced through the Weird Sisters' chant in discordant trochaic tetrameter: "Fair is foul, and foul is fair: / Hover through the fog and filthy air" (1.1.10–11). The chiasmic rhythm overturns moral dualisms, while the "fog" symbolizes the spiritual blindness that engulfs the realm.
+
+[ANALYSIS OF EFFECT & CHARACTER CONSCIENCE]
+When Macbeth echoes this demonic cadence in his opening line—"So foul and fair a day I have not seen" (1.3.38)—the audience recognizes through his prosody that [PROMPT PHENOMENON] has already infected his subconscious mind.
+
+[EVIDENCE 2 & DRAMATIC IRONY]
+This vulnerability is deepened by dramatic irony when King Duncan arrives at Inverness and reflects on the previous traitor: "There's no art / To find the mind's construction in the face: / He was a gentleman on whom I built / An absolute trust" (1.4.11–14). The architectural metaphor of "construction" emphasizes that outer appearance is an impenetrable mask.
+
+[THEATRICAL SYNTHESIS]
+At the exact moment Duncan praises this surface innocence, Macbeth enters the stage; the monarch's warm embrace visually proves to the playhouse that trusting false exteriors invites fatal danger into the heart of the kingdom.
+
+--------------------------------------------------------------------------------
+3. BODY PARAGRAPH 2: [R — RUPTURE & STAGING] (~220 words)
+--------------------------------------------------------------------------------
+[TOPIC SENTENCE: ESCALATION TO VISCERAL ACTION]
+As the drama progresses, [PROMPT TOPIC] shifts from internal temptation into deliberate domestic deception and staged action.
+
+[EVIDENCE 1: DOMESTIC MASK & HISTORICAL/SYMBOLIC ALLUSION]
+Lady Macbeth explicitly instructs her husband to weaponize false appearances, commanding him to "Look like th' innocent flower, / But be the serpent under't" (1.5.63–64). This visual juxtaposition recalls both Genesis and King James I's 1605 Gunpowder Plot medal, warning that treason conceals itself beneath courtly hospitality. Macbeth formalizes this pact: "False face must hide what the false heart doth know" (1.7.82).
+
+[EVIDENCE 2: SOMATIC HALLUCINATION & PSYCHIC REVOLT]
+Yet Shakespeare insists that the human conscience cannot sustain such calculated duplicity. When Macbeth moves to commit regicide, his suppressed horror manifests as a physical hallucination: "Is this a dagger which I see before me, / The handle toward my hand?... A dagger of the mind, a false creation" (2.1.33–38). The frantic apostrophe reveals that his inner reality has begun to fracture under the weight of moral guilt.
+
+[SPECTACLE CLIMAX: BANQUET & THEATRICAL AUDIENCE EFFECT]
+This private breakdown explodes into public spectacle during the Act 3, Scene 4 banquet. As Macbeth tries to project the image of a secure, legitimate king, the bloody Ghost of Banquo occupies the vacant throne. Macbeth’s public terror shatters feudal decorum, proving to the assembled nobles and the Jacobean audience that authority built on [VIOLENCE/DECEIT] is fragile and self-destructive.
+
+--------------------------------------------------------------------------------
+4. BODY PARAGRAPH 3: [E — EXPOSURE & CLIMAX] (~220 words)
+--------------------------------------------------------------------------------
+[TOPIC SENTENCE: THE INEVITABLE UNRAVELING]
+In the play's climactic movement, Shakespeare accelerates the tragic denouement by exposing the ultimate futility and cost of [PROMPT TOPIC].
+
+[EVIDENCE 1: DOUBLE EQUIVOCATION & TYRANNICAL BLINDNESS]
+Lured by the cavern apparitions' double-edged riddles—that "none of woman born / Shall harm Macbeth" (4.1.80)—the protagonist falls into fatal overconfidence, mistaking poetic ambiguities for literal safety.
+
+[EVIDENCE 2: FORM BREAKDOWN — LADY MACBETH'S PROSE SOMNAMBULISM]
+Shakespeare contrasts this tyrannical hubris with Lady Macbeth’s complete collapse in Act 5, Scene 1. Her speech disintegrates from aristocratic iambic verse into fragmented prose: "Out, damned spot! out, I say!... All the perfumes of Arabia will not sweeten this little hand" (5.1.31–45). The olfactory imagery reveals that conscious repression cannot cleanse spiritual guilt; her daytime facade has been annihilated by subconscious truth.
+
+[EVIDENCE 3: ANAGNORISIS & RETRIBUTION]
+When Malcolm's army camouflages with Birnam Wood and Macduff reveals his Caesarean birth, Macbeth undergoes harrowing tragic recognition (*anagnorisis*): "And be these juggling fiends no more believed, / That palter with us in a double sense" (5.8.19–20). The rhetoric that promised invincibility is unmasked as infernal deceit, sealing the tyrant's death.
+
+--------------------------------------------------------------------------------
+5. CONCLUSION: [S — SYNTHESIS & CATHARSIS] (~120 words)
+--------------------------------------------------------------------------------
+[PHILOSOPHICAL RE-STATEMENT]
+In conclusion, Shakespeare’s Macbeth demonstrates that [PROMPT TOPIC: e.g. the unchecked pursuit of power through deceit] is an unsustainable transgression that inevitably devours its own perpetrators.
+
+[METATHEATRICAL RESONANCE]
+Rather than providing enduring triumph, Macbeth’s ambition terminates in total existential exhaustion, reducing mortal human life to "a poor player / That struts and frets his hour upon the stage / And then is heard no more" (5.5.24–26).
+
+[FINAL RESTORATION & CATHARSIS]
+By contrasting the fleeting theatricality of mortal deception against the permanent order of the universe, Shakespeare reassures both Jacobean and modern audiences that justice cannot be permanently eclipsed. As Malcolm is crowned King at Scone through the grace of heaven, the infectious disorder is dispelled, returning moral sanity and renewal to the realm.`
 };
 
 export interface ExemplarEssayData {

@@ -1038,6 +1038,9 @@ export function IBPaper2StudioView() {
                       <Sparkles className="w-3.5 h-3.5 text-amber-400" />
                       Universal IB Paper 2 Formula • Works for Any Prompt
                     </span>
+                    <span className="font-mono text-xs px-2.5 py-1 rounded-full bg-amber-400/15 text-amber-200 border border-amber-400/30 font-bold">
+                      Mnemonic: {UNIVERSAL_IB_PAPER_2_TEMPLATE.mnemonic}
+                    </span>
                     <span className="font-mono text-xs px-2.5 py-1 rounded-full bg-white/5 text-slate-300 border border-white/10">
                       {UNIVERSAL_IB_PAPER_2_TEMPLATE.totalTargetWords}
                     </span>
@@ -1046,7 +1049,7 @@ export function IBPaper2StudioView() {
                     {UNIVERSAL_IB_PAPER_2_TEMPLATE.name}
                   </h3>
                   <p className="text-xs text-slate-300 leading-relaxed max-w-3xl">
-                    {UNIVERSAL_IB_PAPER_2_TEMPLATE.frameworkSummary} Look at these structural formulas and modular sentence stems while drafting above, or click any sentence stem to append it directly into your canvas.
+                    {UNIVERSAL_IB_PAPER_2_TEMPLATE.frameworkSummary} Look at the 2-minute memory cheat sheet below, or click any sentence stem to append it directly into your canvas.
                   </p>
                 </div>
 
@@ -1069,6 +1072,57 @@ export function IBPaper2StudioView() {
                     <Copy className="w-3.5 h-3.5 text-amber-300" />
                     <span>Copy Template</span>
                   </button>
+                </div>
+              </div>
+
+              {/* 1-Page Cheat Sheet / Memory Anchor (Memorize in 2 Minutes) */}
+              <div className="p-4 sm:p-5 rounded-2xl bg-amber-500/[0.08] border border-amber-400/30 space-y-3">
+                <div className="flex flex-wrap items-center justify-between gap-2 border-b border-amber-400/20 pb-2">
+                  <div className="flex items-center gap-2">
+                    <span className="w-6 h-6 rounded-md bg-amber-500/20 text-amber-300 flex items-center justify-center font-mono text-xs font-bold">
+                      ⚡
+                    </span>
+                    <h4 className="text-xs sm:text-sm font-bold text-amber-200 uppercase tracking-wider font-mono">
+                      2-Minute Exam Memory Cheat Sheet: The C-O-R-E-S System
+                    </h4>
+                  </div>
+                  <span className="text-[11px] font-mono text-amber-300/80">
+                    {UNIVERSAL_IB_PAPER_2_TEMPLATE.mnemonicMeaning}
+                  </span>
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-5 gap-2.5 pt-1">
+                  {UNIVERSAL_IB_PAPER_2_TEMPLATE.cheatSheet.map((item, cIdx) => (
+                    <div
+                      key={cIdx}
+                      className="p-3 rounded-xl bg-black/50 border border-amber-400/20 flex flex-col justify-between space-y-2"
+                    >
+                      <div>
+                        <div className="flex items-center justify-between mb-1">
+                          <span className="w-6 h-6 rounded-md bg-amber-400 text-slate-950 flex items-center justify-center font-mono text-xs font-extrabold shadow-sm">
+                            {item.mnemonicLetter}
+                          </span>
+                          <span className="font-mono text-[10px] text-amber-300/90 font-bold">
+                            {item.targetWords}
+                          </span>
+                        </div>
+                        <h5 className="text-xs font-bold text-white line-clamp-1">
+                          {item.role}
+                        </h5>
+                        <p className="text-[11px] text-slate-300 mt-1 leading-snug">
+                          {item.coreRule}
+                        </p>
+                      </div>
+                      <div className="pt-1.5 border-t border-white/10">
+                        <span className="text-[9px] font-mono text-amber-400/80 block uppercase">
+                          Universal Formula:
+                        </span>
+                        <p className="text-[10px] text-amber-100 font-mono leading-tight mt-0.5 line-clamp-2">
+                          {item.universalBracketFormula}
+                        </p>
+                      </div>
+                    </div>
+                  ))}
                 </div>
               </div>
 
