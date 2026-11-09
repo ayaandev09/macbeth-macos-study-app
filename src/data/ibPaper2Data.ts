@@ -267,8 +267,8 @@ export const IB_PAPER_2_RUBRIC: IBRubricCriterion[] = [
         label: "Sophisticated & Precise",
         summary: "Language is very clear, effective, carefully chosen and sophisticated; high degree of accuracy; academic literary register and varied syntax throughout.",
         bullets: [
-          "Flawless academic vocabulary (e.g. 'hamartia', 'equivocation', 'psychomachia', 'prolepsis').",
-          "Syntactic sophistication, varied clause structures, and concise prose.",
+          "Precise, high-scoring literary vocabulary (e.g. 'dramatic irony', 'soliloquy', 'equivocation', 'meter', 'anagnorisis').",
+          "Varied sentence structures, clear analytical phrasing, and concise prose.",
         ],
       },
       {
@@ -344,47 +344,47 @@ export const IB_GUIDING_QUESTIONS: IBQuestionData[] = [
           "Generate an automated Audio Overview / Deep Dive podcast to hear two AI hosts debate the tension between outward theatrical mask and internal psychic damnation.",
         ],
         suggestedPrompts: [
-          "How does Shakespeare utilize trochaic meter and dramatic irony to signal epistemological instability to the Jacobean audience?",
+          "How does Shakespeare use trochaic meter and dramatic irony to signal moral confusion to the Jacobean audience?",
           "Compare the motif of clothing and masking in Macbeth with the facade of outward conformity in my second literary work.",
           "Synthesize 3 distinct comparative thesis statements analyzing how outward hospitality conceals destructive treachery.",
-          "Identify all moments where sensory hallucinations (ocular or auditory) invert reality for Macbeth and Lady Macbeth.",
+          "Identify all moments where hallucinations invert reality for Macbeth and Lady Macbeth.",
         ],
       },
       narrowingStrategy: {
         broadPromptDiagnosis:
-          "The prompt 'Nothing is as it seems' is dangerously expansive. Untrained candidates fall into the trap of listing every lie or disguise in the play chronologically. High-scoring Paper 2 candidates narrow the prompt down into a specific philosophical, dramatic, or epistemological tension: the split between external theatrical performance and internal psychological decay, or the fatal deceit of demonic equivocation.",
+          "The prompt 'Nothing is as it seems' is dangerously broad. Untrained candidates fall into the trap of listing every lie or disguise in the play chronologically. High-scoring Grade 12 candidates narrow the prompt down into a specific dramatic conflict: the tension between outward theatrical performance and inward psychological collapse, or the fatal trap of demonic equivocation.",
         narrowingAngles: [
           {
-            angle: "Epistemological Failure & Theatrical Disguise",
-            focus: "Duncan's tragic inability to decode facial performance juxtaposed with Lady Macbeth's deliberate orchestration of courtly pageantry.",
-            thesisStem: "While both authors explore the deceptive facade of courtly and social protocol, Shakespeare utilizes dramatic irony and domestic theatricality to demonstrate that the suppression of truth inevitably calcifies into profound spiritual alienation.",
+            angle: "Deceptive Appearances & Theatrical Disguise",
+            focus: "Duncan's tragic inability to see past facial performance juxtaposed with Lady Macbeth's deliberate staging of courtly hospitality.",
+            thesisStem: "While both authors explore the deceptive facade of social protocol, Shakespeare utilizes dramatic irony and domestic performance to demonstrate that hiding the truth inevitably destroys the moral conscience.",
           },
           {
-            angle: "Metaphysical Equivocation as Moral Poison",
-            focus: "The Weird Sisters' riddling trochees paltering with double meanings, luring Macbeth into self-deception.",
-            thesisStem: "Shakespeare presents equivocation not merely as clever political rhetoric, but as a metaphysical snare wherein mortal characters eagerly construct false realities to rationalize illicit ambition.",
+            angle: "Supernatural Equivocation as Moral Poison",
+            focus: "The Weird Sisters' riddling trochees speaking in double meanings, tempting Macbeth into rationalizing his ambition.",
+            thesisStem: "Shakespeare presents equivocation not merely as clever wordplay, but as a supernatural trap where characters eagerly deceive themselves to justify violent ambition.",
           },
           {
-            angle: "The Somatic Breakdown of the False Facade",
-            focus: "The involuntary revolt of the unconscious mind: the air-drawn dagger, Banquo's ghost, and Lady Macbeth's somnambulism.",
-            thesisStem: "Although characters in both works attempt to erect an impenetrable 'false face,' Shakespeare reveals that the subconscious mind somaticizes repressed guilt, rendering the psychological facade inherently unsustainable.",
+            angle: "Psychological Breakdown of the False Facade",
+            focus: "The involuntary revolt of the guilty mind: the air-drawn dagger, Banquo's ghost, and Lady Macbeth's sleepwalking.",
+            thesisStem: "Although characters attempt to erect an impenetrable 'false face,' Shakespeare reveals that the human conscience cannot sustain guilt, rendering the outward disguise impossible to maintain.",
           },
         ],
         trapsToAvoid: [
           {
             trap: "Plot Cataloging Trap",
-            consequence: "Listing every time a character lies (Duncan trusting Cawdor, Lady Macbeth framing the guards, Macbeth smiling at Banquo) without analyzing the theatrical mechanism.",
-            remedy: "Organize body paragraphs by conceptual depth (Metaphysical $\rightarrow$ Political $\rightarrow$ Psychological) rather than chronological narrative order.",
+            consequence: "Listing every time a character lies (Duncan trusting Cawdor, Lady Macbeth framing the guards, Macbeth smiling at Banquo) without analyzing authorial craft.",
+            remedy: "Organize body paragraphs by dramatic escalation (Supernatural Temptation ➔ Domestic Performance ➔ Psychological Collapse) rather than chronological plot order.",
           },
           {
             trap: "Ignoring 'To What Effect' (Authorial Purpose)",
             consequence: "Failing to evaluate how the audience reacts to dramatic irony or how the Jacobean sociopolitical framework is reinforced.",
-            remedy: "Explicitly articulate catharsis, the warning against Machiavellian dissimulation, and King James I's ideological stance on demonic deception.",
+            remedy: "Explicitly discuss catharsis, the moral warning against treason, and King James I's worldview regarding demonic deception.",
           },
           {
             trap: "Isolating Appearance from Form and Craft",
-            consequence: "Discussing deception as a thematic idea while neglecting meter, chiaroscuro lighting, acoustic knocks, and asides.",
-            remedy: "Anchor every single point in Shakespeare's poetic craft: trochaic inversions, rhyming couplets of duplicity, and stage entrances.",
+            consequence: "Discussing deception merely as a thematic idea while neglecting meter, staging, sensory imagery, and asides.",
+            remedy: "Anchor every single point in Shakespeare's dramatic craft: trochaic inversions, rhyming couplets of duplicity, and stage entrances.",
           },
         ],
       },
@@ -392,30 +392,30 @@ export const IB_GUIDING_QUESTIONS: IBQuestionData[] = [
         criterionA: {
           focus: "Knowledge, Understanding & Perceptive Interpretation (10 Marks)",
           strategy:
-            "Demonstrate granular familiarity with both the Jacobean context (the Gunpowder Plot medal of 1605 depicting a serpent hiding under roses) and subtle textual allusions. Move beyond obvious plot points to interpret how characters actively construct epistemological blind spots.",
+            "Demonstrate close familiarity with Jacobean context (the Gunpowder Plot medal of 1605 depicting a serpent hiding under roses) and subtle textual details. Move beyond obvious plot points to interpret how characters actively deceive themselves.",
           exemplarApplication:
-            "Contrast Macbeth's deliberate surrender to demonic double-meanings with Duncan's benevolent yet naive feudal idealism, showing that moral vulnerability stems from misinterpreting semiotic signs.",
+            "Contrast Macbeth's willing surrender to demonic double meanings with Duncan's naive trust in outward courtesy, showing that vulnerability stems from misjudging appearance.",
         },
         criterionB: {
           focus: "Analysis & Evaluation of Authorial Choices (10 Marks)",
           strategy:
-            "Analyze how dramatic irony creates a double-consciousness in the audience. Unpack prosody (e.g., trochaic tetrameter catalectic vs. iambic pentameter) and somatic stagecraft.",
+            "Analyze how dramatic irony creates tension for the audience. Unpack meter (e.g., trochaic tetrameter vs. regular iambic pentameter) and physical stagecraft.",
           exemplarApplication:
-            "Examine how the rhyming couplet 'False face must hide what the false heart doth know' mechanically locks the pentameter line, mirroring the rigid, artificial constraint required to maintain physical deception.",
+            "Examine how the rhyming couplet 'False face must hide what the false heart doth know' snaps the pentameter shut, reflecting the rigid, forced effort required to maintain a physical disguise.",
         },
         criterionC: {
           focus: "Focus, Organisation & Tripartite Progression (5 Marks)",
           strategy:
-            "Structure the response using a rigorous 3-stage conceptual progression: 1) Metaphysical inversion (Heath), 2) Sociopolitical & Domestic staging (Castle/Banquet), and 3) Psychic collapse and retribution (Dunsinane).",
+            "Structure the response using a clear 3-stage progression: 1) Supernatural inversion on the Heath, 2) Domestic deception inside Inverness Castle and at the banquet, and 3) Psychological collapse and retribution at Dunsinane.",
           exemplarApplication:
-            "Maintain sustained comparative parity by synthesizing both texts across every paragraph using seamless comparative bridge sentences rather than isolated block summaries.",
+            "Maintain sustained comparative balance by connecting both texts in every paragraph using comparative transition sentences rather than isolated block summaries.",
         },
         criterionD: {
-          focus: "Academic Register & Sophisticated Literary Vocabulary (5 Marks)",
+          focus: "Academic Register & Literary Vocabulary (5 Marks)",
           strategy:
-            "Deploy high-yield literary terms with natural scholarly precision: equivocation, chiasmus, epistemological instability, psychomachia, chiaroscuro, anagnorisis, and metatheatre.",
+            "Deploy standard, high-yield literary terms with natural precision: dramatic irony, equivocation, chiasmus, soliloquy, meter, anagnorisis, and catharsis.",
           exemplarApplication:
-            "Use precise analytical verbs (e.g., 'subverts', 'crystallizes', 'dramatizes', 'obfuscates', 'somaticizes') to elevate syntactic authority.",
+            "Use active analytical verbs (e.g., 'subverts', 'crystallizes', 'dramatizes', 'foreshadows', 'exposes') to make arguments concise and punchy.",
         },
       },
     },
@@ -438,9 +438,9 @@ export const IB_GUIDING_QUESTIONS: IBQuestionData[] = [
         lineRef: "1.4.11–14",
         literaryDevices: ["Dramatic Irony", "Architectural Metaphor ('construction')", "Foreshadowing"],
         analysis: "Duncan laments his inability to penetrate the outward countenance of the executed traitor Cawdor. In a staggering stroke of theatrical irony, Macbeth enters immediately upon this line, becoming the new Cawdor who will exploit this exact cognitive vulnerability.",
-        paper2Utility: "Demonstrates that political tragedy stems from the epistemological impossibility of reading interior conscience through exterior physiognomy.",
+        paper2Utility: "Demonstrates that political tragedy stems from the fatal mistake of trusting a smiling face without knowing the person's true motives.",
         whyMemorable: "Duncan's heartfelt lament about 'absolute trust' juxtaposed with Macbeth's immediate entrance is one of Shakespeare's sharpest dramatic timing moments.",
-        sentenceFormula: "Duncan's tragic vulnerability is foregrounded in his lament that '[Quote]', a cognitive blindness immediately exploited as Macbeth steps onstage.",
+        sentenceFormula: "Duncan's tragic vulnerability is foregrounded in his lament that '[Quote]', a dangerous blindness immediately exploited as Macbeth steps onstage.",
       },
       {
         quote: "Look like th' innocent flower, / But be the serpent under't.",
@@ -448,10 +448,10 @@ export const IB_GUIDING_QUESTIONS: IBQuestionData[] = [
         actScene: "Act 1, Scene 5",
         lineRef: "1.5.63–64",
         literaryDevices: ["Biblical Allusion (Genesis)", "Simile & Metaphor", "Visual Disguise Motif", "Imperative Mood"],
-        analysis: "Lady Macbeth instructs her husband in Machiavellian political theater. The botanical imagery of the 'innocent flower' evokes idyllic feudal hospitality, while the 'serpent' invokes the demonic tempter of Eden and the 1605 Gunpowder Plot commemorative medal.",
+        analysis: "Lady Macbeth instructs her husband in calculated political theater. The botanical imagery of the 'innocent flower' evokes idyllic feudal hospitality, while the 'serpent' invokes the demonic tempter of Eden and the 1605 Gunpowder Plot commemorative medal.",
         paper2Utility: "The definitive quote for calculated courtly deception and feminine political agency overriding martial frankness.",
         whyMemorable: "The visceral juxtaposition of gentle floral beauty and lethal venomous reptile is instant, vivid, and universally recognizable.",
-        sentenceFormula: "Channeling the iconographic subversion of the Gunpowder Plot medal, Lady Macbeth demands her husband '[Quote]', illustrating how domestic hospitality becomes a weaponized facade.",
+        sentenceFormula: "Evoking the warning on King James's Gunpowder Plot medal, Lady Macbeth demands her husband '[Quote]', illustrating how domestic hospitality becomes a weaponized facade.",
       },
       {
         quote: "False face must hide what the false heart doth know.",
@@ -462,18 +462,18 @@ export const IB_GUIDING_QUESTIONS: IBQuestionData[] = [
         analysis: "Concluding Act 1 with an emphatic rhyming couplet, Macbeth capitulates to regicide. The alliterative 'f' sounds emphasize the deliberate, mechanical split between external facial performance ('false face') and internal moral terror ('false heart').",
         paper2Utility: "Perfect structural quote marking the exact boundary where Macbeth surrenders authentic honor for theatrical duplicity.",
         whyMemorable: "The balanced monosyllabic symmetry and crisp rhyme ('know' sealing the act) stick in the mind like a locked door.",
-        sentenceFormula: "Macbeth's conclusive resolution to execute Duncan is sealed in the aphoristic couplet '[Quote]', cementing the schism between public persona and private guilt.",
+        sentenceFormula: "Macbeth's conclusive resolution to execute Duncan is sealed in the rhyming couplet '[Quote]', cementing the divide between his public persona and private guilt.",
       },
       {
         quote: "Is this a dagger which I see before me, / The handle toward my hand?... A dagger of the mind, a false creation, / Proceeding from the heat-oppressed brain?",
         speaker: "Macbeth",
         actScene: "Act 2, Scene 1",
         lineRef: "2.1.33–39",
-        literaryDevices: ["Apostrophe", "Rhetorical Questioning", "Somatic Imagery", "Soliloquy"],
-        analysis: "Shakespeare externalizes Macbeth's psychological breakdown as an air-drawn visual illusion. The epistemological hesitation ('I have thee not, and yet I see thee still') captures the blurring between objective reality and guilt-induced hallucination.",
+        literaryDevices: ["Apostrophe", "Rhetorical Questioning", "Sensory Imagery", "Soliloquy"],
+        analysis: "Shakespeare externalizes Macbeth's psychological breakdown as an air-drawn visual illusion. His hesitation ('I have thee not, and yet I see thee still') captures the blurring between objective reality and guilt-induced hallucination.",
         paper2Utility: "Use to evaluate how psychological guilt transforms sensory reality into terrifying optical hallucinations.",
         whyMemorable: "The opening theatrical question captures the sudden, heart-stopping terror of reaching into empty air for a floating weapon.",
-        sentenceFormula: "The dissolution of objective empirical reality is staged through Macbeth's feverish interrogation, '[Quote]', exposing how conscience somaticizes repressed horror.",
+        sentenceFormula: "The collapse of Macbeth's grip on reality is staged through his feverish soliloquy, '[Quote]', exposing how guilty conscience manifests as a physical hallucination.",
       },
       {
         quote: "And be these juggling fiends no more believed, / That palter with us in a double sense, / That keep the word of promise to our ear, / And break it to our hope.",
@@ -481,7 +481,7 @@ export const IB_GUIDING_QUESTIONS: IBQuestionData[] = [
         actScene: "Act 5, Scene 8",
         lineRef: "5.8.19–22",
         literaryDevices: ["Anagnorisis", "Sibilance", "Equivocation Motifs", "Antithesis ('ear' vs. 'hope')"],
-        analysis: "Macbeth's moment of tragic recognition (*anagnorisis*) strips away the linguistic mask of demonic prophecy. 'Palter in a double sense' indicts the Jesuitical equivocation that offered literal linguistic truth while delivering metaphysical damnation.",
+        analysis: "Macbeth's moment of tragic recognition (*anagnorisis*) strips away the linguistic mask of demonic prophecy. 'Palter in a double sense' indicts the deceitful equivocation that offered literal linguistic truth while delivering metaphysical damnation.",
         paper2Utility: "Essential for concluding an essay on the lethal consequences of trusting deceptive surfaces and verbal riddles.",
         whyMemorable: "The bitter rhythm of 'juggling fiends' and 'palter in a double sense' encapsulates the ultimate heartbreak of demonic deceit.",
         sentenceFormula: "In his final anagnorisis, Macbeth denounces demonic equivocation, lamenting '[Quote]', demonstrating that linguistic ambiguity ultimately demands mortal ruin.",
@@ -539,22 +539,22 @@ export const IB_GUIDING_QUESTIONS: IBQuestionData[] = [
       },
       narrowingStrategy: {
         broadPromptDiagnosis:
-          "'Control and resistance' is an immense prompt that invites generic essays recounting how Macbeth becomes king and then loses a war. To achieve Grade 7 / 27+ marks, you must narrow control into a dual-layered paradox: the illusion of omnipotent political agency versus the inexorable somatic and temporal revolt that strips the tyrant of all autonomy.",
+          "'Control and resistance' is an immense prompt that invites generic essays recounting how Macbeth becomes king and then loses a war. To achieve Grade 7 / 27+ marks, you must narrow control into a sharp dramatic conflict: the illusion of absolute political power versus the inevitable mental breakdown and rebellion that strip the tyrant of all control.",
         narrowingAngles: [
           {
             angle: "Temporal Control & The Futility of Mastered Time",
-            focus: "Macbeth's attempt to 'trammel up the consequence' and assassinate future dynasties, pitted against time as an uncontrollable divine continuum.",
-            thesisStem: "Shakespeare portrays the quest for absolute control not as a political victory, but as an ontological impossibility, illustrating through temporal imagery that violent usurpers are inevitably devoured by the very future they attempt to preempt.",
+            focus: "Macbeth's attempt to 'trammel up the consequence' and assassinate future dynasties, pitted against time as an uncontrollable force.",
+            thesisStem: "Shakespeare portrays the quest for absolute control not as a genuine victory, but as an impossible delusion, illustrating through time motifs that violent usurpers are inevitably destroyed by the very future they try to dominate.",
           },
           {
-            angle: "Psychosomatic Rebellion Against Willpower",
-            focus: "Lady Macbeth's conscious ambition demanding the unsexing of her body vs. her unconscious mind staging a nocturnal rebellion through involuntary sleepwalking.",
-            thesisStem: "While protagonists strive to exert total sovereign mastery over their moral faculties, both texts reveal that the human psyche instinctively resists violent repression, fracturing the self into psychosomatic disorder.",
+            angle: "Psychological Rebellion Against Willpower",
+            focus: "Lady Macbeth's conscious ambition demanding the unsexing of her body vs. her unconscious mind staging a nighttime rebellion through sleepwalking.",
+            thesisStem: "While characters strive to exert total willpower over their conscience, both texts reveal that human nature instinctively resists violent repression, fracturing the mind under the weight of guilt.",
           },
           {
-            angle: "Virtuous Resistance vs. Autocratic Monopolization",
-            focus: "Banquo's moral restraint and Macduff's integrated masculine resistance contrasted with Macbeth's frantic defensive murder spree.",
-            thesisStem: "Shakespeare contrasts the sterile, paranoid violence of tyrannical control with the regenerative potency of moral and communal resistance, proving that legitimate authority requires alignment with natural law.",
+            angle: "Virtuous Resistance vs. Autocratic Tyranny",
+            focus: "Banquo's moral restraint and Macduff's righteous resistance contrasted with Macbeth's paranoid murder spree.",
+            thesisStem: "Shakespeare contrasts the paranoid violence of tyrannical rule with the moral strength of communal resistance, proving that legitimate authority requires alignment with natural justice.",
           },
         ],
         trapsToAvoid: [
@@ -579,16 +579,16 @@ export const IB_GUIDING_QUESTIONS: IBQuestionData[] = [
         criterionA: {
           focus: "Knowledge, Understanding & Conceptual Insight (10 Marks)",
           strategy:
-            "Examine the philosophical tension between Calvinist predestination and Renaissance humanist self-determination. Cite specific soliloquy transitions to demonstrate deep command of character psychology.",
+            "Examine the dramatic tension between prophecy and human free will. Cite specific soliloquy shifts to demonstrate deep command of character psychology.",
           exemplarApplication:
-            "Show how Macbeth's shift from conditional subjunctives ('If it were done...') to reckless declaratives ('The very firstlings of my heart shall be / The firstlings of my hand') represents a desperate, doomed attempt to eliminate contemplative pause.",
+            "Show how Macbeth's shift from hesitant conditionals ('If it were done...') to reckless commands ('The very firstlings of my heart shall be / The firstlings of my hand') represents a desperate attempt to outrun his conscience.",
         },
         criterionB: {
           focus: "Granular Literary & Dramatic Analysis (10 Marks)",
           strategy:
-            "Evaluate how Shakespeare crafts staging, rhythm, and diction to dramatize loss of control: stichomythic exchanges, fractured meter, and sartorial metaphors of dwarfed royalty.",
+            "Evaluate how Shakespeare crafts staging, rhythm, and diction to dramatize loss of control: stichomythic exchanges, fractured meter, and clothing metaphors of dwarfed royalty.",
           exemplarApplication:
-            "Analyze Angus's sartorial imagery ('like a giant's robe / Upon a dwarfish thief') to evaluate how Shakespeare visually and poetically communicates the moral diminution of illegitimate rule.",
+            "Analyze Angus's clothing imagery ('like a giant's robe / Upon a dwarfish thief') to evaluate how Shakespeare visually and poetically communicates the moral diminution of illegitimate rule.",
         },
         criterionC: {
           focus: "Sustained Comparative Argumentation (5 Marks)",
@@ -600,9 +600,9 @@ export const IB_GUIDING_QUESTIONS: IBQuestionData[] = [
         criterionD: {
           focus: "Precise Academic Register & Formal Vocabulary (5 Marks)",
           strategy:
-            "Employ critical vocabulary: hubris, authoritarian hegemony, psychosomatic somnambulism, dynastic sterility, fatalism, anagnorisis, and moral agency.",
+            "Employ clear literary vocabulary: hubris, tyranny, soliloquy, sleepwalking prose, imagery, anagnorisis, and catharsis.",
           exemplarApplication:
-            "Formulate clear, complex-compound sentences that weave textual citations seamlessly into analytical syntax without dropped quotes.",
+            "Formulate clear, well-structured sentences that weave textual citations seamlessly into analytical syntax without dropped quotes.",
         },
       },
     },
@@ -638,7 +638,7 @@ export const IB_GUIDING_QUESTIONS: IBQuestionData[] = [
         analysis: "The adjectives 'fruitless' and 'barren' expose Macbeth's existential horror of genealogical impotence. He feels he has damned his immortal soul merely to hold empty symbols of control that will be violently seized by another dynasty.",
         paper2Utility: "Exposes the ultimate limit of earthly control: the inability to govern biology, time, and legacy.",
         whyMemorable: "The visceral pairing of 'fruitless crown' and 'barren sceptre' symbolizes complete dynastic death and useless regalia.",
-        sentenceFormula: "The existential futility of temporal control is epitomized in Macbeth's bitter acknowledgment of his '[Quote]', underscoring his inability to govern dynastic posterity.",
+        sentenceFormula: "The existential futility of temporal control is epitomized in Macbeth's bitter acknowledgment of his '[Quote]', proving his inability to govern dynastic posterity.",
       },
       {
         quote: "I am in blood / Stepped in so far that, should I wade no more, / Returning were as tedious as go o'er.",
@@ -671,7 +671,7 @@ export const IB_GUIDING_QUESTIONS: IBQuestionData[] = [
         analysis: "The Scottish thanes uniting in armed resistance describe Macbeth's complete loss of political and sovereign authority. The stolen royal garments do not confer majesty; they merely emphasize his dwarfish moral illegitimacy.",
         paper2Utility: "Demonstrates how illegitimate control shrinks the tyrant into insignificance while collective resistance restores legitimate order.",
         whyMemorable: "The comic and pathetic image of a tiny thief swimming in gigantic stolen robes captures the complete deflation of tyrannical majesty.",
-        sentenceFormula: "The complete collapse of Macbeth's sovereign control is captured through Angus's deflating sartorial simile, '[Quote]', visually underscoring his moral illegitimacy.",
+        sentenceFormula: "The complete collapse of Macbeth's sovereign control is captured through Angus's deflating sartorial simile, '[Quote]', visually revealing his moral illegitimacy.",
       },
     ],
     sampleOutline: {
@@ -726,22 +726,22 @@ export const IB_GUIDING_QUESTIONS: IBQuestionData[] = [
       },
       narrowingStrategy: {
         broadPromptDiagnosis:
-          "The prompt asks how internal conflict leads to breakdown. Students often write two detached essays: one describing Macbeth's guilt, and one describing Scotland suffering under tyranny. The key to Level 7 / top marks is to rigorously demonstrate the *causal mechanism*: how the Renaissance microcosm/macrocosm doctrine ensures that an infected royal mind inevitably poisons the entire commonwealth body politic.",
+          "The prompt asks how internal conflict leads to breakdown. Students often write two detached essays: one describing Macbeth's guilt, and one describing Scotland suffering under tyranny. The key to Level 7 marks is to trace the direct cause-and-effect link: how Macbeth's internal guilt and paranoia drive him to commit increasingly brutal acts that tear apart the Scottish nation.",
         narrowingAngles: [
           {
-            angle: "The Microcosm/Macrocosm Nexus (The Great Chain of Being)",
-            focus: "The Jacobean philosophical belief that the King is the head of the national body; thus, his mental fracture unleashes cosmic and ecological anarchy.",
-            thesisStem: "Shakespeare employs the Jacobean doctrine of cosmic correspondence to reveal that internal moral treason is never localized; the protagonist's suppressed conscience metastasizes into widespread societal and ecological collapse.",
+            angle: "The Ruler's Conscience & The Great Chain of Being",
+            focus: "The Jacobean belief that the king's moral health directly affects the health of the entire nation; his guilt unleashes chaos across society.",
+            thesisStem: "Shakespeare employs the Jacobean concept of the Great Chain of Being to reveal that a monarch's moral treason cannot remain private; Macbeth's suppressed conscience inevitably plunges Scotland into political and ecological disorder.",
           },
           {
-            angle: "Defensive Tyranny as a Salve for Paranoia",
-            focus: "How Macbeth's internal torture ('full of scorpions is my mind') directly compels him to launch external reign-of-terror pogroms (Macduff's castle).",
-            thesisStem: "Rather than resolving psychic conflict, the violent externalization of guilt transforms individual neurosis into institutional state brutality, fracturing the bonds of kinship and civic trust.",
+            angle: "Paranoia as the Engine of Tyranny",
+            focus: "How Macbeth's internal torment ('full of scorpions is my mind') directly drives him to order ruthless public atrocities (the slaughter at Macduff's castle).",
+            thesisStem: "Rather than silencing his conscience, Macbeth's violent attempts to suppress his guilt turn his private paranoia into state-sponsored terror, shattering trust across the kingdom.",
           },
           {
-            angle: "The Ritual Breakdown: Feudal Hospitality Subverted",
-            focus: "The banquet scene (3.4) as the physical stage where private supernatural haunting destroys the supreme ritual of feudal governance.",
-            thesisStem: "Through the catastrophic collapse of ceremonial hospitality, both authors demonstrate how private spiritual guilt irrevocably shatters the public protocols that sustain civil peace.",
+            angle: "The Breakdown of Social Ritual & Feudal Order",
+            focus: "The banquet scene (3.4) as the physical moment where private hallucinations destroy the supreme public ritual of kingship.",
+            thesisStem: "Through the chaotic collapse of the royal banquet, both authors demonstrate how private moral guilt physically shatters the public ceremonies that keep society united.",
           },
         ],
         trapsToAvoid: [
@@ -764,32 +764,32 @@ export const IB_GUIDING_QUESTIONS: IBQuestionData[] = [
       },
       criterionMastery: {
         criterionA: {
-          focus: "Knowledge, Understanding & Philosophical Interpretation (10 Marks)",
+          focus: "Knowledge, Understanding & Textual Interpretation (10 Marks)",
           strategy:
-            "Situate the breakdown in Jacobean political philosophy: the King's Two Bodies (the Body Natural vs. the Body Politic) and divine right doctrine.",
+            "Situate the breakdown in Jacobean political context: the Divine Right of Kings and the Great Chain of Being. Trace how moral disorder spreads from ruler to realm.",
           exemplarApplication:
-            "Demonstrate how Macbeth's murder of Duncan decapitates the Body Politic, transforming Scotland from a fertile commonwealth into a diseased, hemorrhaging corpse.",
+            "Demonstrate how Macbeth's murder of Duncan destabilizes the entire nation, transforming Scotland from a peaceful kingdom into a bleeding, terrified battleground.",
         },
         criterionB: {
           focus: "Literary & Dramatic Technique Evaluation (10 Marks)",
           strategy:
-            "Analyze zoomorphic metaphors ('scorpions', 'falcon and owl'), auditory hallucinations, and staging breakdowns where social protocol is physically shattered.",
+            "Analyze animal metaphors ('scorpions', 'falcon and owl'), auditory hallucinations, and staging moments where courtly order breaks down.",
           exemplarApplication:
-            "Evaluate Lady Macbeth's desperate exclamation 'You have displaced the mirth, broke the good meeting' as a dramatic metonym for the total disintegration of feudal order.",
+            "Evaluate Lady Macbeth's desperate line 'You have displaced the mirth, broke the good meeting' as the exact moment when royal authority collapses before the nobility.",
         },
         criterionC: {
           focus: "Coherent Argument Structure & Comparative Development (5 Marks)",
           strategy:
-            "Organize the essay in a continuous causal arc: 1) The inward psychic rupture (1.3, 1.7), 2) The ecological and ceremonial unraveling (2.4, 3.4), and 3) The state transformed into a necropolis (4.3, 5.1).",
+            "Organize the essay in a clear 3-step causal arc: 1) The initial internal crisis (1.3, 1.7), 2) The public unraveling of royal order (2.4, 3.4), and 3) The nation suffering under full-blown tyranny (4.3, 5.1).",
           exemplarApplication:
-            "Maintain sustained synthesis by contrasting how both texts represent the physical space of societal degradation (e.g., Scotland's mass grave vs. the wasteland of the comparative text).",
+            "Maintain sustained synthesis by contrasting how both texts represent the physical space of societal degradation (e.g., Scotland's suffering vs. the wasteland of the comparative text).",
         },
         criterionD: {
-          focus: "Academic Register & Sophisticated Phrasing (5 Marks)",
+          focus: "Academic Register & Precise Phrasing (5 Marks)",
           strategy:
-            "Incorporate scholarly concepts: psychomachia, somatization, macrocosmic correspondence, feudal communion, moral hemorrhage, and cathartic restitution.",
+            "Incorporate standard Level 7 literary terms: dramatic irony, soliloquy, metaphor, motif, Great Chain of Being, anagnorisis, and catharsis.",
           exemplarApplication:
-            "Craft precise evaluative sentences that avoid colloquialisms like 'Macbeth goes crazy' in favor of 'Macbeth suffers progressive cognitive disintegration'.",
+            "Craft precise evaluative sentences that avoid colloquialisms like 'Macbeth goes crazy' in favor of 'Macbeth suffers progressive psychological unraveling'.",
         },
       },
     },
@@ -854,19 +854,19 @@ export const IB_GUIDING_QUESTIONS: IBQuestionData[] = [
         speaker: "Macduff",
         actScene: "Act 4, Scene 3",
         lineRef: "4.3.31–33",
-        literaryDevices: ["Apostrophe to Scotland", "Personification of Nation", "Somatization of State", "Exclamation"],
-        analysis: "Macduff personifies Scotland as an open, bleeding wound suffering under an illegitimate butcher. The king's internal spiritual decay has transformed the kingdom into a necro-political wasteland where grief is commonplace and goodness is paralyzed.",
+        literaryDevices: ["Apostrophe to Scotland", "Personification of Nation", "Metaphor of Disease & Blood", "Exclamation"],
+        analysis: "Macduff personifies Scotland as an open, bleeding wound suffering under an illegitimate butcher. The king's internal spiritual decay has transformed the kingdom into a suffering nation where grief is commonplace and goodness is paralyzed.",
         paper2Utility: "Use to show the ultimate culmination of the thesis: individual moral corruption directly transforms the commonwealth into a dying body.",
         whyMemorable: "The agonizing cry 'Bleed, bleed, poor country!' personifies an entire nation as a weeping, hemorrhaging human victim.",
-        sentenceFormula: "The ultimate macrocosmic consequence of individual psychomachia is voiced in Macduff's lament, '[Quote]', which personifies the battered kingdom as a bleeding organism on the brink of death.",
+        sentenceFormula: "The disastrous national consequence of Macbeth's tyranny is voiced in Macduff's lament, '[Quote]', which personifies the battered kingdom as a bleeding organism on the brink of death.",
       },
     ],
     sampleOutline: {
-      thesis: "Shakespeare employs the Renaissance framework of the Great Chain of Being to demonstrate how Macbeth's internal psychomachia—his violent suppression of conscience in favor of vaulting ambition—serves as the seismic epicenter that destabilizes the human mind, tears apart the social fabric of Scotland, and convulses the natural world.",
-      body1Focus: "The initial psychological fissure: Macbeth's somatic convulsions in Act 1 revealing an agonizing conflict between feudal fealty and dark ambition.",
-      body2Focus: "Macrocosmic and ecological retaliation: The immediate aftermath of Duncan's murder fracturing nature, daylight, and peaceful restorative sleep.",
-      body3Focus: "The social and political hemorrhaging: The shattered banquet protocol and the transformation of Scotland into a mass grave where tyranny reigns unchecked.",
-      conclusionFocus: "Reflect on how moral harmony can only be restored through surgical catharsis: purging the corrupted individual to heal the body politic.",
+      thesis: "Shakespeare employs the Jacobean framework of the Great Chain of Being to demonstrate how Macbeth's internal guilt and unchecked ambition destabilize the human mind, tear apart the social fabric of Scotland, and plunge the natural world into chaos.",
+      body1Focus: "The initial psychological fissure: Macbeth's visceral shock in Act 1 revealing an agonizing conflict between loyalty and dark ambition.",
+      body2Focus: "Natural and ecological rebellion: The immediate aftermath of Duncan's murder disrupting daylight, animal behavior, and peaceful sleep.",
+      body3Focus: "The social and political collapse: The shattered banquet protocol and the transformation of Scotland into a suffering realm under unchecked tyranny.",
+      conclusionFocus: "Reflect on how moral harmony is restored: purging the tyrant to heal the kingdom and re-establish natural succession.",
     },
   },
   {
@@ -913,22 +913,22 @@ export const IB_GUIDING_QUESTIONS: IBQuestionData[] = [
       },
       narrowingStrategy: {
         broadPromptDiagnosis:
-          "'Setting and atmosphere' is frequently answered with superficial stage descriptions (saying the play is 'dark and spooky'). To secure Level 7 / top marks, students must narrow setting into an active *theatrical and metaphysical agent*: how Shakespeare uses chiaroscuro, acoustic shocks, and topographical displacement not as passive decoration, but to externalize spiritual damnation and manipulate the audience's moral judgment.",
+          "'Setting and atmosphere' is frequently answered with superficial stage descriptions (saying the play is 'dark and spooky'). To secure Level 7 marks, candidates must treat setting as an active dramatic force: how Shakespeare uses darkness, sudden sounds, and shifting locations not merely as background decoration, but to reflect moral corruption and heighten audience tension.",
         narrowingAngles: [
           {
-            angle: "Chiaroscuro & Moral Camouflage",
-            focus: "Macbeth and Lady Macbeth calling upon cosmic darkness ('Stars, hide your fires', 'Come, thick night') to blind divine providence.",
-            thesisStem: "Shakespeare employs nocturnal chiaroscuro not merely as environmental realism, but as an active moral cloak, illustrating how characters attempt to weaponize atmospheric obscurity to evade divine and psychological judgment.",
+            angle: "Light vs. Darkness & Moral Camouflage",
+            focus: "Macbeth and Lady Macbeth calling upon darkness ('Stars, hide your fires', 'Come, thick night') to hide their crimes from heaven.",
+            thesisStem: "Shakespeare employs the contrast between light and darkness not merely for atmospheric realism, but as a moral cover, illustrating how characters attempt to use nighttime obscurity to conceal their guilt from divine judgment.",
           },
           {
-            angle: "Acoustic Stagecraft & The Auditory Invasion of Guilt",
-            focus: "The offstage knocking, owl screams, tolling bells, and thunder jolting the Jacobean audience into complicit terror.",
-            thesisStem: "Through jarring acoustic stagecraft—from thunderous knocking to spectral incantations—both authors puncture atmospheric silence to sonically manifest the unavoidable retribution of conscience.",
+            angle: "Acoustic Stagecraft & The Sound of Guilt",
+            focus: "The offstage knocking, screeching owls, tolling bells, and thunder startling the audience and reflecting guilty conscience.",
+            thesisStem: "Through sudden sound effects—from thunderous knocking to eerie incantations—both authors pierce atmospheric silence to dramatize the inescapable panic of a guilty conscience.",
           },
           {
-            angle: "Topographical Subversion: Sanctuary into Slaughterhouse",
-            focus: "The physical castles of Inverness and Fife subverted from symbols of chivalric protection into abattoirs.",
-            thesisStem: "By subverting architectural spaces traditionally associated with domestic hospitality into claustrophobic slaughterhouses, Shakespeare dramatizes the corruption of civil society under despotic rule.",
+            angle: "Subverting Safe Spaces: Sanctuary into Slaughterhouse",
+            focus: "The castles of Inverness and Fife subverted from symbols of noble hospitality and safety into traps of murder.",
+            thesisStem: "By transforming castles—traditionally places of hospitality and sanctuary—into claustrophobic murder scenes, Shakespeare dramatizes the complete breakdown of social trust under tyrannical rule.",
           },
         ],
         trapsToAvoid: [
@@ -940,7 +940,7 @@ export const IB_GUIDING_QUESTIONS: IBQuestionData[] = [
           {
             trap: "Ignoring the Elizabethan / Jacobean Staging Context",
             consequence: "Forgetting that the Globe was an open-air theatre performed in broad daylight, meaning all 'darkness' had to be evoked linguistically.",
-            remedy: "Explicitly credit Shakespeare's verbal scenography: characters carrying torches and describing extinguished stars to paint darkness with words.",
+            remedy: "Explicitly credit Shakespeare's verbal description: characters carrying torches and describing extinguished stars to paint darkness with words.",
           },
           {
             trap: "Superficial Supernatural Listing",
@@ -953,30 +953,30 @@ export const IB_GUIDING_QUESTIONS: IBQuestionData[] = [
         criterionA: {
           focus: "Knowledge, Understanding & Textual Exploration (10 Marks)",
           strategy:
-            "Explore the theological meaning of darkness in Jacobean England: darkness as the absence of God (*privatio boni*). Connect lighting choices to King James I's *Daemonologie*.",
+            "Explore the symbolic meaning of darkness in Jacobean England: darkness as spiritual blindness and moral danger. Connect supernatural elements to King James I's beliefs.",
           exemplarApplication:
-            "Analyze how Banquo's observation 'There's husbandry in heaven; their candles are all out' indicates divine withdrawal from human affairs before the regicide.",
+            "Analyze how Banquo's observation 'There's husbandry in heaven; their candles are all out' indicates moral desertion before Duncan's murder.",
         },
         criterionB: {
-          focus: "Analysis of Dramatic Craft & Sensory Stagecraft (10 Marks)",
+          focus: "Analysis of Dramatic Craft & Stage Atmosphere (10 Marks)",
           strategy:
-            "Analyze verbal scenography, sound design (alarum bells, drums, thunder sheets), and spatial dynamics (proscenium discovery space, trapdoor cavern, elevated gallery).",
+            "Analyze descriptive dialogue, acoustic cues (alarum bells, knocking, thunder), and physical stagecraft (torches, cavern trapdoor).",
           exemplarApplication:
-            "Evaluate the acoustic shock of the knocking at the South gate: how the sudden rhythm breaks Macbeth's stasis and functions as the metatheatrical knocking of fate at the gates of hell.",
+            "Evaluate the shocking impact of the knocking at the south gate: how the sudden noise breaks the eerie silence of the murder and shocks Macbeth out of his trance.",
         },
         criterionC: {
-          focus: "Comparative Organisation & Environmental Framing (5 Marks)",
+          focus: "Comparative Organisation & Atmospheric Progression (5 Marks)",
           strategy:
-            "Structure comparisons across shared atmospheric typologies: 1) Nocturnal gloom & obfuscation, 2) Acoustic disruptions & panic, and 3) The natural landscape rising to purge pollution.",
+            "Structure comparisons across shared atmospheric stages: 1) Murky darkness and concealment, 2) Sudden sound disruptions and panic, and 3) Nature rising to cleanse the corrupted realm.",
           exemplarApplication:
-            "Ensure transitions smoothly contrast theatrical auditory effects with prose narrative's descriptive atmosphere (e.g., sound vs. olfactory/visual prose details).",
+            "Ensure transitions smoothly contrast theatrical auditory effects with descriptive prose details in the second work.",
         },
         criterionD: {
-          focus: "Sophisticated Terminology & Scholarly Expression (5 Marks)",
+          focus: "Clear Literary Register & Technical Precision (5 Marks)",
           strategy:
-            "Utilize precise technical terms: verbal scenography, chiaroscuro, acoustic stagecraft, topographical irony, visceral prolepsis, and environmental pathetic fallacy.",
+            "Utilize precise Grade 12 literary terms: pathetic fallacy, light/dark contrast, dramatic irony, acoustic stagecraft, and sensory imagery.",
           exemplarApplication:
-            "Articulate arguments through high-scoring sentence structures with embedded citations, demonstrating effortless academic fluency.",
+            "Articulate arguments through high-scoring sentence structures with embedded citations, demonstrating natural academic fluency.",
         },
       },
     },
@@ -989,7 +989,7 @@ export const IB_GUIDING_QUESTIONS: IBQuestionData[] = [
         literaryDevices: ["Apostrophe to the Cosmos", "Chiaroscuro (Light/Dark)", "Alliteration ('d')", "Rhyme"],
         analysis: "Macbeth commands the cosmos to extinguish its celestial torches so his regicidal thoughts remain shrouded in primordial darkness. The setting is transformed from an objective physical sky into a moral canvas hiding sin from divine scrutiny.",
         paper2Utility: "Foundational quote for establishing how setting and darkness are actively weaponized as moral camouflage by the protagonist.",
-        whyMemorable: "The fierce, hushed imperative 'Stars, hide your fires' instantly paints a picture of a soul begging the universe to go black.",
+        whyMemorable: "The fierce, hushed imperative 'Stars, hide your fires' instantly conveys a soul desperate for total darkness.",
         sentenceFormula: "Macbeth's desperate invocation of atmospheric blackout, '[Quote]', transforms the physical cosmos into an accomplice in moral concealment.",
       },
       {
