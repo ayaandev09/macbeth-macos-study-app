@@ -320,30 +320,33 @@ Because the Globe Theatre was an unroofed amphitheatre performing in broad after
     category: "Model Essay Extracts",
     authorOrSpeaker: "IB English Literature Grade 7 Examiner Panel",
     reference: "Criteria A, B, C, D (30/30 Marks Benchmark)",
-    keyKeywords: ["C-O-R-E-S Formula", "Tripartite Progression", "Comparative Bridge", "Microcosmic Correspondence", "Hamartia", "Catharsis"],
-    summary: "Complete blueprint and modular phrase bank calibrated for the IB Literature Paper 2 comparative examination.",
-    fullTextContent: `[THE C-O-R-E-S MEMORY ARCHITECTURE]
-C — Conceptual Thesis & Historical Dual-Context (~120 words)
-O — Opening Literary Spark: Metaphysical/Form Genesis (~220 words)
-R — Rising Dramatic Performativity: Domestic & Stage Staging (~220 words)
-E — Escalating Retributive Climax: Somatic Breakdown & Anagnorisis (~220 words)
-S — Structural Synthesis & Transcendent Catharsis (~120 words)
+    keyKeywords: ["Funnel Intro", "T.E.A.R. Framework", "Topic-Evidence-Analysis-Response", "Jacobean Great Chain of Being", "Micro-Diction", "Catharsis"],
+    summary: "Complete blueprint and modular phrase bank calibrated for the IB Literature Paper 2 examination utilizing the Funnel Intro + T.E.A.R. body structure.",
+    fullTextContent: `[THE FUNNEL INTRO + T.E.A.R. MEMORY ARCHITECTURE]
+1. The Funnel Intro (~100 words):
+   - Move quickly from broad theme to specific thesis: "Through the tragedy of Macbeth, William Shakespeare explores the destructive nature of [core theme] to illustrate how [thesis]..."
+   - Anchor in Jacobean England: "...a cautionary tale about what happens when you break the natural order/Great Chain of Being."
+   - Define Macbeth's trajectory: "By tracing Macbeth’s trajectory from a [initial state] to a [final state], Shakespeare ultimately reveals that [claim]."
 
-[HIGH-YIELD COMPARATIVE BRIDGE FORMULAS]
-1. Whereas Shakespeare utilizes [dramatic technique / staging] to externalize [Character A]'s psychic decay, [Author B] relies on [prose craft / narration] to mirror [Character B]'s alienation.
-2. In a striking divergence of genre conventions, Shakespeare's theatrical medium physically stages [concept] through acoustic shocks, whereas [Author B]'s interior narrative voice emphasizes the quiet, suffocating claustrophobia of societal repression.
-3. Both texts converge upon the unsettling revelation that outward compliance inevitably calcifies into profound spiritual estrangement.
-4. Shakespeare's use of trochaic meter destabilizes Jacobean epistemological certainty, a formal disorientation mirrored in [Author B]'s fractured temporal chronology.
+2. The T.E.A.R. Body Paragraph Structure (~230 words each, 3 chronological movements):
+   - T (Topic Sentence): "Initially / As the plot progresses / Ultimately, Shakespeare establishes [point] to highlight [thesis connection]..."
+   - E (Evidence with Context): "This is most evident during [scene context], when [Character] states, '[micro-quote]'..."
+   - A (Analysis of Choices): "Shakespeare’s use of [literary device] in this moment emphasizes [analysis]. Specifically, the diction of the word '[word]' conveys a sense of [emotion/meaning]..."
+   - R (Response / Link Back): "Consequently, this positions the Jacobean audience to realize [effect], reinforcing the idea that [tie back to question]..."
 
-[SAMPLE 30/30 EXAMINER MARKING BREAKDOWN]
-• Criterion A (10/10): Nuanced historical grounding in 1605 Gunpowder Plot and Jacobean political theory; sustained comparative parity between both texts across every body paragraph.
-• Criterion B (10/10): Granular textual close reading addressing prosody (trochaic tetrameter vs iambic pentameter), acoustic stagecraft (knocking), and sartorial metaphors ('giant's robe').
-• Criterion C (5/5): Crystal-clear tripartite development moving logically from Metaphysical Origin -> Domestic Masking -> Psychic/Political Collapse.
-• Criterion D (5/5): Flawless academic register employing literary terminology naturally without dropped quotations.`,
+3. The Conclusion (~110 words):
+   - Zoom out and summarize the play's warning: "Ultimately, Macbeth stands as a profound commentary on [theme]..."
+   - Synthesize 2 devices: "By employing [2 literary devices], Shakespeare successfully demonstrates that [thesis restatement]..."
+   - Universal truth & order: "The tragic downfall of the protagonist serves as a final reminder to the audience that [final universal truth / Jacobean context]..."
+
+[WHY THIS FORMULA SECURES GRADE 7 / 30 MARKS]
+• Criterion B (Authorial Choices): Keeps Shakespeare as the active subject ('Shakespeare explores...', 'Shakespeare establishes...'), proving analytical rigor over plot summary.
+• Criterion B & C (Audience Impact): 'Positions the audience to...' directly evaluates reader effect and thematic cohesion.
+• Criterion A (Jacobean Context): Weaving the Great Chain of Being and Gunpowder Plot anxieties satisfies contextual requirements with elegance.`,
     notebookLmPrompts: [
-      "How can I adapt the universal C-O-R-E-S formula to answer any arbitrary Paper 2 guiding question?",
-      "Review my comparative thesis statement to ensure it balances both authors equally under Criterion A and C.",
-      "Identify 5 high-yield literary terms I can seamlessly integrate into my essay on dramatic craft.",
+      "How can I adapt the Funnel Intro + T.E.A.R. formula to answer any arbitrary Paper 2 guiding question?",
+      "Review my T.E.A.R. body paragraph to verify that Shakespeare remains the active subject and that word-level diction is analyzed.",
+      "Identify 5 high-yield literary terms I can seamlessly integrate into my T.E.A.R. analysis on dramatic craft.",
       "What are the most common traps that prevent an otherwise well-written essay from reaching Level 7 (27+ marks)?"
     ],
     audioDeepDiveOverview: {

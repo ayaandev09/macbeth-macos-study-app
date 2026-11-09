@@ -310,7 +310,7 @@ export function IBPaper2StudioView() {
 
   const handleLoadTemplateIntoCanvas = () => {
     const templateText = UNIVERSAL_IB_PAPER_2_TEMPLATE.rawFullTemplateText;
-    if (!continuousText.trim() || window.confirm("Load the universal 900-word template framework into your writing canvas? This will populate the editor with the complete structured guide.")) {
+    if (!continuousText.trim() || window.confirm("Load the Funnel Intro + T.E.A.R. template framework into your writing canvas? This will populate the editor with the complete structured guide.")) {
       updateContinuousEssay(templateText);
       setTemplateLoadedFeedback(true);
       setTimeout(() => setTemplateLoadedFeedback(false), 2500);
@@ -1188,10 +1188,10 @@ export function IBPaper2StudioView() {
               <button
                 onClick={handleLoadTemplateIntoCanvas}
                 className="px-3.5 py-1.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-mono text-xs font-bold flex items-center gap-1.5 cursor-pointer shadow-md transition-all"
-                title="Populate the continuous canvas with the complete universal IB Paper 2 ~900-word template framework"
+                title="Populate the continuous canvas with the Funnel Intro + T.E.A.R. template framework"
               >
                 <FileText className="w-3.5 h-3.5" />
-                <span>{templateLoadedFeedback ? "✓ Template Loaded!" : "Load Universal 900w Template"}</span>
+                <span>{templateLoadedFeedback ? "✓ Template Loaded!" : "Load Template Framework into Canvas"}</span>
               </button>
 
               <button
@@ -1354,8 +1354,7 @@ export function IBPaper2StudioView() {
                 aria-multiline="true"
                 value={continuousText}
                 onChange={(e) => updateContinuousEssay(e.target.value)}
-                rows={22}
-                placeholder={`Draft your complete ~900-word IB English Paper 2 response here seamlessly...\n\nStructure Guide:\n• Introduction (~120 words): Conceptual thesis, Jacobean historical context, and tripartite roadmap\n• Body Paragraph 1 (~220 words): Metaphysical genesis, trochaic meter, and dramatic irony\n• Body Paragraph 2 (~220 words): Domestic performativity, somatic optical hallucination, and the ruined banquet\n• Body Paragraph 3 (~220 words): Equivocal apparitions, Lady Macbeth's prose somnambulism, and anagnorisis\n• Conclusion (~120 words): Elevated philosophical synthesis, metatheatrical reflection ('poor player'), and cathartic resolution\n\nClick "Load Universal 900w Template" above to start typing directly inside the fill-in framework!`}
+                placeholder={`Draft your complete ~900-word IB English Paper 2 response here seamlessly...\n\nStructure Guide (Funnel Intro + T.E.A.R. Body Paragraphs):\n• Introduction (~100 words): Funnel from broad theme to specific thesis, Jacobean backdrop & Great Chain of Being, Macbeth's trajectory\n• Body Paragraph 1 (~230 words) [Beginning]: T (Topic sentence) ➔ E (Evidence & scene context) ➔ A (Analysis of choices & micro-diction) ➔ R (Response / Jacobean audience effect)\n• Body Paragraph 2 (~230 words) [Middle / Climax]: T ➔ E ➔ A ➔ R (Escalation to domestic mask, optical hallucination & banquet spectacle)\n• Body Paragraph 3 (~230 words) [End / Denouement]: T ➔ E ➔ A ➔ R (Equivocal apparitions, Lady Macbeth's prose breakdown & anagnorisis)\n• Conclusion (~110 words): Zoom out, recap 2 devices, play's warning & restoration of moral order\n\nClick "Load Template Framework into Canvas" above to start typing directly inside the fill-in framework!`}
                 style={{
                   fontSize: fontStyle.startsWith("handwriting") ? "1.25rem" : "1.05rem",
                   lineHeight: fontStyle.startsWith("handwriting") ? "34px" : "30px",
@@ -1415,7 +1414,7 @@ export function IBPaper2StudioView() {
                   <div className="flex flex-wrap items-center gap-2">
                     <span className="font-mono text-xs px-3 py-1 rounded-full bg-amber-500/25 text-amber-300 border border-amber-400/40 font-bold uppercase tracking-wider flex items-center gap-1.5">
                       <Sparkles className="w-3.5 h-3.5 text-amber-400" />
-                      Universal IB Paper 2 Formula • Works for Any Prompt
+                      Funnel Intro + T.E.A.R. Formula • Top-Rated by IB Students
                     </span>
                     <span className="font-mono text-xs px-2.5 py-1 rounded-full bg-amber-400/15 text-amber-200 border border-amber-400/30 font-bold">
                       Mnemonic: {UNIVERSAL_IB_PAPER_2_TEMPLATE.mnemonic}
@@ -1428,7 +1427,7 @@ export function IBPaper2StudioView() {
                     {UNIVERSAL_IB_PAPER_2_TEMPLATE.name}
                   </h3>
                   <p className="text-xs text-slate-300 leading-relaxed max-w-3xl">
-                    {UNIVERSAL_IB_PAPER_2_TEMPLATE.frameworkSummary} Look at the 2-minute memory cheat sheet below, or click any sentence stem to append it directly into your canvas.
+                    {UNIVERSAL_IB_PAPER_2_TEMPLATE.frameworkSummary} Look at the 2-minute memory cheat sheet below, or click any sentence stem or anchor phrase to insert it directly into your canvas at the active cursor position.
                   </p>
                 </div>
 
@@ -1438,7 +1437,7 @@ export function IBPaper2StudioView() {
                     className="px-3.5 py-2 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-mono text-xs font-bold flex items-center gap-1.5 cursor-pointer shadow-md transition-all"
                   >
                     <FileText className="w-3.5 h-3.5" />
-                    <span>Fill Template Into Canvas</span>
+                    <span>Load Template Framework into Canvas</span>
                   </button>
                   <button
                     onClick={async () => {
@@ -1464,7 +1463,7 @@ export function IBPaper2StudioView() {
                       ⚡
                     </span>
                     <h4 className="text-xs sm:text-sm font-bold text-amber-200 uppercase tracking-wider font-mono">
-                      2-Minute Exam Memory Cheat Sheet: The C-O-R-E-S System
+                      2-Minute Exam Memory Cheat Sheet: Funnel Intro + T.E.A.R. Framework
                     </h4>
                   </div>
                   <span className="text-[11px] font-mono text-amber-300/80">
@@ -1476,11 +1475,11 @@ export function IBPaper2StudioView() {
                   {UNIVERSAL_IB_PAPER_2_TEMPLATE.cheatSheet.map((item, cIdx) => (
                     <div
                       key={cIdx}
-                      className="p-3 rounded-xl bg-black/50 border border-amber-400/20 flex flex-col justify-between space-y-2"
+                      className="p-3 rounded-xl bg-black/50 border border-amber-400/20 flex flex-col justify-between space-y-2 hover:border-amber-400/40 transition-colors"
                     >
                       <div>
                         <div className="flex items-center justify-between mb-1">
-                          <span className="w-6 h-6 rounded-md bg-amber-400 text-slate-950 flex items-center justify-center font-mono text-xs font-extrabold shadow-sm">
+                          <span className="px-2 py-0.5 rounded-md bg-amber-400 text-slate-950 font-mono text-xs font-extrabold shadow-sm">
                             {item.mnemonicLetter}
                           </span>
                           <span className="font-mono text-[10px] text-amber-300/90 font-bold">
@@ -1494,12 +1493,59 @@ export function IBPaper2StudioView() {
                           {item.coreRule}
                         </p>
                       </div>
-                      <div className="pt-1.5 border-t border-white/10">
+                      <div className="pt-1.5 border-t border-white/10 space-y-1.5">
                         <span className="text-[9px] font-mono text-amber-400/80 block uppercase">
                           Universal Formula:
                         </span>
                         <p className="text-[10px] text-amber-100 font-mono leading-tight mt-0.5 line-clamp-2">
                           {item.universalBracketFormula}
+                        </p>
+                        <button
+                          onClick={() => handleInsertSentenceStem(item.clickablePhrase, `cheat-${cIdx}`)}
+                          className="w-full mt-1 px-2 py-1 rounded-lg bg-amber-500/20 hover:bg-amber-500/30 text-amber-300 border border-amber-400/30 text-[10px] font-mono font-bold flex items-center justify-center gap-1 cursor-pointer transition-colors"
+                          title="Click to insert anchor stem into canvas at cursor"
+                        >
+                          {copiedStemIndex === `cheat-${cIdx}` ? (
+                            <>
+                              <Check className="w-3 h-3 text-emerald-400" />
+                              <span className="text-emerald-300">Inserted!</span>
+                            </>
+                          ) : (
+                            <>
+                              <ListPlus className="w-3 h-3" />
+                              <span>+ Insert Stem</span>
+                            </>
+                          )}
+                        </button>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Why this specific template works for the IB Rubric */}
+              <div className="p-4 sm:p-5 rounded-2xl bg-gradient-to-r from-purple-950/40 via-amber-950/30 to-black/60 border border-amber-400/30 space-y-3">
+                <div className="flex items-center gap-2 border-b border-amber-400/20 pb-2">
+                  <Award className="w-4 h-4 text-amber-400" />
+                  <h4 className="text-xs sm:text-sm font-bold text-amber-200 uppercase tracking-wider font-mono">
+                    Why this specific template works for the IB Rubric
+                  </h4>
+                </div>
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+                  {UNIVERSAL_IB_PAPER_2_TEMPLATE.rubricAdvantages.map((adv, aIdx) => (
+                    <div
+                      key={aIdx}
+                      className="p-3.5 rounded-xl bg-black/60 border border-amber-400/20 space-y-2 flex flex-col justify-between"
+                    >
+                      <div className="space-y-1.5">
+                        <span className="font-mono text-[10px] font-bold px-2 py-0.5 rounded bg-amber-500/20 text-amber-300 border border-amber-400/30 inline-block">
+                          {adv.criterion}
+                        </span>
+                        <h5 className="text-xs font-bold text-white font-mono leading-snug">
+                          {adv.stem}
+                        </h5>
+                        <p className="text-[11px] text-slate-300 leading-relaxed">
+                          {adv.advantage}
                         </p>
                       </div>
                     </div>
