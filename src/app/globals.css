@@ -2,17 +2,34 @@
 @import "tailwindcss";
 
 :root {
-  --bg-obsidian: #05070f;
-  --bg-dunsinane: #090d1a;
-  --glass-surface: rgba(15, 21, 38, 0.56);
-  --glass-surface-elevated: rgba(24, 33, 58, 0.64);
-  --glass-border-highlight: rgba(255, 255, 255, 0.16);
-  --glass-border-subtle: rgba(255, 255, 255, 0.08);
-  --accent-telescreen: #38bdf8;
-  --accent-minitrue: #818cf8;
+  color-scheme: dark;
+  --bg-obsidian: #060402;
+  --bg-midnight: #090d1c;
+  --glass-surface: rgba(255, 255, 255, 0.08);
+  --glass-surface-elevated: rgba(255, 255, 255, 0.12);
+  --glass-border-highlight: rgba(255, 255, 255, 0.38);
+  --glass-border-subtle: rgba(255, 255, 255, 0.16);
+  --glass-border-bottom: rgba(255, 255, 255, 0.06);
+  --glass-specular: inset 0 1.5px 2px rgba(255, 255, 255, 0.4),
+    inset 0 -1px 2px rgba(255, 255, 255, 0.05);
+  --glass-shadow: 0 18px 44px -8px rgba(0, 0, 0, 0.75),
+    0 4px 14px -2px rgba(0, 0, 0, 0.45);
+
+  /* German B Unified Warm Amber Accent Palette */
+  --theme-bg: #060402;
+  --theme-primary: #d97706;
+  --theme-secondary: #991b1b;
+  --theme-tertiary: #047857;
+  --theme-glow: rgba(217, 119, 6, 0.38);
+  --theme-glow-strong: rgba(153, 27, 27, 0.32);
+  --theme-text: #fffbeb;
+
+  --accent-amber: #f59e0b;
+  --accent-gold: #fbbf24;
+  --accent-emerald: #10b981;
   --accent-crimson: #f43f5e;
-  --accent-amber: #fbbf24;
-  --accent-emerald: #34d399;
+  --accent-cyan: #38bdf8;
+  --accent-purple: #a855f7;
 
   /* Academic & Professional Scholarly Typography Stacks */
   --font-newsreader: "Newsreader", "EB Garamond", "Georgia", "Times New Roman", serif;
@@ -21,8 +38,8 @@
   --font-cinzel: "Cinzel", "Newsreader", serif;
   --font-academic-mono: "JetBrains Mono", "SF Mono", Menlo, Consolas, monospace;
 
-  /* Universal Default Font (Oxford / Cambridge Scholarly Academic) */
-  --active-academic-font: var(--font-newsreader);
+  /* Universal Default Font (Plus Jakarta Sans default matching German B) */
+  --active-academic-font: var(--font-jakarta);
   --active-academic-sans: var(--font-jakarta);
 
   --font-sans: var(--active-academic-sans);
@@ -106,28 +123,31 @@ html[data-handwritten-style="cinzel"],
 
 html {
   color-scheme: dark;
-  background-color: var(--bg-obsidian);
+  background-color: #060402;
   color: #f1f5f9;
-  font-family: var(--font-academic-sans);
-  font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+  font-family: var(--active-academic-sans);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-rendering: optimizeLegibility;
+  -webkit-text-size-adjust: 100%;
   overscroll-behavior-y: none;
   -webkit-overflow-scrolling: touch;
 }
 
 body {
-  min-height: 100dvh;
-  background-color: var(--bg-obsidian);
+  background-color: #060402;
   background-image:
-    radial-gradient(at 0% 0%, rgba(244, 63, 94, 0.08) 0px, transparent 50%),
-    radial-gradient(at 100% 0%, rgba(251, 191, 36, 0.07) 0px, transparent 50%),
-    radial-gradient(at 50% 100%, rgba(52, 211, 153, 0.05) 0px, transparent 50%);
+    radial-gradient(ellipse at 12% 8%, rgba(217, 119, 6, 0.32) 0%, transparent 46%),
+    radial-gradient(ellipse at 88% 12%, rgba(153, 27, 27, 0.25) 0%, transparent 46%),
+    radial-gradient(ellipse at 50% 108%, rgba(4, 120, 87, 0.28) 0%, transparent 62%),
+    linear-gradient(180deg, #060402 0%, #150b05 52%, #060402 100%);
   background-attachment: fixed;
+  color: #f1f5f9;
+  font-family: var(--active-academic-font);
+  line-height: 1.62;
+  letter-spacing: 0.005em;
   overflow-x: hidden;
-  font-family: var(--font-academic-sans);
-  letter-spacing: -0.011em;
+  min-height: 100dvh;
   overscroll-behavior-y: none;
 }
 
@@ -187,92 +207,7 @@ blockquote,
    ============================================================================ */
 
 /* 1. Redesigned Rounded Long Command Bar (Apple Liquid Glass) */
-.liquid-glass-longbar {
-  background: linear-gradient(
-    135deg,
-    rgba(255, 255, 255, 0.1) 0%,
-    rgba(22, 32, 62, 0.8) 40%,
-    rgba(10, 15, 34, 0.94) 100%
-  );
-  backdrop-filter: blur(20px) saturate(190%);
-  -webkit-backdrop-filter: blur(20px) saturate(190%);
-  border: 1px solid rgba(255, 255, 255, 0.18);
-  box-shadow:
-    0 18px 48px -10px rgba(0, 0, 0, 0.85),
-    0 0 30px -8px rgba(244, 63, 94, 0.2),
-    inset 0 1.5px 0 0 rgba(255, 255, 255, 0.35),
-    inset 0 -1px 0 0 rgba(255, 255, 255, 0.05);
-  transform: translateZ(0);
-  -webkit-transform: translateZ(0);
-  transition: transform 0.28s cubic-bezier(0.16, 1, 0.3, 1),
-              box-shadow 0.28s ease,
-              border-color 0.2s ease;
-}
-
-.liquid-glass-longbar:hover {
-  border-color: rgba(255, 255, 255, 0.28);
-  box-shadow:
-    0 24px 56px -10px rgba(0, 0, 0, 0.9),
-    0 0 40px -6px rgba(244, 63, 94, 0.25),
-    inset 0 1.5px 0 0 rgba(255, 255, 255, 0.45);
-}
-
-/* 2. Primary Floating Sidebar Shell */
-.liquid-glass-sidebar {
-  background: linear-gradient(
-    145deg,
-    rgba(22, 29, 52, 0.76) 0%,
-    rgba(11, 15, 29, 0.84) 100%
-  );
-  backdrop-filter: blur(14px) saturate(180%);
-  -webkit-backdrop-filter: blur(14px) saturate(180%);
-  border: 1px solid rgba(255, 255, 255, 0.15);
-  box-shadow:
-    0 20px 50px -12px rgba(0, 0, 0, 0.75),
-    inset 0 1px 0 0 rgba(255, 255, 255, 0.24),
-    inset 1px 0 0 0 rgba(255, 255, 255, 0.08);
-  transform: translateZ(0);
-  -webkit-transform: translateZ(0);
-  transition: transform 0.28s cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-/* 3. Bento Study Card Surface with Elastic Jelly Hover */
-.liquid-glass-bento {
-  background: linear-gradient(
-    145deg,
-    rgba(255, 255, 255, 0.06) 0%,
-    rgba(25, 35, 65, 0.76) 45%,
-    rgba(12, 17, 36, 0.92) 100%
-  );
-  backdrop-filter: blur(14px) saturate(160%);
-  -webkit-backdrop-filter: blur(14px) saturate(160%);
-  border: 1px solid rgba(255, 255, 255, 0.14);
-  box-shadow:
-    0 16px 36px -10px rgba(0, 0, 0, 0.75),
-    inset 0 1px 0 0 rgba(255, 255, 255, 0.22);
-  transform: translateZ(0);
-  -webkit-transform: translateZ(0);
-  transition: transform 0.22s cubic-bezier(0.16, 1, 0.3, 1),
-              border-color 0.2s ease,
-              box-shadow 0.22s ease;
-  contain: layout paint;
-}
-
-.liquid-glass-bento:hover {
-  transform: translateY(-1px);
-  border-color: rgba(255, 255, 255, 0.25);
-  box-shadow:
-    0 20px 44px -8px rgba(0, 0, 0, 0.8),
-    0 0 20px -4px rgba(244, 63, 94, 0.18),
-    inset 0 1px 0 0 rgba(255, 255, 255, 0.3);
-}
-
-.liquid-glass-bento:active {
-  transform: scale3d(0.988, 0.988, 1);
-  transition: transform 0.1s ease-out;
-}
-
-/* 3. Unified Liquid Glass Long Bar */
+.liquid-glass-longbar,
 .liquid-glass-long-bar {
   background: linear-gradient(
     135deg,
@@ -280,14 +215,14 @@ blockquote,
     rgba(14, 21, 46, 0.9) 45%,
     rgba(6, 10, 24, 0.97) 100%
   );
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
   border-top: 1px solid rgba(255, 255, 255, 0.45);
   border-left: 1px solid rgba(255, 255, 255, 0.18);
   border-right: 1px solid rgba(255, 255, 255, 0.18);
   border-bottom: 1px solid rgba(255, 255, 255, 0.08);
   box-shadow: 0 20px 48px -8px rgba(0, 0, 0, 0.82),
-    0 0 25px -4px rgba(251, 191, 36, 0.2),
+    0 0 25px -4px rgba(56, 189, 248, 0.2),
     inset 0 1.5px 2px rgba(255, 255, 255, 0.42),
     inset 0 -1px 2px rgba(0, 0, 0, 0.3);
   border-radius: 28px;
@@ -297,62 +232,184 @@ blockquote,
               border-color 0.3s ease;
 }
 
-/* 4. Floating Bottom Dock Pill */
-.liquid-glass-dock {
-  background: linear-gradient(
-    180deg,
-    rgba(26, 36, 66, 0.88) 0%,
-    rgba(12, 17, 32, 0.96) 100%
-  );
-  backdrop-filter: blur(16px) saturate(190%);
-  -webkit-backdrop-filter: blur(16px) saturate(190%);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  box-shadow:
-    0 22px 55px -10px rgba(0, 0, 0, 0.85),
-    0 0 35px -10px rgba(244, 63, 94, 0.25),
-    inset 0 1.5px 0 0 rgba(255, 255, 255, 0.32);
-  transform: translateZ(0);
-  -webkit-transform: translateZ(0);
-  transition: transform 0.24s cubic-bezier(0.16, 1, 0.3, 1);
+.liquid-glass-longbar:hover,
+.liquid-glass-long-bar:hover {
+  border-top-color: rgba(255, 255, 255, 0.65);
+  box-shadow: 0 24px 56px -8px rgba(0, 0, 0, 0.9),
+    0 0 30px -2px rgba(56, 189, 248, 0.28),
+    inset 0 1.5px 2px rgba(255, 255, 255, 0.55);
 }
 
-/* 5. Interactive Specular Pill Button (Uniswap Elastic Jelly Physics) */
-.liquid-glass-pill {
-  background: rgba(255, 255, 255, 0.08);
-  border: 1px solid rgba(255, 255, 255, 0.14);
-  box-shadow: inset 0 1px 0 0 rgba(255, 255, 255, 0.18);
+/* 2. Primary Floating Sidebar Shell */
+.liquid-glass-sidebar,
+.liquid-glass-panel {
+  background: linear-gradient(
+    165deg,
+    rgba(255, 255, 255, 0.09) 0%,
+    rgba(13, 19, 44, 0.82) 55%,
+    rgba(6, 9, 22, 0.94) 100%
+  );
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-top: 1px solid rgba(255, 255, 255, 0.38);
+  border-left: 1px solid rgba(255, 255, 255, 0.16);
+  border-right: 1px solid rgba(255, 255, 255, 0.16);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 20px 48px -8px rgba(0, 0, 0, 0.75),
+    inset 0 1.5px 2px rgba(255, 255, 255, 0.3);
   transform: translateZ(0);
-  transition: transform 0.22s cubic-bezier(0.16, 1, 0.3, 1),
-              background-color 0.15s ease,
-              border-color 0.15s ease,
-              box-shadow 0.22s ease;
+  -webkit-transform: translateZ(0);
+}
+
+/* 3. Bento Study Card Surface with Uniswap Elastic Jelly Hover */
+.liquid-glass-bento,
+.jelly-bento,
+.ultraThinMaterial {
+  position: relative;
+  background:
+    radial-gradient(120% 120% at 0% 0%, rgba(217, 119, 6, 0.16), transparent 56%),
+    linear-gradient(
+      140deg,
+      rgba(255, 255, 255, 0.075) 0%,
+      rgba(28, 14, 6, 0.78) 52%,
+      rgba(6, 4, 2, 0.96) 100%
+    );
+  backdrop-filter: blur(18px) saturate(170%);
+  -webkit-backdrop-filter: blur(18px) saturate(170%);
+  border: 1px solid rgba(251, 191, 36, 0.22);
+  box-shadow:
+    0 16px 36px -10px rgba(0, 0, 0, 0.85),
+    0 0 28px -4px rgba(217, 119, 6, 0.18),
+    inset 0 1.2px 0 0 rgba(255, 255, 255, 0.22),
+    inset 0 -1px 0 0 rgba(0, 0, 0, 0.4);
+  transform: translateZ(0);
+  -webkit-transform: translateZ(0);
+  transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1),
+              border-color 0.25s ease,
+              box-shadow 0.3s ease;
+  contain: layout paint;
+}
+
+.liquid-glass-bento:hover,
+.jelly-bento:hover,
+.ultraThinMaterial:hover {
+  transform: translateY(-1px);
+  border-color: rgba(251, 191, 36, 0.48);
+  box-shadow:
+    0 24px 52px -10px rgba(0, 0, 0, 0.92),
+    0 0 34px -4px rgba(217, 119, 6, 0.38),
+    0 0 46px -12px rgba(153, 27, 27, 0.25),
+    inset 0 1.5px 0 0 rgba(254, 243, 199, 0.35);
+}
+
+.liquid-glass-bento:active,
+.jelly-bento:active {
+  transform: scale(0.982) translateY(0);
+  transition: transform 0.1s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* 4. Flagship Analytical Cards */
+.liquid-card-flagship {
+  background: rgba(10, 14, 28, 0.92);
+  backdrop-filter: blur(24px) saturate(190%);
+  -webkit-backdrop-filter: blur(24px) saturate(190%);
+  border: 1px solid rgba(245, 158, 11, 0.35);
+  box-shadow:
+    0 24px 60px -10px rgba(0, 0, 0, 0.9),
+    0 0 35px -6px rgba(217, 119, 6, 0.22),
+    inset 0 1.5px 0 0 rgba(255, 255, 255, 0.25),
+    inset 0 -1px 0 0 rgba(0, 0, 0, 0.4);
+  transform: translateZ(0);
+  -webkit-transform: translateZ(0);
+  transition: transform 0.28s cubic-bezier(0.16, 1, 0.3, 1),
+              box-shadow 0.28s ease,
+              border-color 0.2s ease;
+}
+
+.liquid-card-flagship:hover {
+  border-color: rgba(251, 191, 36, 0.55);
+  box-shadow:
+    0 28px 68px -10px rgba(0, 0, 0, 0.95),
+    0 0 45px -4px rgba(217, 119, 6, 0.35),
+    inset 0 1.5px 0 0 rgba(254, 243, 199, 0.38);
+}
+
+/* 5. Floating Bottom Dock Pill */
+.liquid-glass-dock {
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.18) 0%,
+    rgba(15, 23, 48, 0.92) 55%,
+    rgba(7, 11, 26, 0.98) 100%
+  );
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-top: 1px solid rgba(255, 255, 255, 0.45);
+  border-left: 1px solid rgba(255, 255, 255, 0.2);
+  border-right: 1px solid rgba(255, 255, 255, 0.2);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 16px 42px -4px rgba(0, 0, 0, 0.85),
+    0 0 24px -2px rgba(217, 119, 6, 0.25),
+    inset 0 1.5px 2px rgba(255, 255, 255, 0.4);
+  contain: layout paint;
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1),
+              box-shadow 0.2s ease,
+              border-color 0.2s ease;
+}
+
+.liquid-glass-dock:hover {
+  transform: translateY(-2px);
+  border-top-color: rgba(255, 255, 255, 0.6);
+  box-shadow: 0 20px 48px -4px rgba(0, 0, 0, 0.9),
+    0 0 28px -2px rgba(217, 119, 6, 0.35),
+    inset 0 1.5px 2px rgba(255, 255, 255, 0.5);
+}
+
+/* 6. Interactive Specular Pill Button (Uniswap Elastic Jelly Physics) */
+.liquid-glass-pill {
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.18);
+  transform: translateZ(0);
+  transition: transform 0.28s cubic-bezier(0.16, 1, 0.3, 1),
+              background 0.2s ease,
+              border-color 0.2s ease,
+              box-shadow 0.25s ease;
   cursor: pointer;
+  will-change: transform;
 }
 
 .liquid-glass-pill:hover {
   transform: translateY(-1px);
-  background: rgba(255, 255, 255, 0.15);
-  border-color: rgba(255, 255, 255, 0.3);
-  box-shadow:
-    0 8px 20px -4px rgba(0, 0, 0, 0.5),
-    inset 0 1px 0 0 rgba(255, 255, 255, 0.35);
+  background: rgba(255, 255, 255, 0.13);
+  border-color: rgba(255, 255, 255, 0.28);
+  box-shadow: 0 8px 20px -4px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.25);
 }
 
 .liquid-glass-pill:active {
-  transform: scale3d(0.975, 0.975, 1);
-  transition: transform 0.08s ease-out;
+  transform: translateY(1px) scale(0.95);
+  transition-duration: 0.08s;
 }
 
 .liquid-glass-pill-active {
   background: linear-gradient(
     135deg,
-    rgba(244, 63, 94, 0.4) 0%,
-    rgba(251, 191, 36, 0.32) 100%
-  );
-  border: 1px solid rgba(251, 191, 36, 0.65);
+    rgba(217, 119, 6, 0.32) 0%,
+    rgba(245, 158, 11, 0.22) 100%
+  ) !important;
+  border: 1px solid rgba(251, 191, 36, 0.55) !important;
   box-shadow:
-    inset 0 1.5px 0 0 rgba(255, 255, 255, 0.45),
-    0 6px 20px -2px rgba(244, 63, 94, 0.42);
+    0 6px 20px -3px rgba(217, 119, 6, 0.35),
+    0 0 18px rgba(245, 158, 11, 0.25),
+    inset 0 1.2px 0 0 rgba(255, 255, 255, 0.4) !important;
+}
+
+.liquid-glass-pill-active:hover {
+  transform: translateY(-2px) scale(1.02);
+  box-shadow:
+    0 8px 25px -2px rgba(217, 119, 6, 0.45),
+    0 0 22px rgba(245, 158, 11, 0.35),
+    inset 0 1.5px 0 0 rgba(255, 255, 255, 0.5);
 }
 
 /* Universal Tactile Mechanical Button Actuation */

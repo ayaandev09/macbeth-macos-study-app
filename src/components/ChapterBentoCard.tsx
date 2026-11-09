@@ -46,10 +46,10 @@ interface ChapterBentoCardProps {
 }
 
 const OMEN_BADGE_STYLES: Record<ChapterData["omenLevel"], string> = {
-  "VALOR & OMEN": "bg-sky-500/15 text-sky-300 border-sky-400/35",
+  "VALOR & OMEN": "bg-amber-500/15 text-amber-300 border-amber-400/35",
   TEMPTATION: "bg-amber-500/15 text-amber-300 border-amber-400/35",
   REGICIDE: "bg-rose-500/20 text-rose-300 border-rose-400/40",
-  "TYRANNY & PARANOIA": "bg-purple-500/20 text-purple-300 border-purple-400/40",
+  "TYRANNY & PARANOIA": "bg-rose-500/20 text-rose-300 border-rose-400/40",
   "ABYSSAL DOOM":
     "bg-red-500/25 text-red-200 border-red-400/50 shadow-[0_0_20px_-4px_rgba(244,63,94,0.45)]",
 };
@@ -345,17 +345,17 @@ export const ChapterBentoCard = React.memo(function ChapterBentoCard({
 
         {/* KPI 3: Reading Pace & Verse Structure */}
         <div className="liquid-card-flagship rounded-3xl p-4.5 flex flex-col justify-between">
-          <div className="flex items-center justify-between text-[11px] font-mono text-slate-400 mb-2">
+          <div className="flex items-center justify-between text-xs font-mono text-slate-400 mb-2">
             <span className="uppercase tracking-wider flex items-center gap-1.5">
-              <Clock className="w-3.5 h-3.5 text-sky-400" />
+              <Clock className="w-3.5 h-3.5 text-amber-400" />
               Rhythm & Pace
             </span>
-            <span className="font-mono text-sky-300 font-bold">{chapter.readingTimeMinutes}m</span>
+            <span className="font-mono text-amber-300 font-bold">{chapter.readingTimeMinutes}m</span>
           </div>
-          <div className="text-sm font-bold text-white truncate mb-1">
+          <div className="text-sm sm:text-base font-bold text-white truncate mb-1">
             Blank Verse (Iambic)
           </div>
-          <div className="text-[11px] text-slate-300 truncate">
+          <div className="text-xs text-slate-300 truncate">
             {chapter.subSections.length} Beats • {chapter.quotes.length} Key Lines
           </div>
         </div>
@@ -423,26 +423,26 @@ export const ChapterBentoCard = React.memo(function ChapterBentoCard({
                 {sceneBriefing.thirtySecondRecap}
               </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-3.5 text-xs">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-3.5 text-xs sm:text-sm">
                 {/* Teacher Pop Quiz */}
                 <div className="p-3.5 rounded-2xl bg-white/5 border border-white/10 space-y-2">
-                  <span className="font-bold text-sky-300 flex items-center gap-1.5 uppercase tracking-wider text-[11px]">
-                    <HelpCircle className="w-3.5 h-3.5" />
+                  <span className="font-bold text-amber-300 flex items-center gap-1.5 uppercase tracking-wider text-xs">
+                    <HelpCircle className="w-3.5 h-3.5 text-amber-400" />
                     Teacher Will Ask (Raise Hand):
                   </span>
-                  <p className="text-slate-200 font-medium pl-2.5 border-l-2 border-sky-400/50">
+                  <p className="text-slate-200 font-medium pl-2.5 border-l-2 border-amber-400/50 text-xs sm:text-sm">
                     {sceneBriefing.teacherPopQuiz.question}
                   </p>
                   <div className="pt-1">
                     <button
                       onClick={() => setQuizRevealed(!quizRevealed)}
-                      className="text-[11px] font-mono text-sky-300 hover:text-sky-100 flex items-center gap-1 cursor-pointer"
+                      className="text-xs font-mono text-amber-300 hover:text-amber-100 flex items-center gap-1 cursor-pointer transition-colors"
                     >
                       <span>{quizRevealed ? "Hide Model Answer ▲" : "Reveal Model Answer ▼"}</span>
                     </button>
                     {quizRevealed && (
-                      <div className="mt-1.5 p-2.5 rounded-xl bg-sky-950/50 border border-sky-400/30 text-slate-200 text-xs leading-relaxed">
-                        <span className="font-bold text-sky-300 mr-1">Model Answer:</span>
+                      <div className="mt-1.5 p-2.5 rounded-xl bg-amber-950/40 border border-amber-400/30 text-slate-200 text-xs sm:text-sm leading-relaxed">
+                        <span className="font-bold text-amber-300 mr-1">Model Answer:</span>
                         {sceneBriefing.teacherPopQuiz.answer}
                       </div>
                     )}
@@ -641,19 +641,19 @@ export const ChapterBentoCard = React.memo(function ChapterBentoCard({
 
               {/* Story So Far */}
               <div className="p-4 rounded-2xl bg-slate-950/60 border border-white/10">
-                <span className="font-mono text-[10px] uppercase tracking-wider text-sky-300 font-bold flex items-center gap-1.5 mb-2">
-                  <BookOpen className="w-3.5 h-3.5 text-sky-400" />
+                <span className="font-mono text-xs uppercase tracking-wider text-amber-300 font-bold flex items-center gap-1.5 mb-2">
+                  <BookOpen className="w-3.5 h-3.5 text-amber-400" />
                   Where We Are in the Story:
                 </span>
-                <p className="text-xs lg:text-sm text-slate-200 leading-relaxed">
+                <p className="text-xs sm:text-sm text-slate-200 leading-relaxed">
                   {scenePrimer.storySoFar}
                 </p>
               </div>
 
               {/* Archaic Words Glossed */}
               {scenePrimer.glossary.length > 0 && (
-                <div className="p-4 rounded-2xl bg-purple-500/[0.08] border border-purple-400/25">
-                  <span className="font-mono text-[10px] uppercase tracking-wider text-purple-300 font-bold block mb-2">
+                <div className="p-4 rounded-2xl bg-amber-500/[0.08] border border-amber-400/25">
+                  <span className="font-mono text-xs uppercase tracking-wider text-amber-300 font-bold block mb-2">
                     Tricky Words Translated:
                   </span>
                   <div className="space-y-1.5">
@@ -768,25 +768,25 @@ export const ChapterBentoCard = React.memo(function ChapterBentoCard({
             </div>
 
             {/* Teacher Pop-Quiz */}
-            <div className="p-4 rounded-2xl bg-purple-500/[0.08] border border-purple-400/25">
-              <span className="font-mono text-[10px] uppercase tracking-wider text-purple-300 font-bold flex items-center gap-1.5 mb-2">
-                <HelpCircle className="w-3.5 h-3.5" />
+            <div className="p-4 rounded-2xl bg-amber-500/[0.08] border border-amber-400/25">
+              <span className="font-mono text-xs uppercase tracking-wider text-amber-300 font-bold flex items-center gap-1.5 mb-2">
+                <HelpCircle className="w-3.5 h-3.5 text-amber-400" />
                 Teacher Pop-Quiz Question:
               </span>
-              <p className="text-xs lg:text-sm font-semibold text-white mb-2.5">
+              <p className="text-xs sm:text-sm font-semibold text-white mb-2.5">
                 {sceneBriefing.teacherPopQuiz.question}
               </p>
               <details className="group text-xs pt-1.5 border-t border-white/[0.08]">
-                <summary className="font-mono text-[10px] text-purple-300 hover:text-purple-200 cursor-pointer list-none select-none flex items-center justify-between py-1">
+                <summary className="font-mono text-xs text-amber-300 hover:text-amber-200 cursor-pointer list-none select-none flex items-center justify-between py-1 transition-colors">
                   <span className="flex items-center gap-1">
-                    <Sparkles className="w-3 h-3 text-purple-400" />
+                    <Sparkles className="w-3 h-3 text-amber-400" />
                     Reveal Model Answer
                   </span>
-                  <span className="text-[10px] text-slate-400 group-open:rotate-180 transition-transform">
+                  <span className="text-xs text-slate-400 group-open:rotate-180 transition-transform">
                     ▼
                   </span>
                 </summary>
-                <div className="mt-2 p-2.5 rounded-xl bg-purple-950/40 border border-purple-400/20 text-slate-200 text-xs leading-relaxed">
+                <div className="mt-2 p-2.5 rounded-xl bg-amber-950/40 border border-amber-400/20 text-slate-200 text-xs sm:text-sm leading-relaxed">
                   {sceneBriefing.teacherPopQuiz.answer}
                 </div>
               </details>
@@ -1126,40 +1126,40 @@ export const ChapterBentoCard = React.memo(function ChapterBentoCard({
               </h3>
             </div>
 
-            <div className="p-3.5 rounded-2xl bg-purple-500/10 border border-purple-400/30">
-              <span className="font-mono text-[10px] uppercase tracking-widest text-purple-300 font-semibold block mb-1">
+            <div className="p-3.5 rounded-2xl bg-amber-500/10 border border-amber-400/30">
+              <span className="font-mono text-xs uppercase tracking-widest text-amber-300 font-semibold block mb-1">
                 Scene Thesis
               </span>
-              <p className="text-xs text-white font-medium leading-relaxed">
+              <p className="text-xs sm:text-sm text-white font-medium leading-relaxed">
                 {chapter.analysis.thesis}
               </p>
             </div>
 
             <div className="space-y-3">
               <div className="p-3.5 rounded-2xl bg-amber-500/[0.06] border border-amber-400/25">
-                <span className="font-mono text-[10px] uppercase tracking-widest text-amber-300 font-semibold flex items-center gap-1.5 mb-1">
+                <span className="font-mono text-xs uppercase tracking-widest text-amber-300 font-semibold flex items-center gap-1.5 mb-1">
                   <ScrollText className="w-3.5 h-3.5" />
                   1. Class Study Guide (Google Doc Notes)
                 </span>
-                <p className="text-xs text-slate-200 leading-relaxed">
+                <p className="text-xs sm:text-sm text-slate-200 leading-relaxed">
                   {chapter.analysis.googleDocSynthesis}
                 </p>
               </div>
 
               <div className="p-3.5 rounded-2xl bg-white/[0.03] border border-white/[0.08]">
-                <span className="font-mono text-[10px] uppercase tracking-widest text-sky-300 font-semibold block mb-1">
+                <span className="font-mono text-xs uppercase tracking-widest text-amber-200/90 font-semibold block mb-1">
                   2. SparkNotes Structural & Thematic Lens
                 </span>
-                <p className="text-xs text-slate-300 leading-relaxed">
+                <p className="text-xs sm:text-sm text-slate-300 leading-relaxed">
                   {chapter.analysis.sparkNotesSynthesis}
                 </p>
               </div>
 
               <div className="p-3.5 rounded-2xl bg-white/[0.03] border border-white/[0.08]">
-                <span className="font-mono text-[10px] uppercase tracking-widest text-indigo-300 font-semibold block mb-1">
+                <span className="font-mono text-xs uppercase tracking-widest text-amber-300/80 font-semibold block mb-1">
                   3. LitCharts Symbolism, Meter & Rhetoric
                 </span>
-                <p className="text-xs text-slate-300 leading-relaxed">
+                <p className="text-xs sm:text-sm text-slate-300 leading-relaxed">
                   {chapter.analysis.litChartsSynthesis}
                 </p>
               </div>

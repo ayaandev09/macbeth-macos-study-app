@@ -21,7 +21,7 @@ export function RecallFlipCard({
   prompt,
   answer,
   accent = "#d97706",
-  secondary = "#e11d48",
+  secondary = "#991b1b",
   meta = "ACTIVE RECALL",
 }: RecallFlipCardProps) {
   const [flipped, setFlipped] = useState(false);
@@ -102,7 +102,7 @@ export function RecallFlipCard({
               <div className="relative z-10 flex items-center justify-between gap-3">
                 <div className="flex items-center gap-2">
                   <span
-                    className="inline-flex items-center gap-1.5 rounded-xl border px-2.5 py-1 font-mono text-[10px] font-bold uppercase tracking-[0.16em] shadow-sm"
+                    className="inline-flex items-center gap-1.5 rounded-xl border px-2.5 py-1 font-mono text-xs font-bold uppercase tracking-[0.16em] shadow-sm"
                     style={{
                       borderColor: `${accent}88`,
                       color: "#fde68a",
@@ -113,12 +113,12 @@ export function RecallFlipCard({
                     {meta} · {moduleCode}
                   </span>
                   {confidence === "mastered" && (
-                    <span className="inline-flex items-center gap-1 rounded-full bg-emerald-500/20 border border-emerald-400/40 px-2.5 py-0.5 text-[10px] font-mono font-bold text-emerald-300">
+                    <span className="inline-flex items-center gap-1 rounded-full bg-emerald-500/20 border border-emerald-400/40 px-2.5 py-0.5 text-xs font-mono font-bold text-emerald-300">
                       <CheckCircle2 className="w-3 h-3" /> Locked In
                     </span>
                   )}
                 </div>
-                <span className="font-mono text-[10px] uppercase tracking-wider text-slate-400 group-hover:text-amber-300 transition-colors flex items-center gap-1">
+                <span className="font-mono text-xs uppercase tracking-wider text-slate-400 group-hover:text-amber-300 transition-colors flex items-center gap-1">
                   <Zap className="w-3 h-3 text-amber-400" /> Interactive 3D Flip
                 </span>
               </div>
@@ -133,12 +133,12 @@ export function RecallFlipCard({
               </div>
 
               <div className="relative z-10 mt-4 flex items-center justify-between border-t border-white/10 pt-3">
-                <span className="flex items-center gap-1.5 font-mono text-[11px] text-amber-200/90 group-hover:text-white transition-colors">
+                <span className="flex items-center gap-1.5 font-mono text-xs text-amber-200/90 group-hover:text-white transition-colors">
                   <RotateCcw className="h-3.5 w-3.5 group-hover:rotate-180 transition-transform duration-500" style={{ color: accent }} />
                   Click or press Space to reveal examiner synthesis
                 </span>
                 <span
-                  className="rounded-full px-2.5 py-0.5 font-mono text-[10px] font-bold border border-white/15"
+                  className="rounded-full px-2.5 py-0.5 font-mono text-xs font-bold border border-white/15"
                   style={{ backgroundColor: `${secondary}44`, color: "#ffe4d6" }}
                 >
                   IB AO1 / AO2
@@ -158,10 +158,10 @@ export function RecallFlipCard({
               }}
             >
               <div className="relative z-10 flex items-center justify-between gap-3">
-                <span className="inline-flex items-center gap-1.5 rounded-xl bg-amber-500/20 border border-amber-400/40 px-2.5 py-1 font-mono text-[10px] font-bold uppercase tracking-[0.16em] text-amber-200">
+                <span className="inline-flex items-center gap-1.5 rounded-xl bg-amber-500/20 border border-amber-400/40 px-2.5 py-1 font-mono text-xs font-bold uppercase tracking-[0.16em] text-amber-200">
                   <Flame className="w-3 h-3 text-amber-400" /> Examiner Model Synthesis · {moduleCode}
                 </span>
-                <span className="font-mono text-[10px] uppercase tracking-wider text-slate-300">
+                <span className="font-mono text-xs uppercase tracking-wider text-slate-300">
                   Click to flip back
                 </span>
               </div>
@@ -171,7 +171,7 @@ export function RecallFlipCard({
               </p>
 
               <div className="relative z-10 mt-4 flex flex-wrap items-center justify-between gap-2 border-t border-white/10 pt-3">
-                <span className="font-mono text-[10px] text-slate-300">
+                <span className="font-mono text-xs text-slate-300">
                   Rate your recall confidence:
                 </span>
                 <div

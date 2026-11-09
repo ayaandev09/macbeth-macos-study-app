@@ -120,7 +120,7 @@ export function MacbethRightInspector({
         <div className="grid grid-cols-4 gap-1 p-1 bg-black/40 rounded-xl border border-white/10 mb-3 shrink-0">
           <button
             onClick={() => setActiveTab("recall")}
-            className={`py-1.5 px-1 rounded-lg text-[10px] font-mono font-bold uppercase transition-all cursor-pointer truncate ${
+            className={`py-1.5 px-1 rounded-lg text-xs font-mono font-bold uppercase transition-all cursor-pointer truncate ${
               activeTab === "recall"
                 ? "bg-amber-500/25 text-amber-200 border border-amber-400/40 shadow-sm"
                 : "text-slate-400 hover:text-white"
@@ -130,7 +130,7 @@ export function MacbethRightInspector({
           </button>
           <button
             onClick={() => setActiveTab("quotes")}
-            className={`py-1.5 px-1 rounded-lg text-[10px] font-mono font-bold uppercase transition-all cursor-pointer truncate ${
+            className={`py-1.5 px-1 rounded-lg text-xs font-mono font-bold uppercase transition-all cursor-pointer truncate ${
               activeTab === "quotes"
                 ? "bg-amber-500/25 text-amber-200 border border-amber-400/40 shadow-sm"
                 : "text-slate-400 hover:text-white"
@@ -140,7 +140,7 @@ export function MacbethRightInspector({
           </button>
           <button
             onClick={() => setActiveTab("context")}
-            className={`py-1.5 px-1 rounded-lg text-[10px] font-mono font-bold uppercase transition-all cursor-pointer truncate ${
+            className={`py-1.5 px-1 rounded-lg text-xs font-mono font-bold uppercase transition-all cursor-pointer truncate ${
               activeTab === "context"
                 ? "bg-amber-500/25 text-amber-200 border border-amber-400/40 shadow-sm"
                 : "text-slate-400 hover:text-white"
@@ -150,7 +150,7 @@ export function MacbethRightInspector({
           </button>
           <button
             onClick={() => setActiveTab("notes")}
-            className={`py-1.5 px-1 rounded-lg text-[10px] font-mono font-bold uppercase transition-all cursor-pointer truncate ${
+            className={`py-1.5 px-1 rounded-lg text-xs font-mono font-bold uppercase transition-all cursor-pointer truncate ${
               activeTab === "notes"
                 ? "bg-amber-500/25 text-amber-200 border border-amber-400/40 shadow-sm"
                 : "text-slate-400 hover:text-white"

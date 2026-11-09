@@ -95,6 +95,24 @@ export default function MacbethStudyDashboardMacPage() {
     return cleanup;
   }, []);
 
+  // Fluid layout window adaptation on dynamic resize and full-screen toggles
+  useEffect(() => {
+    const handleResize = () => {
+      if (typeof window === "undefined") return;
+      const width = window.innerWidth;
+      const store = useStudyStore.getState();
+      if (width < 1024) {
+        if (!store.sidebarCollapsed) store.toggleSidebar();
+      }
+      if (width < 1280) {
+        if (store.isInspectorOpen) store.toggleInspector();
+      }
+    };
+    handleResize();
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
   // Global Keyboard Shortcut: Cmd/Ctrl + I to toggle Analytical Inspector
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -222,14 +240,9 @@ export default function MacbethStudyDashboardMacPage() {
       </AnimatePresence>
 
       {/* 2. Main Study Dashboard - Fluid Liquid Glass Reveal */}
-      <div
-        className={`mac-dashboard-shell ${showMainUI ? "app-revealed" : ""} transition-opacity duration-300 ease-out ${
-          showMainUI
-            ? "opacity-100 pointer-events-auto"
-            : "opacity-0 pointer-events-none select-none"
-        }`}
-      >
+      <div className="relative min-h-screen w-full bg-[#060402] text-slate-100 flex flex-col font-sans selection:bg-amber-500/30 selection:text-amber-100 overflow-x-hidden">
         <AmbientAuroraCanvas />
+        <WidgetBridge />
         {diagnosticsModalOpen && (
           <StartupDiagnosticIntro
             isManualTelemetry={true}
@@ -237,19 +250,21 @@ export default function MacbethStudyDashboardMacPage() {
           />
         )}
 
-      {/* =====================================================================
-          MAIN LIQUID GLASS SHELL WORKSPACE (MAC WIDESCREEN DASHBOARD)
-          ===================================================================== */}
-      <div className="relative z-10 w-full flex flex-col lg:flex-row gap-4 xl:gap-5 items-start">
-        {/* Left Sticky Liquid Glass Navigation Sidebar */}
-        <FloatingSidebar isMobileSheet={false} />
-
-        {/* Main Content Column */}
-        <main
-          className="flex-1 min-w-0 w-full pb-36 transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)]"
-          style={{ containerType: "inline-size" }}
+        {/* Main 3-Column macOS Dashboard Shell */}
+        <div
+          className={`relative z-10 w-full max-w-[1720px] mx-auto p-2.5 sm:p-4 flex gap-4 xl:gap-5 items-start transition-opacity duration-700 mac-dashboard-shell ${
+            showMainUI ? "app-revealed opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none select-none"
+          }`}
         >
-            <WidgetBridge />
+          {/* Left Sticky Liquid Glass Navigation Sidebar */}
+          <FloatingSidebar isMobileSheet={false} />
+
+          {/* Main Content Column */}
+          <main
+            data-tour="main-workspace"
+            className="flex-1 min-w-0 w-full pb-36 flex flex-col transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)]"
+            style={{ containerType: "inline-size" }}
+          >
             <div className="sticky top-2 z-30 mb-4">
               <TopCommandBar onOpenWalkthrough={() => setIsWalkthroughOpen(true)} />
             </div>
@@ -400,7 +415,7 @@ export default function MacbethStudyDashboardMacPage() {
                           entranceBlur={10}
                           entranceDistance={20}
                           entranceScale={0.65}
-                          className="!min-w-[240px] !h-12 !px-6 !text-xs font-bold shadow-xl cursor-pointer"
+                          className="w-full sm:w-auto min-w-[200px] !h-12 !px-6 !text-xs font-bold shadow-xl cursor-pointer"
                         >
                           <CheckCircle2 className="w-4 h-4 text-emerald-300 mr-2" />
                           <span>Complete {activeChapter.displayCode} &amp; Continue</span>

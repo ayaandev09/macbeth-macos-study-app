@@ -165,7 +165,7 @@ export function TopCommandBar({ onOpenWalkthrough }: TopCommandBarProps = {}) {
 
   return (
     <>
-      <header data-tour="command-bar" className="liquid-card-flagship !rounded-3xl overflow-hidden p-2.5 sm:p-3 mb-3 flex flex-col gap-2 shadow-xl relative mac-drag-region transition-all z-20 w-full max-w-full">
+      <header data-tour="command-bar" className="liquid-glass-long-bar !rounded-3xl overflow-hidden p-2.5 sm:p-3 mb-3 flex flex-col gap-2 shadow-xl relative mac-drag-region transition-all z-20 w-full max-w-full">
       {/* Top Segment: Brand & Status (Left: Flexible, shrinks cleanly) & Compact Action Cluster (Right: ~280px total) */}
       <div className="flex items-center justify-between gap-2 w-full pb-2 border-b border-white/10 min-h-[42px] max-w-full overflow-hidden">
         {/* Brand & Breadcrumbs (Left) */}
@@ -193,13 +193,13 @@ export function TopCommandBar({ onOpenWalkthrough }: TopCommandBarProps = {}) {
               <MacbethAppLogo className="w-full h-full object-contain" />
             </div>
             <div className="min-w-0 leading-tight">
-              <span className="text-[9px] font-mono font-bold tracking-[0.2em] text-amber-400 uppercase block truncate">
+              <span className="text-[10px] sm:text-xs font-mono font-bold tracking-[0.18em] text-amber-400 uppercase block truncate">
                 DUNSINANE // 1606
               </span>
-              <span className="text-xs font-semibold text-white tracking-tight flex items-center gap-1 truncate">
+              <span className="text-xs sm:text-sm font-semibold text-white tracking-tight flex items-center gap-1 truncate">
                 <span>Macbeth Codex</span>
                 <span className="text-slate-500">/</span>
-                <span className="text-amber-300 font-mono text-[11px] font-bold">
+                <span className="text-amber-300 font-mono text-xs font-bold">
                   {currentChapter.displayCode}
                 </span>
               </span>
@@ -216,8 +216,8 @@ export function TopCommandBar({ onOpenWalkthrough }: TopCommandBarProps = {}) {
             className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl bg-black/50 hover:bg-black/70 border border-white/10 hover:border-amber-400/40 text-slate-300 hover:text-white cursor-pointer transition-all shrink-0"
           >
             <Search className="w-3.5 h-3.5 text-amber-400" />
-            <span className="text-[11px] font-medium text-slate-300 hidden md:inline">Search</span>
-            <kbd className="inline-flex items-center px-1 py-0.2 rounded text-[9px] font-mono font-bold text-amber-300 bg-amber-500/15 border border-amber-400/25">
+            <span className="text-xs font-medium text-slate-300 hidden md:inline">Search</span>
+            <kbd className="inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-mono font-bold text-amber-300 bg-amber-500/15 border border-amber-400/25">
               ⌘K
             </kbd>
           </button>
@@ -234,7 +234,7 @@ export function TopCommandBar({ onOpenWalkthrough }: TopCommandBarProps = {}) {
               }`}
             >
               <Zap className="w-3 h-3 text-amber-300" />
-              <span className="text-[11px]">Revise</span>
+              <span className="text-xs">Revise</span>
             </button>
             <button
               onClick={() => setStudyGoal("learn")}
@@ -246,7 +246,7 @@ export function TopCommandBar({ onOpenWalkthrough }: TopCommandBarProps = {}) {
               }`}
             >
               <BookOpen className="w-3 h-3 text-emerald-300" />
-              <span className="text-[11px]">Study</span>
+              <span className="text-xs">Study</span>
             </button>
           </div>
 
@@ -254,10 +254,10 @@ export function TopCommandBar({ onOpenWalkthrough }: TopCommandBarProps = {}) {
           <button
             onClick={openExamSprint}
             title="Launch Timed Exam Sprint (⌘E)"
-            className="flex items-center gap-1 px-2.5 py-1.5 rounded-full text-xs font-bold transition-all cursor-pointer border bg-amber-500/15 text-amber-200 border-amber-400/35 hover:bg-amber-500/25 shadow-sm soft-button shrink-0"
+            className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-full text-xs font-bold transition-all cursor-pointer border bg-amber-500/15 text-amber-200 border-amber-400/35 hover:bg-amber-500/25 shadow-sm soft-button shrink-0"
           >
             <Timer className="w-3.5 h-3.5 text-amber-300 animate-pulse" />
-            <span className="text-[10px] font-mono text-amber-400/80">⌘E</span>
+            <span className="text-xs font-mono font-bold text-amber-300">⌘E</span>
           </button>
 
           {/* Pro Analytical Inspector Toggle Pill (Shown only when tucked away to prevent collision) */}
@@ -268,7 +268,7 @@ export function TopCommandBar({ onOpenWalkthrough }: TopCommandBarProps = {}) {
               className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-full text-xs font-bold transition-all cursor-pointer border soft-button shrink-0 bg-amber-500/15 text-amber-200 hover:text-white border-amber-400/50 hover:border-amber-300 shadow-[0_0_18px_rgba(245,158,11,0.35)] tucked-pill-beacon"
             >
               <Sparkles className="w-3.5 h-3.5 text-amber-300" />
-              <span className="text-[10px] font-mono text-amber-400/80">⌘I</span>
+              <span className="text-xs font-mono font-bold text-amber-300">⌘I</span>
             </button>
           )}
 

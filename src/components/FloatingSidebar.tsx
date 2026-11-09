@@ -199,10 +199,10 @@ export function FloatingSidebar({ isMobileSheet = false }: FloatingSidebarProps)
                     return (
                       <div
                         key={chapter.id}
-                        className={`group flex items-center justify-between gap-2 px-2.5 py-2 rounded-xl text-xs transition-all ${
+                        className={`group flex items-center justify-between gap-2 px-2.5 py-2.5 rounded-xl text-xs sm:text-sm transition-all border ${
                           isSelected
-                            ? "liquid-glass-pill-active text-white"
-                            : "hover:bg-white/[0.05] text-slate-300"
+                            ? "bg-amber-500/20 text-amber-200 border-amber-400/40 shadow-sm"
+                            : "hover:bg-white/[0.05] text-slate-300 border-transparent"
                         }`}
                       >
                         <button
@@ -210,22 +210,22 @@ export function FloatingSidebar({ isMobileSheet = false }: FloatingSidebarProps)
                           className="flex-1 text-left flex items-start gap-2.5 min-w-0 cursor-pointer"
                         >
                           <span
-                            className={`font-mono text-[10px] px-1.5 py-0.5 rounded-md shrink-0 mt-0.5 ${
+                            className={`font-mono text-xs px-2 py-0.5 rounded-md shrink-0 mt-0.5 ${
                               isSelected
-                                ? "bg-amber-400/25 text-amber-200 border border-amber-300/30"
-                                : "bg-white/[0.06] text-slate-400"
+                                ? "bg-amber-400/25 text-amber-200 border border-amber-300/35"
+                                : "bg-white/[0.08] text-slate-300 border border-white/10"
                             }`}
                           >
                             {chapter.displayCode}
                           </span>
                           <div className="min-w-0 flex-1">
-                            <div className="font-medium truncate">
+                            <div className="font-semibold text-xs sm:text-sm truncate">
                               {chapter.title.replace(
                                 /^Act \d+, Scene \d+:\s*/,
                                 ""
                               )}
                             </div>
-                            <div className="text-[10px] text-slate-400 truncate mt-0.5">
+                            <div className="text-xs text-slate-400 truncate mt-0.5 font-mono">
                               {chapter.subSections.length} beats •{" "}
                               {chapter.readingTimeMinutes}m
                               {chapter.folioCrossRef
@@ -317,14 +317,14 @@ export function FloatingSidebar({ isMobileSheet = false }: FloatingSidebarProps)
   return (
     <aside
       data-tour="sidebar"
-      className={`hidden lg:flex shrink-0 lg:sticky lg:top-5 lg:h-[calc(100vh-2.5rem)] flex-col liquid-glass-sidebar rounded-3xl overflow-hidden select-none z-20 transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] ${
+      className={`shrink-0 liquid-glass-panel rounded-3xl flex flex-col h-[calc(100vh-2rem)] sticky top-4 select-none overflow-hidden transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] z-10 shadow-xl ${
         sidebarCollapsed
           ? "w-0 max-w-0 p-0 -mr-4 xl:-mr-5 border-0 opacity-0 pointer-events-none"
-          : "w-72 xl:w-80 p-0 opacity-100"
+          : "w-72 lg:w-80 p-0 border border-white/10 opacity-100"
       }`}
     >
       <div
-        className={`w-72 xl:w-80 p-4 flex flex-col h-full min-h-0 shrink-0 transition-opacity duration-200 ${
+        className={`w-72 lg:w-80 p-3 sm:p-4 flex flex-col h-full min-h-0 shrink-0 gap-2.5 transition-opacity duration-200 ${
           sidebarCollapsed ? "opacity-0 pointer-events-none invisible" : "opacity-100 visible"
         }`}
       >

@@ -112,10 +112,10 @@ export function StudyMiniHomepage() {
 
           <div className="min-w-0">
             <div className="flex items-center gap-2">
-              <span className="font-mono text-[9px] sm:text-[10px] font-bold uppercase tracking-[0.18em] text-amber-400 truncate">
+              <span className="font-mono text-xs font-bold uppercase tracking-[0.18em] text-amber-400 truncate">
                 DUNSINANE // 1606
               </span>
-              <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-emerald-500/15 border border-emerald-500/25 text-[9px] font-mono text-emerald-300 shrink-0">
+              <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-emerald-500/15 border border-emerald-500/25 text-xs font-mono text-emerald-300 shrink-0">
                 <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
                 Live Widget Synced
               </span>

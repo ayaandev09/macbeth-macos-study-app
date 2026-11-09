@@ -13,7 +13,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="dark" data-academic-font="newsreader" data-handwritten-style="newsreader">
+    <html lang="en" className="dark" data-academic-font="jakarta" data-handwritten-style="jakarta">
       <head>
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link
@@ -26,7 +26,7 @@ export default function RootLayout({
           rel="stylesheet"
         />
       </head>
-      <body className="antialiased selection:bg-rose-500/30 selection:text-rose-100 font-sans">
+      <body className="bg-[#020308] text-slate-100 antialiased selection:bg-amber-500/30 selection:text-amber-100 min-h-screen font-sans">
         {children}
       </body>
     </html>
