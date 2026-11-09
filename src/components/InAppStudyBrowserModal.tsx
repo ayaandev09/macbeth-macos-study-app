@@ -58,9 +58,43 @@ export function InAppStudyBrowserModal({
   const [isIframeLoading, setIsIframeLoading] = useState(false);
   const [iframeError, setIframeError] = useState(false);
 
+  // Sync state whenever modal is opened or props change
+  React.useEffect(() => {
+    if (isOpen) {
+      if (initialSourceId) {
+        setSelectedSourceId(initialSourceId);
+      }
+      if (initialUrl) {
+        setBrowserUrl(initialUrl);
+        setUrlInput(initialUrl);
+        setHistory((prev) => (prev[prev.length - 1] === initialUrl ? prev : [...prev, initialUrl]));
+      }
+    }
+  }, [isOpen, initialSourceId, initialUrl]);
+
   // Audio Deep Dive simulator state
   const [isPlayingAudio, setIsPlayingAudio] = useState(false);
   const [audioProgress, setAudioProgress] = useState(0);
+
+  React.useEffect(() => {
+    let timer: NodeJS.Timeout | null = null;
+    if (isPlayingAudio) {
+      timer = setInterval(() => {
+        setAudioProgress((prev) => {
+          if (prev >= 100) {
+            setIsPlayingAudio(false);
+            return 0;
+          }
+          return prev + 2;
+        });
+      }, 500);
+    } else {
+      if (timer) clearInterval(timer);
+    }
+    return () => {
+      if (timer) clearInterval(timer);
+    };
+  }, [isPlayingAudio]);
 
   if (!isOpen) return null;
 
@@ -463,7 +497,12 @@ export function InAppStudyBrowserModal({
                   </div>
 
                   <button
-                    onClick={() => setIsPlayingAudio(!isPlayingAudio)}
+                    onClick={() => {
+                      if (!isPlayingAudio && audioProgress >= 100) {
+                        setAudioProgress(0);
+                      }
+                      setIsPlayingAudio(!isPlayingAudio);
+                    }}
                     className="px-3.5 py-1.5 rounded-xl bg-amber-500/20 hover:bg-amber-500/30 border border-amber-400/40 text-amber-300 font-mono text-xs flex items-center gap-1.5 cursor-pointer transition-all"
                   >
                     {isPlayingAudio ? (
@@ -474,10 +513,18 @@ export function InAppStudyBrowserModal({
                     ) : (
                       <>
                         <Play className="w-3.5 h-3.5 text-emerald-400" />
-                        <span>Play Briefing</span>
+                        <span>{audioProgress > 0 && audioProgress < 100 ? "Resume Briefing" : "Play Briefing"}</span>
                       </>
                     )}
                   </button>
+                </div>
+
+                {/* Simulated Audio Progress Bar */}
+                <div className="w-full bg-black/40 rounded-full h-1.5 overflow-hidden border border-white/5">
+                  <div
+                    className="h-full bg-gradient-to-r from-amber-400 via-purple-400 to-rose-400 transition-all duration-300"
+                    style={{ width: `${audioProgress}%` }}
+                  />
                 </div>
 
                 {/* Debate Points */}

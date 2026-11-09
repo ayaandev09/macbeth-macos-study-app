@@ -586,6 +586,25 @@ export default function MacbethStudyDashboardMacPage() {
       onClose={closeInAppBrowser}
       initialUrl={inAppBrowserUrl}
       initialSourceId={inAppBrowserSourceId}
+      onInsertIntoEssay={(textToInsert) => {
+        try {
+          const savedDrafts = localStorage.getItem("macbeth_ib_paper2_drafts_v1");
+          const parsed = savedDrafts ? JSON.parse(savedDrafts) : {};
+          const current = parsed["q1-appearance-reality"] || { continuousEssay: "" };
+          const existing = current.continuousEssay || "";
+          const separator = existing && !existing.endsWith("\n") ? "\n\n" : "";
+          const updated = {
+            ...parsed,
+            ["q1-appearance-reality"]: {
+              ...current,
+              continuousEssay: existing + separator + textToInsert,
+            },
+          };
+          localStorage.setItem("macbeth_ib_paper2_drafts_v1", JSON.stringify(updated));
+        } catch (e) {
+          console.error("Failed to insert into essay:", e);
+        }
+      }}
     />
 
     {/* Immersive Onboarding Walkthrough Tour */}
