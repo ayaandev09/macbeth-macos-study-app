@@ -187,60 +187,36 @@ export function IBPaper2StudioView() {
     return `${mins.toString().padStart(2, "0")}:${secs.toString().padStart(2, "0")}`;
   };
 
-  // Current draft calculation
-  const activeDraft = draftsByQuestion[selectedQuestionId] || DEFAULT_DRAFT;
-  const continuousText = activeDraft.continuousEssay || "";
+  // Reference to the continuous textarea for cursor-aware insertion & accessibility
+  const continuousTextareaRef = useRef<HTMLTextAreaElement>(null);
 
-  const totalWords = useMemo(() => {
-    return continuousText.trim() ? continuousText.trim().split(/\s+/).length : 0;
-  }, [continuousText]);
-
-  const handleCopyFullEssayDraft = () => {
-    const fullText = [
-      `TITLE: IB English Paper 2 - Response to Question ${currentQuestion.number}`,
-      `QUESTION: ${currentQuestion.question}`,
-      `WORD COUNT: ${totalWords} words`,
-      "",
-      continuousText || "(No essay text written yet)",
-    ].join("\n");
-
-    navigator.clipboard.writeText(fullText);
-    setCopiedEssayText(true);
-    setTimeout(() => setCopiedEssayText(false), 2000);
-  };
-
-  const handleLoadTemplateIntoCanvas = () => {
-    const templateText = UNIVERSAL_IB_PAPER_2_TEMPLATE.rawFullTemplateText;
-    if (!continuousText.trim() || window.confirm("Load the universal 900-word template framework into your writing canvas? This will populate the editor with the complete structured guide.")) {
-      updateContinuousEssay(templateText);
-      setTemplateLoadedFeedback(true);
-      setTimeout(() => setTemplateLoadedFeedback(false), 2500);
+  // Safe clipboard writing helper with fallback
+  const safeCopyToClipboard = async (text: string): Promise<boolean> => {
+    if (typeof navigator !== "undefined" && navigator.clipboard && navigator.clipboard.writeText) {
+      try {
+        await navigator.clipboard.writeText(text);
+        return true;
+      } catch (err) {
+        console.warn("navigator.clipboard.writeText failed, falling back to execCommand:", err);
+      }
     }
-  };
-
-  const handleInsertSentenceStem = (stem: string, stemId: string) => {
-    const separator = continuousText && !continuousText.endsWith("\n") ? (continuousText.endsWith(" ") ? "" : " ") : "";
-    updateContinuousEssay(continuousText + separator + stem + " ");
-    setCopiedStemIndex(stemId);
-    setTimeout(() => setCopiedStemIndex(null), 1500);
-  };
-
-  const handleCopyQuote = (quoteText: string, index: number) => {
-    navigator.clipboard.writeText(quoteText);
-    setCopiedQuoteIndex(index);
-    setTimeout(() => setCopiedQuoteIndex(null), 2000);
-  };
-
-  const handleCopyExemplarSection = (content: string, index: number) => {
-    navigator.clipboard.writeText(content);
-    setCopiedSectionIndex(index);
-    setTimeout(() => setCopiedSectionIndex(null), 2000);
-  };
-
-  const handleCopyTransitionPhrase = (phrase: string, key: string) => {
-    navigator.clipboard.writeText(phrase);
-    setCopiedTransitionIndex(key);
-    setTimeout(() => setCopiedTransitionIndex(null), 2000);
+    // Fallback for non-secure contexts or permission restrictions
+    try {
+      const textarea = document.createElement("textarea");
+      textarea.value = text;
+      textarea.style.position = "fixed";
+      textarea.style.left = "-9999px";
+      textarea.style.top = "-9999px";
+      document.body.appendChild(textarea);
+      textarea.focus();
+      textarea.select();
+      const successful = document.execCommand("copy");
+      document.body.removeChild(textarea);
+      return successful;
+    } catch (fallbackErr) {
+      console.error("Fallback clipboard copy failed:", fallbackErr);
+      return false;
+    }
   };
 
   // Handwriting font styling resolver (Strictly clean upright handwriting with zero slant)
@@ -257,6 +233,108 @@ export function IBPaper2StudioView() {
       case "regular-sans":
       default:
         return "font-sans";
+    }
+  };
+
+  // Current draft calculation
+  const activeDraft = draftsByQuestion[selectedQuestionId] || DEFAULT_DRAFT;
+  const continuousText = activeDraft.continuousEssay || "";
+
+  const totalWords = useMemo(() => {
+    return continuousText.trim() ? continuousText.trim().split(/\s+/).length : 0;
+  }, [continuousText]);
+
+  // Insert text into continuous textarea at active selection or end
+  const insertTextIntoContinuousEssay = (textToInsert: string) => {
+    const textarea = continuousTextareaRef.current;
+    if (textarea) {
+      const start = textarea.selectionStart ?? continuousText.length;
+      const end = textarea.selectionEnd ?? continuousText.length;
+      const before = continuousText.substring(0, start);
+      const after = continuousText.substring(end);
+
+      // Add appropriate spacing around inserted text if needed
+      let leadingSpace = "";
+      if (before.length > 0 && !before.endsWith(" ") && !before.endsWith("\n") && !textToInsert.startsWith(" ") && !textToInsert.startsWith("\n")) {
+        leadingSpace = " ";
+      }
+      let trailingSpace = "";
+      if (after.length > 0 && !after.startsWith(" ") && !after.startsWith("\n") && !textToInsert.endsWith(" ") && !textToInsert.endsWith("\n")) {
+        trailingSpace = " ";
+      }
+
+      const newContent = before + leadingSpace + textToInsert + trailingSpace + after;
+      updateContinuousEssay(newContent);
+
+      // Re-position cursor right after inserted text
+      setTimeout(() => {
+        if (textarea) {
+          const newCursorPos = start + leadingSpace.length + textToInsert.length;
+          textarea.focus();
+          textarea.setSelectionRange(newCursorPos, newCursorPos);
+        }
+      }, 0);
+    } else {
+      const separator = continuousText && !continuousText.endsWith("\n") ? (continuousText.endsWith(" ") ? "" : " ") : "";
+      updateContinuousEssay(continuousText + separator + textToInsert);
+    }
+  };
+
+  const handleCopyFullEssayDraft = async () => {
+    const fullText = [
+      `TITLE: IB English Paper 2 - Response to Question ${currentQuestion.number}`,
+      `QUESTION: ${currentQuestion.question}`,
+      `WORD COUNT: ${totalWords} words`,
+      "",
+      continuousText || "(No essay text written yet)",
+    ].join("\n");
+
+    const success = await safeCopyToClipboard(fullText);
+    if (success) {
+      setCopiedEssayText(true);
+      setTimeout(() => setCopiedEssayText(false), 2000);
+    }
+  };
+
+  const handleLoadTemplateIntoCanvas = () => {
+    const templateText = UNIVERSAL_IB_PAPER_2_TEMPLATE.rawFullTemplateText;
+    if (!continuousText.trim() || window.confirm("Load the universal 900-word template framework into your writing canvas? This will populate the editor with the complete structured guide.")) {
+      updateContinuousEssay(templateText);
+      setTemplateLoadedFeedback(true);
+      setTimeout(() => setTemplateLoadedFeedback(false), 2500);
+      if (continuousTextareaRef.current) {
+        continuousTextareaRef.current.focus();
+      }
+    }
+  };
+
+  const handleInsertSentenceStem = (stem: string, stemId: string) => {
+    insertTextIntoContinuousEssay(stem);
+    setCopiedStemIndex(stemId);
+    setTimeout(() => setCopiedStemIndex(null), 1500);
+  };
+
+  const handleCopyQuote = async (quoteText: string, index: number) => {
+    const success = await safeCopyToClipboard(quoteText);
+    if (success) {
+      setCopiedQuoteIndex(index);
+      setTimeout(() => setCopiedQuoteIndex(null), 2000);
+    }
+  };
+
+  const handleCopyExemplarSection = async (content: string, index: number) => {
+    const success = await safeCopyToClipboard(content);
+    if (success) {
+      setCopiedSectionIndex(index);
+      setTimeout(() => setCopiedSectionIndex(null), 2000);
+    }
+  };
+
+  const handleCopyTransitionPhrase = async (phrase: string, key: string) => {
+    const success = await safeCopyToClipboard(phrase);
+    if (success) {
+      setCopiedTransitionIndex(key);
+      setTimeout(() => setCopiedTransitionIndex(null), 2000);
     }
   };
 
@@ -818,8 +896,7 @@ export function IBPaper2StudioView() {
                   onChange={(e) => {
                     const quote = e.target.value;
                     if (quote) {
-                      const separator = continuousText && !continuousText.endsWith("\n") ? (continuousText.endsWith(" ") ? "" : " ") : "";
-                      updateContinuousEssay(continuousText + separator + quote + " ");
+                      insertTextIntoContinuousEssay(quote);
                       e.target.value = "";
                     }
                   }}
@@ -838,22 +915,20 @@ export function IBPaper2StudioView() {
 
                 <button
                   onClick={() => {
-                    const separator = continuousText && !continuousText.endsWith("\n") ? "\n• " : "• ";
-                    updateContinuousEssay(continuousText + separator);
+                    insertTextIntoContinuousEssay("\n• ");
                   }}
                   className="px-2.5 py-1 rounded-lg bg-white/5 hover:bg-white/10 text-slate-300 hover:text-white text-xs font-mono flex items-center gap-1 cursor-pointer transition-colors"
-                  title="Insert Bullet Point"
+                  title="Insert Bullet Point at cursor"
                 >
                   <ListPlus className="w-3 h-3 text-amber-300" />
                   <span>Bullet</span>
                 </button>
                 <button
                   onClick={() => {
-                    const separator = continuousText && !continuousText.endsWith(" ") ? " " : "";
-                    updateContinuousEssay(continuousText + separator + '"[Quote]" ');
+                    insertTextIntoContinuousEssay('"[Quote]"');
                   }}
                   className="px-2.5 py-1 rounded-lg bg-white/5 hover:bg-white/10 text-slate-300 hover:text-white text-xs font-mono flex items-center gap-1 cursor-pointer transition-colors"
-                  title="Insert Quotation Placeholder"
+                  title="Insert Quotation Placeholder at cursor"
                 >
                   <Quote className="w-3 h-3 text-amber-300" />
                   <span>Quote Slot</span>
@@ -893,6 +968,11 @@ export function IBPaper2StudioView() {
             {/* The Unified Continuous Writing Textarea */}
             <div className="relative p-5 sm:p-6">
               <textarea
+                ref={continuousTextareaRef}
+                id="continuous-essay-canvas"
+                aria-label="Continuous IB English Paper 2 Essay Canvas"
+                role="textbox"
+                aria-multiline="true"
                 value={continuousText}
                 onChange={(e) => updateContinuousEssay(e.target.value)}
                 rows={22}
