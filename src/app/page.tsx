@@ -19,6 +19,7 @@ import { ImmersiveAppWalkthrough } from "@/components/ImmersiveAppWalkthrough";
 import { MacbethRightInspector } from "@/components/MacbethRightInspector";
 import { TimedExamSprintModal } from "@/components/TimedExamSprintModal";
 import { JellySpotlightModal } from "@/components/JellySpotlightModal";
+import { InAppStudyBrowserModal } from "@/components/InAppStudyBrowserModal";
 import { ChromaticButton } from "@/components/chromatic-button";
 import { ALL_CHAPTERS, BOOK_PARTS, THEMES_TAXONOMY, ActId } from "@/data";
 import { useStudyStore } from "@/store/useStudyStore";
@@ -64,6 +65,10 @@ export default function MacbethStudyDashboardMacPage() {
     isSpotlightOpen,
     closeSpotlight,
     setStudyGoal,
+    isInAppBrowserOpen,
+    inAppBrowserUrl,
+    inAppBrowserSourceId,
+    closeInAppBrowser,
   } = useStudyStore();
 
   const [isStartupActive, setIsStartupActive] = useState(true);
@@ -573,6 +578,14 @@ export default function MacbethStudyDashboardMacPage() {
     <JellySpotlightModal
       isOpen={isSpotlightOpen}
       onClose={closeSpotlight}
+    />
+
+    {/* In-App Study Browser & NotebookLM Research Hub Modal */}
+    <InAppStudyBrowserModal
+      isOpen={isInAppBrowserOpen}
+      onClose={closeInAppBrowser}
+      initialUrl={inAppBrowserUrl}
+      initialSourceId={inAppBrowserSourceId}
     />
 
     {/* Immersive Onboarding Walkthrough Tour */}

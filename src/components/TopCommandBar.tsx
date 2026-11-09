@@ -26,6 +26,7 @@ import {
   Keyboard,
   PanelLeft,
   Compass,
+  Globe,
 } from "lucide-react";
 import { KeyboardShortcutsModal } from "./KeyboardShortcutsModal";
 
@@ -102,6 +103,8 @@ export function TopCommandBar({ onOpenWalkthrough }: TopCommandBarProps = {}) {
     triggerStartupIntro,
     sidebarCollapsed,
     toggleSidebar,
+    openInAppBrowser,
+    toggleInAppBrowser,
   } = useStudyStore();
 
   const completedCount = Object.values(completedChapters || {}).filter(Boolean).length;
@@ -230,6 +233,16 @@ export function TopCommandBar({ onOpenWalkthrough }: TopCommandBarProps = {}) {
             <kbd className="inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-mono font-bold text-amber-300 bg-amber-500/15 border border-amber-400/25">
               ⌘K
             </kbd>
+          </button>
+
+          {/* In-App Research Browser & NotebookLM Vault Button */}
+          <button
+            onClick={() => openInAppBrowser()}
+            title="Open In-App Study Companion & NotebookLM Browser"
+            className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl bg-sky-500/15 hover:bg-sky-500/25 border border-sky-400/35 hover:border-sky-300 text-sky-200 hover:text-white cursor-pointer transition-all shrink-0 shadow-sm"
+          >
+            <Globe className="w-3.5 h-3.5 text-sky-400" />
+            <span className="text-xs font-medium hidden lg:inline">Research</span>
           </button>
 
           {/* Study Goal Switcher: Revision vs Study (Compact Segmented Pill) */}

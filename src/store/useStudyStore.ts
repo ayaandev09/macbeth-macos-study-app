@@ -31,6 +31,9 @@ interface StudyStoreState {
   isSpotlightOpen: boolean;
   isStartupActive: boolean;
   widgetTemplate: WidgetTemplateSize;
+  isInAppBrowserOpen: boolean;
+  inAppBrowserUrl: string;
+  inAppBrowserSourceId?: string;
 
   // Persisted Study Progress State
   completedChapters: Record<string, boolean>;
@@ -65,6 +68,9 @@ interface StudyStoreState {
   setWidgetTemplate: (template: WidgetTemplateSize) => void;
   triggerStartupIntro: () => void;
   dismissStartupIntro: () => void;
+  openInAppBrowser: (url?: string, sourceId?: string) => void;
+  closeInAppBrowser: () => void;
+  toggleInAppBrowser: () => void;
 
   // Progress Tracker Actions
   toggleChapterComplete: (chapterId: string) => void;
@@ -101,6 +107,9 @@ export const useStudyStore = create<StudyStoreState>()(
       isSpotlightOpen: false,
       isStartupActive: true,
       widgetTemplate: "medium",
+      isInAppBrowserOpen: false,
+      inAppBrowserUrl: "https://notebooklm.google.com/",
+      inAppBrowserSourceId: "src-appearance-inversion",
 
       completedChapters: {},
       completedSubSections: {},
@@ -227,6 +236,23 @@ export const useStudyStore = create<StudyStoreState>()(
       toggleSpotlight: () =>
         set((state) => ({
           isSpotlightOpen: !state.isSpotlightOpen,
+        })),
+
+      openInAppBrowser: (url, sourceId) =>
+        set({
+          isInAppBrowserOpen: true,
+          inAppBrowserUrl: url || "https://notebooklm.google.com/",
+          inAppBrowserSourceId: sourceId || "src-appearance-inversion",
+        }),
+
+      closeInAppBrowser: () =>
+        set({
+          isInAppBrowserOpen: false,
+        }),
+
+      toggleInAppBrowser: () =>
+        set((state) => ({
+          isInAppBrowserOpen: !state.isInAppBrowserOpen,
         })),
 
       setSpotlightOpen: (open) =>

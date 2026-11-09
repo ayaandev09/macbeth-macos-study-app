@@ -9,6 +9,7 @@ export * from "./metadata";
 export * from "./revisionData";
 export * from "./ibPaper2Data";
 export * from "./ibSampleEssayTemplate";
+export * from "./notebookLmSources";
 
 export const BOOK_PARTS: BookPart[] = [
   {

@@ -1,7 +1,8 @@
 "use client";
 
 import React, { useState, useEffect, useRef, useMemo } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import {
+  motion, AnimatePresence } from "framer-motion";
 import {
   IB_GUIDING_QUESTIONS,
   IB_PAPER_2_RUBRIC,
@@ -9,6 +10,7 @@ import {
   UNIVERSAL_IB_PAPER_2_TEMPLATE,
   IBQuestionData,
 } from "@/data";
+import { useStudyStore } from "@/store/useStudyStore";
 import {
   PenLine,
   BookOpen,
@@ -41,6 +43,13 @@ import {
   EyeOff,
   Compass,
   Lightbulb,
+  ExternalLink,
+  Bookmark,
+  Target,
+  AlertTriangle,
+  BrainCircuit,
+  Library,
+  Globe,
 } from "lucide-react";
 
 type FontStyleOption = "handwriting-upright" | "handwriting-comic" | "handwriting-architect" | "regular-sans" | "scholarly-serif";
@@ -66,10 +75,13 @@ const DEFAULT_DRAFT: EssayDraftState = {
 };
 
 export function IBPaper2StudioView() {
+  const { openInAppBrowser } = useStudyStore();
   const [selectedQuestionId, setSelectedQuestionId] = useState<string>(IB_GUIDING_QUESTIONS[0].id);
   const [activeStudioTab, setActiveStudioTab] = useState<"questions" | "write" | "rubric" | "exemplar">("questions");
   const [fontStyle, setFontStyle] = useState<FontStyleOption>("handwriting-upright");
   const [expandedQuoteIndex, setExpandedQuoteIndex] = useState<number | null>(0);
+  const [activeDeepDiveTab, setActiveDeepDiveTab] = useState<"narrowing" | "rubric" | "notebooklm" | "quotes">("narrowing");
+  const [copiedFormulaIndex, setCopiedFormulaIndex] = useState<number | null>(null);
   const [activeRubricCriterion, setActiveRubricCriterion] = useState<string>("A");
   const [copiedQuoteIndex, setCopiedQuoteIndex] = useState<number | null>(null);
   const [copiedEssayText, setCopiedEssayText] = useState(false);
@@ -314,6 +326,14 @@ export function IBPaper2StudioView() {
     setTimeout(() => setCopiedStemIndex(null), 1500);
   };
 
+  const handleCopyFormula = async (formulaText: string, index: number) => {
+    const success = await safeCopyToClipboard(formulaText);
+    if (success) {
+      setCopiedFormulaIndex(index);
+      setTimeout(() => setCopiedFormulaIndex(null), 2000);
+    }
+  };
+
   const handleCopyQuote = async (quoteText: string, index: number) => {
     const success = await safeCopyToClipboard(quoteText);
     if (success) {
@@ -544,100 +564,437 @@ export function IBPaper2StudioView() {
               </div>
             </div>
 
-            {/* CURATED BEST QUOTES SECTION */}
-            <div className="space-y-4">
-              <div className="flex items-center justify-between">
-                <div>
-                  <h3 className="text-base sm:text-lg font-bold text-white flex items-center gap-2">
-                    <Quote className="w-4 h-4 text-amber-400" />
-                    <span>Curated Best Quotes for Question 0{currentQuestion.number}</span>
+            {/* =====================================================================
+                COMPREHENSIVE QUESTION DEEP-DIVE & NOTEBOOKLM RESOURCE HUB
+                ===================================================================== */}
+            <div className="space-y-5 rounded-3xl p-5 sm:p-6 bg-gradient-to-br from-amber-950/30 via-slate-900/90 to-black/90 border border-amber-400/40 shadow-xl">
+              {/* Deep-Dive Header with Sub-tabs */}
+              <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-4 border-b border-white/10">
+                <div className="space-y-1">
+                  <div className="flex flex-wrap items-center gap-2">
+                    <span className="px-2.5 py-0.5 rounded-full bg-amber-500/20 text-amber-300 border border-amber-400/30 text-[11px] font-mono font-bold uppercase flex items-center gap-1.5">
+                      <Sparkles className="w-3 h-3 text-amber-400" />
+                      Paper 2 Modified Deep-Dive Hub
+                    </span>
+                    <span className="px-2 py-0.5 rounded-full bg-emerald-500/15 text-emerald-300 border border-emerald-400/25 text-[10px] font-mono">
+                      Target: Grade 7 / 27+ Marks
+                    </span>
+                  </div>
+                  <h3 className="text-base sm:text-lg font-bold text-white font-display flex items-center gap-2">
+                    <span>Mastering Question 0{currentQuestion.number}: Narrowing, High Marks &amp; Memorable Anchors</span>
                   </h3>
-                  <p className="text-xs text-slate-400">
-                    High-scoring, versatile Shakespearean anchors complete with speaker, act/scene citation, literary devices, and Paper 2 utility.
+                  <p className="text-xs text-slate-300 max-w-2xl">
+                    How to transform this broad prompt into a razor-sharp thesis, integrate unforgettable quotes, and utilize NotebookLM as your personal Paper 2 study companion.
                   </p>
                 </div>
-                <span className="text-xs font-mono text-amber-300">
-                  {currentQuestion.bestQuotes.length} Curated Quotes
-                </span>
+
+                {/* Sub-tab Navigation */}
+                <div className="flex flex-wrap items-center gap-1.5 p-1 rounded-2xl bg-black/60 border border-white/10 text-xs shrink-0">
+                  <button
+                    onClick={() => setActiveDeepDiveTab("narrowing")}
+                    className={`px-3 py-1.5 rounded-xl font-mono text-xs flex items-center gap-1.5 transition-all cursor-pointer ${
+                      activeDeepDiveTab === "narrowing"
+                        ? "bg-amber-500/25 text-amber-300 border border-amber-400/40 font-bold shadow-sm"
+                        : "text-slate-400 hover:text-white"
+                    }`}
+                  >
+                    <Target className="w-3.5 h-3.5" />
+                    <span>Narrowing Down</span>
+                  </button>
+                  <button
+                    onClick={() => setActiveDeepDiveTab("rubric")}
+                    className={`px-3 py-1.5 rounded-xl font-mono text-xs flex items-center gap-1.5 transition-all cursor-pointer ${
+                      activeDeepDiveTab === "rubric"
+                        ? "bg-amber-500/25 text-amber-300 border border-amber-400/40 font-bold shadow-sm"
+                        : "text-slate-400 hover:text-white"
+                    }`}
+                  >
+                    <Award className="w-3.5 h-3.5" />
+                    <span>High Marks (A–D)</span>
+                  </button>
+                  <button
+                    onClick={() => setActiveDeepDiveTab("quotes")}
+                    className={`px-3 py-1.5 rounded-xl font-mono text-xs flex items-center gap-1.5 transition-all cursor-pointer ${
+                      activeDeepDiveTab === "quotes"
+                        ? "bg-amber-500/25 text-amber-300 border border-amber-400/40 font-bold shadow-sm"
+                        : "text-slate-400 hover:text-white"
+                    }`}
+                  >
+                    <Quote className="w-3.5 h-3.5" />
+                    <span>Memorable Quotes ({currentQuestion.bestQuotes.length})</span>
+                  </button>
+                  <button
+                    onClick={() => setActiveDeepDiveTab("notebooklm")}
+                    className={`px-3 py-1.5 rounded-xl font-mono text-xs flex items-center gap-1.5 transition-all cursor-pointer ${
+                      activeDeepDiveTab === "notebooklm"
+                        ? "bg-sky-500/25 text-sky-300 border border-sky-400/40 font-bold shadow-sm"
+                        : "text-slate-400 hover:text-sky-300"
+                    }`}
+                  >
+                    <BrainCircuit className="w-3.5 h-3.5" />
+                    <span>NotebookLM Hub</span>
+                  </button>
+                </div>
               </div>
 
-              <div className="grid grid-cols-1 gap-3">
-                {currentQuestion.bestQuotes.map((q, idx) => {
-                  const isExpanded = expandedQuoteIndex === idx;
-                  const isCopied = copiedQuoteIndex === idx;
-                  return (
-                    <div
-                      key={idx}
-                      className="p-4 rounded-2xl bg-slate-900/80 border border-white/10 hover:border-amber-400/30 transition-all space-y-3"
-                    >
-                      <div className="flex flex-wrap items-center justify-between gap-2">
-                        <div className="flex items-center gap-2">
-                          <span className="font-mono text-xs font-bold text-amber-300 px-2 py-0.5 rounded bg-amber-500/15 border border-amber-400/25">
-                            {q.speaker} • {q.actScene} ({q.lineRef})
-                          </span>
-                          <div className="flex flex-wrap gap-1">
-                            {q.literaryDevices.map((dev, dIdx) => (
-                              <span
-                                key={dIdx}
-                                className="px-1.5 py-0.2 rounded text-[10px] font-mono bg-white/5 text-slate-300 border border-white/10"
-                              >
-                                {dev}
+              {/* TAB CONTENT: 1. NARROWING DOWN STRATEGY */}
+              {activeDeepDiveTab === "narrowing" && (
+                <div className="space-y-4 animate-fade-in">
+                  {/* Broad Diagnosis Warning */}
+                  <div className="p-4 rounded-2xl bg-amber-500/[0.08] border border-amber-400/30 flex items-start gap-3">
+                    <div className="w-8 h-8 rounded-xl bg-amber-500/20 text-amber-300 flex items-center justify-center shrink-0 mt-0.5">
+                      <Compass className="w-4 h-4" />
+                    </div>
+                    <div className="space-y-1">
+                      <span className="font-mono text-xs font-bold text-amber-300 uppercase tracking-wider block">
+                        How to Narrow Down this Broad Prompt
+                      </span>
+                      <p className="text-xs sm:text-sm text-slate-200 leading-relaxed">
+                        {currentQuestion.deepDive.narrowingStrategy.broadPromptDiagnosis}
+                      </p>
+                    </div>
+                  </div>
+
+                  {/* 3 High-Scoring Narrowed Angles with Thesis Stems */}
+                  <div className="space-y-2">
+                    <span className="font-mono text-[11px] text-slate-300 uppercase font-bold tracking-wider block">
+                      ✦ 3 Recommended Narrowed Angles &amp; Razor-Sharp Thesis Stems:
+                    </span>
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+                      {currentQuestion.deepDive.narrowingStrategy.narrowingAngles.map((angle, aIdx) => (
+                        <div
+                          key={aIdx}
+                          className="p-4 rounded-2xl bg-black/50 border border-white/10 hover:border-amber-400/40 transition-all space-y-2.5 flex flex-col justify-between"
+                        >
+                          <div className="space-y-1.5">
+                            <div className="flex items-center gap-1.5 text-amber-300 font-mono text-xs font-bold">
+                              <span className="w-5 h-5 rounded-full bg-amber-500/20 flex items-center justify-center text-[10px]">
+                                {aIdx + 1}
                               </span>
-                            ))}
+                              <span>{angle.angle}</span>
+                            </div>
+                            <p className="text-xs text-slate-300 leading-relaxed">{angle.focus}</p>
+                          </div>
+                          <div className="pt-2 border-t border-white/10 space-y-1.5">
+                            <div className="flex items-center justify-between text-[10px] font-mono text-slate-400">
+                              <span className="uppercase text-amber-400/80 font-bold">High-Scoring Thesis:</span>
+                              <button
+                                onClick={async () => {
+                                  await safeCopyToClipboard(angle.thesisStem);
+                                  handleInsertSentenceStem(angle.thesisStem, `thesis-${aIdx}`);
+                                }}
+                                className="text-amber-300 hover:text-white flex items-center gap-1 cursor-pointer transition-colors"
+                                title="Insert Thesis into Canvas"
+                              >
+                                <span>+ Insert</span>
+                              </button>
+                            </div>
+                            <blockquote className="text-[11px] italic font-serif text-slate-200 bg-white/[0.02] p-2 rounded-lg border-l-2 border-amber-400/60 leading-relaxed">
+                              &ldquo;{angle.thesisStem}&rdquo;
+                            </blockquote>
                           </div>
                         </div>
+                      ))}
+                    </div>
+                  </div>
 
-                        <div className="flex items-center gap-1.5">
-                          <button
-                            onClick={() => handleCopyQuote(`"${q.quote}" (${q.speaker}, ${q.lineRef})`, idx)}
-                            className="px-2.5 py-1 rounded-lg text-xs font-mono bg-white/5 hover:bg-white/10 text-slate-300 hover:text-white flex items-center gap-1 cursor-pointer transition-colors"
-                            title="Copy Quote with Reference"
-                          >
-                            {isCopied ? (
-                              <>
-                                <Check className="w-3 h-3 text-emerald-400" />
-                                <span className="text-emerald-300 text-[11px]">Copied</span>
-                              </>
-                            ) : (
-                              <>
-                                <Copy className="w-3 h-3" />
-                                <span className="text-[11px]">Copy</span>
-                              </>
-                            )}
-                          </button>
-                          <button
-                            onClick={() => setExpandedQuoteIndex(isExpanded ? null : idx)}
-                            className="p-1 rounded-lg text-slate-400 hover:text-white hover:bg-white/10 transition-colors cursor-pointer"
-                          >
-                            {isExpanded ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
-                          </button>
+                  {/* Common Student Traps to Avoid */}
+                  <div className="space-y-2 pt-2">
+                    <span className="font-mono text-[11px] text-rose-300 uppercase font-bold tracking-wider flex items-center gap-1.5">
+                      <AlertTriangle className="w-3.5 h-3.5" />
+                      Common Student Traps to Avoid (Why Students Lose Marks):
+                    </span>
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+                      {currentQuestion.deepDive.narrowingStrategy.trapsToAvoid.map((trap, tIdx) => (
+                        <div key={tIdx} className="p-3.5 rounded-2xl bg-rose-950/20 border border-rose-500/25 space-y-1.5 text-xs">
+                          <span className="font-mono font-bold text-rose-300 block">⚠️ {trap.trap}</span>
+                          <p className="text-slate-300 leading-relaxed">
+                            <strong className="text-rose-200/90">Consequence:</strong> {trap.consequence}
+                          </p>
+                          <p className="text-slate-200 pt-1 border-t border-rose-500/20 leading-relaxed">
+                            <strong className="text-emerald-400">Remedy:</strong> {trap.remedy}
+                          </p>
                         </div>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* TAB CONTENT: 2. HIGH MARKS CRITERION STRATEGY (A-D) */}
+              {activeDeepDiveTab === "rubric" && (
+                <div className="space-y-4 animate-fade-in">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    {/* Criterion A */}
+                    <div className="p-4 rounded-2xl bg-amber-500/[0.06] border border-amber-400/25 space-y-2">
+                      <div className="flex items-center justify-between">
+                        <span className="px-2.5 py-0.5 rounded-lg bg-amber-500/20 text-amber-300 font-mono text-xs font-bold">
+                          Criterion A • 10 Marks
+                        </span>
+                        <span className="text-[11px] font-mono text-slate-400">Knowledge &amp; Insight</span>
+                      </div>
+                      <h4 className="text-sm font-bold text-white">{currentQuestion.deepDive.criterionMastery.criterionA.focus}</h4>
+                      <p className="text-xs text-slate-300 leading-relaxed">{currentQuestion.deepDive.criterionMastery.criterionA.strategy}</p>
+                      <div className="p-2.5 rounded-xl bg-black/40 border border-white/10 text-xs">
+                        <span className="text-[10px] font-mono text-amber-300 uppercase font-bold block mb-0.5">Applied to Question 0{currentQuestion.number}:</span>
+                        <p className="text-slate-200 italic font-serif">{currentQuestion.deepDive.criterionMastery.criterionA.exemplarApplication}</p>
+                      </div>
+                    </div>
+
+                    {/* Criterion B */}
+                    <div className="p-4 rounded-2xl bg-sky-500/[0.06] border border-sky-400/25 space-y-2">
+                      <div className="flex items-center justify-between">
+                        <span className="px-2.5 py-0.5 rounded-lg bg-sky-500/20 text-sky-300 font-mono text-xs font-bold">
+                          Criterion B • 10 Marks
+                        </span>
+                        <span className="text-[11px] font-mono text-slate-400">Craft &amp; Stagecraft</span>
+                      </div>
+                      <h4 className="text-sm font-bold text-white">{currentQuestion.deepDive.criterionMastery.criterionB.focus}</h4>
+                      <p className="text-xs text-slate-300 leading-relaxed">{currentQuestion.deepDive.criterionMastery.criterionB.strategy}</p>
+                      <div className="p-2.5 rounded-xl bg-black/40 border border-white/10 text-xs">
+                        <span className="text-[10px] font-mono text-sky-300 uppercase font-bold block mb-0.5">Applied to Question 0{currentQuestion.number}:</span>
+                        <p className="text-slate-200 italic font-serif">{currentQuestion.deepDive.criterionMastery.criterionB.exemplarApplication}</p>
+                      </div>
+                    </div>
+
+                    {/* Criterion C */}
+                    <div className="p-4 rounded-2xl bg-purple-500/[0.06] border border-purple-400/25 space-y-2">
+                      <div className="flex items-center justify-between">
+                        <span className="px-2.5 py-0.5 rounded-lg bg-purple-500/20 text-purple-300 font-mono text-xs font-bold">
+                          Criterion C • 5 Marks
+                        </span>
+                        <span className="text-[11px] font-mono text-slate-400">Focused Organisation</span>
+                      </div>
+                      <h4 className="text-sm font-bold text-white">{currentQuestion.deepDive.criterionMastery.criterionC.focus}</h4>
+                      <p className="text-xs text-slate-300 leading-relaxed">{currentQuestion.deepDive.criterionMastery.criterionC.strategy}</p>
+                      <div className="p-2.5 rounded-xl bg-black/40 border border-white/10 text-xs">
+                        <span className="text-[10px] font-mono text-purple-300 uppercase font-bold block mb-0.5">Applied to Question 0{currentQuestion.number}:</span>
+                        <p className="text-slate-200 italic font-serif">{currentQuestion.deepDive.criterionMastery.criterionC.exemplarApplication}</p>
+                      </div>
+                    </div>
+
+                    {/* Criterion D */}
+                    <div className="p-4 rounded-2xl bg-emerald-500/[0.06] border border-emerald-400/25 space-y-2">
+                      <div className="flex items-center justify-between">
+                        <span className="px-2.5 py-0.5 rounded-lg bg-emerald-500/20 text-emerald-300 font-mono text-xs font-bold">
+                          Criterion D • 5 Marks
+                        </span>
+                        <span className="text-[11px] font-mono text-slate-400">Academic Register</span>
+                      </div>
+                      <h4 className="text-sm font-bold text-white">{currentQuestion.deepDive.criterionMastery.criterionD.focus}</h4>
+                      <p className="text-xs text-slate-300 leading-relaxed">{currentQuestion.deepDive.criterionMastery.criterionD.strategy}</p>
+                      <div className="p-2.5 rounded-xl bg-black/40 border border-white/10 text-xs">
+                        <span className="text-[10px] font-mono text-emerald-300 uppercase font-bold block mb-0.5">Applied to Question 0{currentQuestion.number}:</span>
+                        <p className="text-slate-200 italic font-serif">{currentQuestion.deepDive.criterionMastery.criterionD.exemplarApplication}</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* TAB CONTENT: 3. MEMORABLE & ESSENTIAL QUOTES WITH FORMULAS */}
+              {activeDeepDiveTab === "quotes" && (
+                <div className="space-y-4 animate-fade-in">
+                  <div className="p-3.5 rounded-2xl bg-white/[0.02] border border-white/10 flex items-center justify-between text-xs">
+                    <span className="text-slate-300">
+                      Below are the <strong className="text-amber-300 font-bold">{currentQuestion.bestQuotes.length} high-yield quotes</strong> specifically chosen for Question 0{currentQuestion.number}. For each quote, learn <strong className="text-white">why it is easy to remember</strong> and use the <strong className="text-white">ready-to-use sentence formula</strong> to integrate it seamlessly.
+                    </span>
+                  </div>
+
+                  <div className="grid grid-cols-1 gap-3.5">
+                    {currentQuestion.bestQuotes.map((q, idx) => {
+                      const isExpanded = expandedQuoteIndex === idx;
+                      const isCopiedQuote = copiedQuoteIndex === idx;
+                      const isCopiedFormula = copiedFormulaIndex === idx;
+                      return (
+                        <div
+                          key={idx}
+                          className="p-4 sm:p-5 rounded-2xl bg-slate-900/90 border border-white/10 hover:border-amber-400/40 transition-all space-y-3"
+                        >
+                          <div className="flex flex-wrap items-center justify-between gap-2">
+                            <div className="flex flex-wrap items-center gap-2">
+                              <span className="font-mono text-xs font-bold text-amber-300 px-2.5 py-1 rounded bg-amber-500/15 border border-amber-400/30">
+                                {q.speaker} • {q.actScene} ({q.lineRef})
+                              </span>
+                              <div className="flex flex-wrap gap-1">
+                                {q.literaryDevices.map((dev, dIdx) => (
+                                  <span
+                                    key={dIdx}
+                                    className="px-2 py-0.5 rounded text-[10px] font-mono bg-white/5 text-slate-300 border border-white/10"
+                                  >
+                                    {dev}
+                                  </span>
+                                ))}
+                              </div>
+                            </div>
+
+                            <div className="flex items-center gap-1.5">
+                              <button
+                                onClick={() => handleCopyQuote(`"${q.quote}" (${q.speaker}, ${q.lineRef})`, idx)}
+                                className="px-2.5 py-1 rounded-lg text-xs font-mono bg-white/5 hover:bg-white/10 text-slate-300 hover:text-white flex items-center gap-1 cursor-pointer transition-colors"
+                                title="Copy Quote with Reference"
+                              >
+                                {isCopiedQuote ? (
+                                  <>
+                                    <Check className="w-3 h-3 text-emerald-400" />
+                                    <span className="text-emerald-300 text-[11px]">Copied</span>
+                                  </>
+                                ) : (
+                                  <>
+                                    <Copy className="w-3 h-3" />
+                                    <span className="text-[11px]">Copy Quote</span>
+                                  </>
+                                )}
+                              </button>
+                              <button
+                                onClick={() => setExpandedQuoteIndex(isExpanded ? null : idx)}
+                                className="p-1 rounded-lg text-slate-400 hover:text-white hover:bg-white/10 transition-colors cursor-pointer"
+                              >
+                                {isExpanded ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
+                              </button>
+                            </div>
+                          </div>
+
+                          {/* Quote Callout */}
+                          <blockquote className="p-3.5 rounded-xl bg-amber-500/[0.09] border-l-3 border-amber-400 font-serif italic text-sm sm:text-base text-amber-100/95 leading-relaxed">
+                            &ldquo;{q.quote}&rdquo;
+                          </blockquote>
+
+                          {/* Memory Anchor & Sentence Integration Formula (Always Visible) */}
+                          <div className="grid grid-cols-1 md:grid-cols-2 gap-3 pt-1 text-xs">
+                            <div className="p-3 rounded-xl bg-black/40 border border-amber-400/20 space-y-1">
+                              <span className="font-mono text-[10px] text-amber-300 font-bold uppercase flex items-center gap-1">
+                                <Sparkles className="w-3 h-3 text-amber-400" />
+                                Why It&apos;s Memorable &amp; Stickier
+                              </span>
+                              <p className="text-slate-300 leading-relaxed">{q.whyMemorable}</p>
+                            </div>
+
+                            <div className="p-3 rounded-xl bg-black/40 border border-emerald-400/20 space-y-1.5">
+                              <div className="flex items-center justify-between">
+                                <span className="font-mono text-[10px] text-emerald-300 font-bold uppercase flex items-center gap-1">
+                                  <PenLine className="w-3 h-3 text-emerald-400" />
+                                  Paper 2 Essay Sentence Formula
+                                </span>
+                                <button
+                                  onClick={() => handleCopyFormula(q.sentenceFormula, idx)}
+                                  className="text-[10px] font-mono text-emerald-300 hover:text-white flex items-center gap-0.5 cursor-pointer"
+                                >
+                                  {isCopiedFormula ? "✓ Copied" : "Copy Formula"}
+                                </button>
+                              </div>
+                              <p className="text-slate-200 italic font-serif text-[11px] leading-relaxed bg-white/[0.02] p-1.5 rounded">
+                                &ldquo;{q.sentenceFormula}&rdquo;
+                              </p>
+                            </div>
+                          </div>
+
+                          {/* Granular Analysis & Paper 2 Utility (Expandable) */}
+                          {isExpanded && (
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-3 pt-2 text-xs border-t border-white/10">
+                              <div className="p-3 rounded-xl bg-white/[0.02] border border-white/5 space-y-1">
+                                <span className="font-mono text-[10px] text-sky-300 font-bold uppercase block">
+                                  Granular Craft Analysis (Criterion B)
+                                </span>
+                                <p className="text-slate-300 leading-relaxed">{q.analysis}</p>
+                              </div>
+                              <div className="p-3 rounded-xl bg-white/[0.02] border border-white/5 space-y-1">
+                                <span className="font-mono text-[10px] text-emerald-300 font-bold uppercase block">
+                                  Paper 2 Comparative Application (Criterion A &amp; C)
+                                </span>
+                                <p className="text-slate-300 leading-relaxed">{q.paper2Utility}</p>
+                              </div>
+                            </div>
+                          )}
+                        </div>
+                      );
+                    })}
+                  </div>
+                </div>
+              )}
+
+              {/* TAB CONTENT: 4. NOTEBOOKLM DIRECT RESOURCE HUB & COMPANION */}
+              {activeDeepDiveTab === "notebooklm" && (
+                <div className="space-y-4 animate-fade-in">
+                  {/* NotebookLM Header Launch Card */}
+                  <div className="p-5 rounded-2xl bg-sky-950/30 border border-sky-400/40 space-y-4">
+                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                      <div className="space-y-1">
+                        <div className="flex items-center gap-2">
+                          <span className="px-2 py-0.5 rounded-full bg-sky-500/20 text-sky-300 text-[10px] font-mono font-bold uppercase">
+                            Google NotebookLM Integration
+                          </span>
+                        </div>
+                        <h4 className="text-base sm:text-lg font-bold text-white font-display flex items-center gap-2">
+                          <BrainCircuit className="w-4 h-4 text-sky-400" />
+                          <span>{currentQuestion.deepDive.notebookLm.notebookName}</span>
+                        </h4>
+                        <p className="text-xs text-slate-300 max-w-xl">
+                          Leverage Google&apos;s grounded NotebookLM to synthesize Macbeth scenes, draft comparative tables, and generate AI audio podcast overviews for this exact question.
+                        </p>
                       </div>
 
-                      <blockquote className="p-3 rounded-xl bg-amber-500/[0.08] border-l-2 border-amber-400 font-serif italic text-sm sm:text-base text-amber-100/95 leading-relaxed">
-                        &ldquo;{q.quote}&rdquo;
-                      </blockquote>
-
-                      {isExpanded && (
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-3 pt-2 text-xs border-t border-white/10">
-                          <div className="p-3 rounded-xl bg-white/[0.02] border border-white/5 space-y-1">
-                            <span className="font-mono text-[10px] text-sky-300 font-bold uppercase block">
-                              Granular Craft Analysis (Criterion B)
-                            </span>
-                            <p className="text-slate-300 leading-relaxed">{q.analysis}</p>
-                          </div>
-                          <div className="p-3 rounded-xl bg-white/[0.02] border border-white/5 space-y-1">
-                            <span className="font-mono text-[10px] text-emerald-300 font-bold uppercase block">
-                              Paper 2 Comparative Application (Criterion A &amp; C)
-                            </span>
-                            <p className="text-slate-300 leading-relaxed">{q.paper2Utility}</p>
-                          </div>
-                        </div>
-                      )}
+                      <div className="flex flex-wrap items-center gap-2 shrink-0">
+                        <button
+                          onClick={() => {
+                            const sourceMapping: Record<string, string> = {
+                              "q1-appearance-reality": "src-appearance-inversion",
+                              "q2-control-resistance": "src-control-temporal",
+                              "q3-conflict-breakdown": "src-psychomachia-breakdown",
+                              "q4-setting-atmosphere": "src-setting-verbal-scenography",
+                            };
+                            openInAppBrowser(
+                              currentQuestion.deepDive.notebookLm.recommendedNotebookUrl,
+                              sourceMapping[currentQuestion.id] || "src-appearance-inversion"
+                            );
+                          }}
+                          className="px-4 py-2.5 rounded-xl bg-gradient-to-r from-sky-500 to-amber-500 hover:from-sky-400 hover:to-amber-400 text-slate-950 font-bold font-mono text-xs flex items-center justify-center gap-2 cursor-pointer shadow-lg transition-all"
+                        >
+                          <Globe className="w-3.5 h-3.5 text-slate-950" />
+                          <span>Open In-App Research Browser</span>
+                        </button>
+                      </div>
                     </div>
-                  );
-                })}
-              </div>
+
+                    {/* Step-by-Step Setup Guide */}
+                    <div className="p-4 rounded-xl bg-black/50 border border-white/10 space-y-2">
+                      <span className="font-mono text-[10px] text-sky-300 font-bold uppercase tracking-wider block">
+                        How to Setup Your NotebookLM for Question 0{currentQuestion.number}:
+                      </span>
+                      <ol className="text-xs text-slate-300 space-y-1.5 list-decimal list-inside leading-relaxed">
+                        {currentQuestion.deepDive.notebookLm.instructions.map((inst, iIdx) => (
+                          <li key={iIdx} className="pl-1">{inst}</li>
+                        ))}
+                      </ol>
+                    </div>
+
+                    {/* Suggested High-Scoring NotebookLM Queries */}
+                    <div className="space-y-2">
+                      <span className="font-mono text-[10px] text-amber-300 font-bold uppercase tracking-wider block">
+                        Recommended Prompts to Ask NotebookLM (Click to Copy):
+                      </span>
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                        {currentQuestion.deepDive.notebookLm.suggestedPrompts.map((prompt, pIdx) => (
+                          <button
+                            key={pIdx}
+                            onClick={async () => {
+                              await safeCopyToClipboard(prompt);
+                              setCopiedTransitionIndex(`nlm-${pIdx}`);
+                              setTimeout(() => setCopiedTransitionIndex(null), 2000);
+                            }}
+                            className="p-2.5 rounded-xl bg-white/[0.03] hover:bg-white/[0.08] border border-white/10 text-left text-xs text-slate-200 transition-all cursor-pointer flex items-center justify-between gap-2 group"
+                          >
+                            <span className="italic leading-relaxed font-serif">&ldquo;{prompt}&rdquo;</span>
+                            <span className="text-[10px] font-mono shrink-0 text-sky-300 opacity-80 group-hover:opacity-100">
+                              {copiedTransitionIndex === `nlm-${pIdx}` ? "✓ Copied" : "Copy"}
+                            </span>
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              )}
             </div>
 
             {/* QUICK ESSAY BLUEPRINT SUMMARY */}
@@ -850,6 +1207,26 @@ export function IBPaper2StudioView() {
               >
                 <Copy className="w-3.5 h-3.5 text-amber-300" />
                 <span>Copy Full Template</span>
+              </button>
+
+              <button
+                onClick={() => {
+                  const sourceMapping: Record<string, string> = {
+                    "q1-appearance-reality": "src-appearance-inversion",
+                    "q2-control-resistance": "src-control-temporal",
+                    "q3-conflict-breakdown": "src-psychomachia-breakdown",
+                    "q4-setting-atmosphere": "src-setting-verbal-scenography",
+                  };
+                  openInAppBrowser(
+                    "https://notebooklm.google.com/",
+                    sourceMapping[selectedQuestionId] || "src-appearance-inversion"
+                  );
+                }}
+                className="px-3 py-1.5 rounded-xl bg-sky-500/20 hover:bg-sky-500/30 text-sky-200 hover:text-white font-mono text-xs flex items-center gap-1.5 cursor-pointer transition-all border border-sky-400/40"
+                title="Open in-app study browser with NotebookLM companion and source vault"
+              >
+                <Globe className="w-3.5 h-3.5 text-sky-400" />
+                <span>In-App Research Browser</span>
               </button>
             </div>
 

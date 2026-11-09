@@ -378,6 +378,17 @@ export function MacbethRightInspector({
                 </span>
                 <span className="text-[10px] text-slate-400">Rubric &amp; 900w ➔</span>
               </button>
+
+              <button
+                onClick={() => useStudyStore.getState().openInAppBrowser()}
+                className="w-full p-2.5 rounded-xl bg-sky-500/15 hover:bg-sky-500/25 border border-sky-400/30 text-sky-300 font-mono text-xs font-bold flex items-center justify-between transition-colors cursor-pointer"
+              >
+                <span className="flex items-center gap-1.5">
+                  <span className="text-sm">🌐</span>
+                  <span>In-App Research Browser</span>
+                </span>
+                <span className="text-[10px] text-sky-400">NotebookLM Vault ➔</span>
+              </button>
             </div>
           )}
         </div>
