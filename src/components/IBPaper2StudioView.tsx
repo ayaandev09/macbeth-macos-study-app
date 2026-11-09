@@ -838,10 +838,12 @@ export function IBPaper2StudioView() {
               </button>
 
               <button
-                onClick={() => {
-                  navigator.clipboard.writeText(UNIVERSAL_IB_PAPER_2_TEMPLATE.rawFullTemplateText);
-                  setTemplateLoadedFeedback(true);
-                  setTimeout(() => setTemplateLoadedFeedback(false), 2000);
+                onClick={async () => {
+                  const ok = await safeCopyToClipboard(UNIVERSAL_IB_PAPER_2_TEMPLATE.rawFullTemplateText);
+                  if (ok) {
+                    setTemplateLoadedFeedback(true);
+                    setTimeout(() => setTemplateLoadedFeedback(false), 2000);
+                  }
                 }}
                 className="px-3 py-1.5 rounded-xl bg-white/10 hover:bg-white/15 text-slate-200 hover:text-white font-mono text-xs flex items-center gap-1.5 cursor-pointer transition-all border border-white/10"
                 title="Copy entire universal template to clipboard without overwriting canvas"
@@ -1062,10 +1064,12 @@ export function IBPaper2StudioView() {
                     <span>Fill Template Into Canvas</span>
                   </button>
                   <button
-                    onClick={() => {
-                      navigator.clipboard.writeText(UNIVERSAL_IB_PAPER_2_TEMPLATE.rawFullTemplateText);
-                      setTemplateLoadedFeedback(true);
-                      setTimeout(() => setTemplateLoadedFeedback(false), 2000);
+                    onClick={async () => {
+                      const ok = await safeCopyToClipboard(UNIVERSAL_IB_PAPER_2_TEMPLATE.rawFullTemplateText);
+                      if (ok) {
+                        setTemplateLoadedFeedback(true);
+                        setTimeout(() => setTemplateLoadedFeedback(false), 2000);
+                      }
                     }}
                     className="px-3 py-2 rounded-xl bg-white/10 hover:bg-white/15 text-white font-mono text-xs flex items-center gap-1.5 cursor-pointer transition-all border border-white/15"
                   >
@@ -1164,11 +1168,13 @@ export function IBPaper2StudioView() {
 
                         <div className="flex items-center gap-2">
                           <button
-                            onClick={(e) => {
+                            onClick={async (e) => {
                               e.stopPropagation();
-                              navigator.clipboard.writeText(sec.exemplarFill);
-                              setCopiedTemplateSection(idx);
-                              setTimeout(() => setCopiedTemplateSection(null), 2000);
+                              const ok = await safeCopyToClipboard(sec.exemplarFill);
+                              if (ok) {
+                                setCopiedTemplateSection(idx);
+                                setTimeout(() => setCopiedTemplateSection(null), 2000);
+                              }
                             }}
                             className="px-2.5 py-1 rounded-lg bg-white/5 hover:bg-white/10 text-slate-300 hover:text-white text-xs font-mono flex items-center gap-1 cursor-pointer transition-colors"
                             title="Copy this section's exemplar text"
