@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import "./globals.css";
+import { ThemeToggle } from "@/components/ThemeToggle";
 
 export const metadata: Metadata = {
   title: "DUNSINANE // MACBETH — macOS Liquid Glass Study Database",
@@ -13,8 +14,9 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="dark" data-academic-font="jakarta" data-handwritten-style="jakarta">
+    <html suppressHydrationWarning lang="en" className="dark" data-academic-font="jakarta" data-handwritten-style="jakarta">
       <head>
+        <script dangerouslySetInnerHTML={{ __html: `try{if(localStorage.getItem("study-app-theme")==="light"){document.documentElement.classList.add("theme-light")}}catch(e){}` }} />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link
           rel="preconnect"
@@ -28,6 +30,7 @@ export default function RootLayout({
       </head>
       <body className="bg-[#020308] text-slate-100 antialiased selection:bg-amber-500/30 selection:text-amber-100 min-h-screen font-sans">
         {children}
+        <ThemeToggle />
       </body>
     </html>
   );
