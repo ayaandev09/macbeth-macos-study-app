@@ -182,171 +182,92 @@ export function TopCommandBar({ onOpenWalkthrough }: TopCommandBarProps = {}) {
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, [setViewMode, toggleSpotlight, openSpotlight, isSpotlightOpen]);
 
+  const sectionLabel = VIEW_MODES.find((m) => m.id === viewMode)?.label ?? "Home";
+
+  const glassBtn =
+    "flex items-center gap-1.5 h-9 px-3 rounded-full text-xs font-medium cursor-pointer transition-colors bg-white/[0.07] hover:bg-white/[0.14] border border-white/15 text-slate-200 hover:text-white shrink-0";
+
   return (
     <>
-      <header data-tour="command-bar" className="liquid-glass-long-bar !rounded-3xl overflow-hidden p-2.5 sm:p-3 mb-3 flex flex-col gap-2 shadow-xl relative mac-drag-region transition-all z-20 w-full max-w-full">
-      {/* Top Segment: Brand & Status (Left: Flexible, shrinks cleanly) & Compact Action Cluster (Right: ~280px total) */}
-      <div className="flex items-center justify-between gap-2 w-full pb-2 border-b border-white/10 min-h-[42px] max-w-full overflow-hidden">
-        {/* Brand & Breadcrumbs (Left) */}
-        <div className="flex items-center gap-2 min-w-0 shrink mac-no-drag">
-          {/* Native macOS Sidebar Toggle (⌘B) */}
+      <header
+        data-tour="command-bar"
+        className="liquid-glass-bar relative z-20 w-full max-w-full rounded-full px-2.5 py-2 mb-3 flex items-center justify-between gap-2 mac-drag-region"
+      >
+        <div className="flex items-center gap-2 min-w-0 mac-no-drag">
           <button
             onClick={toggleSidebar}
-            title={sidebarCollapsed ? "Expand Scene Navigation Sidebar (⌘B)" : "Collapse Sidebar for Wide View (⌘B)"}
-            className={`w-8 h-8 rounded-xl flex items-center justify-center transition-all cursor-pointer soft-button shrink-0 border ${
+            title="Toggle sidebar (⌘B)"
+            aria-label="Toggle sidebar"
+            className={`w-9 h-9 rounded-full flex items-center justify-center cursor-pointer border transition-colors shrink-0 ${
               sidebarCollapsed
-                ? "bg-amber-500/20 text-amber-300 border-amber-400/40 shadow-sm"
-                : "bg-white/5 hover:bg-white/10 text-slate-400 hover:text-white border-white/10"
+                ? "bg-amber-500/25 border-amber-300/50 text-amber-200"
+                : "bg-white/[0.07] hover:bg-white/[0.14] border-white/15 text-slate-300"
             }`}
           >
             <PanelLeft className="w-4 h-4" />
           </button>
-
-          {/* Brand Logo & Title */}
-          <button
-            onClick={() => triggerStartupIntro()}
-            title="Click to replay Scottish Crown Cinematic Startup Intro"
-            className="flex items-center gap-2 min-w-0 text-left cursor-pointer group"
-          >
-            <div className="w-8 h-8 rounded-xl bg-gradient-to-br from-amber-400/25 via-rose-500/20 to-amber-600/25 border border-amber-400/40 flex items-center justify-center p-1 shadow-md relative shrink-0 group-hover:scale-105 transition-transform overflow-hidden">
-              <MacbethAppLogo className="w-full h-full object-contain" />
-            </div>
-            <div className="min-w-0 leading-tight">
-              <span className="text-[10px] sm:text-xs font-mono font-bold tracking-[0.18em] text-amber-400 uppercase block truncate">
-                DUNSINANE // 1606
-              </span>
-              <span className="text-xs sm:text-sm font-semibold text-white tracking-tight flex items-center gap-1 truncate">
-                <span>Macbeth Codex</span>
-                <span className="text-slate-500">/</span>
-                <span className="text-amber-300 font-mono text-xs font-bold">
-                  {currentChapter.displayCode}
-                </span>
-              </span>
-            </div>
-          </button>
+          <div className="min-w-0 pl-1">
+            <p className="text-sm font-semibold text-white truncate leading-tight">{sectionLabel}</p>
+            {(viewMode === "focus" || viewMode === "stream") && (
+              <p className="text-[11px] text-amber-200/80 truncate leading-tight">{currentChapter.displayCode}</p>
+            )}
+          </div>
         </div>
 
-        {/* Right Section: Compact Ergonomic Modality Switchers & Action Pills */}
-        <div className="flex items-center justify-end gap-1.5 shrink-0 mac-no-drag">
-          {/* Quick Spotlight Trigger Button */}
-          <button
-            onClick={openSpotlight}
-            title="Search Scenes & Quotes (⌘K)"
-            className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl bg-black/50 hover:bg-black/70 border border-white/10 hover:border-amber-400/40 text-slate-300 hover:text-white cursor-pointer transition-all shrink-0"
-          >
-            <Search className="w-3.5 h-3.5 text-amber-400" />
-            <span className="text-xs font-medium text-slate-300 hidden md:inline">Search</span>
-            <kbd className="inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-mono font-bold text-amber-300 bg-amber-500/15 border border-amber-400/25">
-              ⌘K
-            </kbd>
+        <div className="flex items-center gap-1.5 mac-no-drag">
+          <button onClick={openSpotlight} title="Search (⌘K)" className={glassBtn}>
+            <Search className="w-3.5 h-3.5 text-amber-300" />
+            <span className="hidden md:inline text-slate-300">Search</span>
+            <kbd className="hidden md:inline text-[10px] font-mono text-slate-400">⌘K</kbd>
           </button>
 
-          {/* In-App Research Browser & NotebookLM Vault Button */}
-          <button
-            onClick={() => openInAppBrowser()}
-            title="Open In-App Study Companion & NotebookLM Browser"
-            className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl bg-sky-500/15 hover:bg-sky-500/25 border border-sky-400/35 hover:border-sky-300 text-sky-200 hover:text-white cursor-pointer transition-all shrink-0 shadow-sm"
-          >
-            <Globe className="w-3.5 h-3.5 text-sky-400" />
-            <span className="text-xs font-medium hidden lg:inline">Research</span>
-          </button>
-
-          {/* Study Goal Switcher: Revision vs Study (Compact Segmented Pill) */}
-          <div className="flex items-center p-0.5 rounded-full bg-black/60 border border-white/12 text-xs shrink-0">
-            <button
-              onClick={() => setStudyGoal("revise")}
-              title="Pre-lesson cramming, exam traps & active recall"
-              className={`flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-bold transition-all cursor-pointer whitespace-nowrap ${
-                studyGoal === "revise"
-                  ? "bg-amber-500/25 text-amber-200 border border-amber-400/40 shadow-sm"
-                  : "text-slate-400 hover:text-slate-200"
-              }`}
-            >
-              <Zap className="w-3 h-3 text-amber-300" />
-              <span className="text-xs">Revise</span>
-            </button>
-            <button
-              onClick={() => setStudyGoal("learn")}
-              title="First-time guided study with context"
-              className={`flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-bold transition-all cursor-pointer whitespace-nowrap ${
-                studyGoal === "learn"
-                  ? "bg-emerald-500/25 text-emerald-200 border border-emerald-400/40 shadow-sm"
-                  : "text-slate-400 hover:text-slate-200"
-              }`}
-            >
-              <BookOpen className="w-3 h-3 text-emerald-300" />
-              <span className="text-xs">Study</span>
-            </button>
+          <div className="hidden sm:flex items-center p-0.5 rounded-full bg-black/30 border border-white/15 h-9 shrink-0">
+            {(["learn", "revise"] as const).map((g) => (
+              <button
+                key={g}
+                onClick={() => setStudyGoal(g)}
+                title={g === "revise" ? "Quick recall and exam traps" : "Guided first-time study"}
+                className={`px-3 h-full rounded-full text-xs font-semibold cursor-pointer transition-colors ${
+                  studyGoal === g
+                    ? g === "revise"
+                      ? "bg-amber-500/30 text-amber-100"
+                      : "bg-emerald-500/30 text-emerald-100"
+                    : "text-slate-400 hover:text-white"
+                }`}
+              >
+                {g === "revise" ? "Revise" : "Study"}
+              </button>
+            ))}
           </div>
 
-          {/* Timed Exam Sprint Button */}
-          <button
-            onClick={openExamSprint}
-            title="Launch Timed Exam Sprint (⌘E)"
-            className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-full text-xs font-bold transition-all cursor-pointer border bg-amber-500/15 text-amber-200 border-amber-400/35 hover:bg-amber-500/25 shadow-sm soft-button shrink-0"
-          >
-            <Timer className="w-3.5 h-3.5 text-amber-300 animate-pulse" />
-            <span className="text-xs font-mono font-bold text-amber-300">⌘E</span>
+          <button onClick={() => openInAppBrowser()} title="Research and NotebookLM" className={glassBtn}>
+            <Globe className="w-3.5 h-3.5 text-sky-300" />
+            <span className="hidden lg:inline">Research</span>
           </button>
 
-          {/* Pro Analytical Inspector Toggle Pill (Shown only when tucked away to prevent collision) */}
+          <button onClick={openExamSprint} title="Timed exam sprint (⌘E)" className={glassBtn}>
+            <Timer className="w-3.5 h-3.5 text-amber-300" />
+            <span className="hidden lg:inline">Sprint</span>
+          </button>
+
           {!isInspectorOpen && (
-            <button
-              onClick={toggleInspector}
-              title="Open Analytical Inspector (⌘I)"
-              className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-full text-xs font-bold transition-all cursor-pointer border soft-button shrink-0 bg-amber-500/15 text-amber-200 hover:text-white border-amber-400/50 hover:border-amber-300 shadow-[0_0_18px_rgba(245,158,11,0.35)] tucked-pill-beacon"
-            >
+            <button onClick={toggleInspector} title="Analysis panel (⌘I)" className={glassBtn}>
               <Sparkles className="w-3.5 h-3.5 text-amber-300" />
-              <span className="text-xs font-mono font-bold text-amber-300">⌘I</span>
+              <span className="hidden lg:inline">Analysis</span>
             </button>
           )}
 
-          {/* Native Shortcuts Cheatsheet Guide (?) */}
           <button
             onClick={() => setIsShortcutsOpen((prev) => !prev)}
-            title="Keyboard Shortcuts Cheatsheet (?)"
-            className="flex items-center justify-center w-7 h-7 sm:w-8 sm:h-8 rounded-full text-xs font-bold transition-all cursor-pointer border bg-white/5 hover:bg-white/10 text-slate-300 hover:text-white border-white/10 shadow-sm soft-button shrink-0"
+            title="Keyboard shortcuts (?)"
+            aria-label="Keyboard shortcuts"
+            className="w-9 h-9 rounded-full flex items-center justify-center cursor-pointer border bg-white/[0.07] hover:bg-white/[0.14] border-white/15 text-slate-300 text-xs font-mono shrink-0"
           >
-            <span className="text-xs font-mono font-bold text-slate-300">?</span>
+            ?
           </button>
         </div>
-      </div>
+      </header>
 
-      {/* Row 2: Symmetrical 6-Column Navigation Grid - 100% Adaptive to Any Mac Screen */}
-      <nav
-        data-tour="nav-tabs"
-        aria-label="Integrated Main Sections Bar"
-        className="w-full grid grid-cols-4 sm:grid-cols-7 gap-1 p-1 bg-black/60 border border-white/12 rounded-2xl shadow-inner relative max-w-full overflow-hidden"
-      >
-        {VIEW_MODES.map((mode) => {
-          const isActive = viewMode === mode.id;
-          return (
-            <button
-              key={mode.id}
-              onClick={() => setViewMode(mode.id)}
-              className={`relative col-span-1 flex items-center justify-center gap-1.5 py-1.5 sm:py-2 px-1 rounded-xl text-xs font-bold transition-colors cursor-pointer min-w-0 overflow-hidden ${
-                isActive
-                  ? "text-amber-200"
-                  : "text-slate-400 hover:text-white hover:bg-white/5"
-              }`}
-            >
-              {isActive && (
-                <motion.div
-                  layoutId="activeNavTabIndicator"
-                  transition={{ type: "spring", stiffness: 420, damping: 32 }}
-                  className="absolute inset-0 rounded-xl bg-amber-500/25 border border-amber-400/50 shadow-md shadow-amber-500/20 pointer-events-none"
-                />
-              )}
-              <span className={`relative z-10 ${isActive ? "text-amber-300 shrink-0" : "text-slate-400 shrink-0"}`}>
-                {mode.icon}
-              </span>
-              <span className="relative z-10 text-xs truncate">{mode.shortLabel}</span>
-            </button>
-          );
-        })}
-      </nav>
-
-      {/* Global Native Keyboard Shortcuts Cheatsheet Modal */}
       <KeyboardShortcutsModal
         isOpen={isShortcutsOpen}
         onClose={() => setIsShortcutsOpen(false)}
@@ -354,7 +275,6 @@ export function TopCommandBar({ onOpenWalkthrough }: TopCommandBarProps = {}) {
         accentColor="#d97706"
         onOpenTour={onOpenWalkthrough}
       />
-    </header>
-  </>
+    </>
   );
 }
