@@ -4,7 +4,7 @@ import { create } from "zustand";
 import { persist, createJSONStorage } from "zustand/middleware";
 import { ALL_CHAPTERS, BOOK_PARTS, ThemeId, ActId } from "@/data";
 
-export type ViewMode = "focus" | "stream" | "matrix" | "lexicon" | "revision" | "paper2";
+export type ViewMode = "home" | "focus" | "stream" | "matrix" | "lexicon" | "revision" | "paper2";
 export type StudyLensMode = "primer" | "revision" | "deep";
 export type StudyGoal = "learn" | "revise";
 export type AcademicStyle = "newsreader" | "garamond" | "jakarta" | "cinzel";
@@ -92,7 +92,7 @@ export const useStudyStore = create<StudyStoreState>()(
       activeChapterId: "a1-s1",
       activePartFilter: "all",
       activeThemeFilter: "all",
-      viewMode: "focus",
+      viewMode: "home",
       studyLensMode: "primer",
       studyGoal: "revise",
       academicStyle: "newsreader",
@@ -102,7 +102,7 @@ export const useStudyStore = create<StudyStoreState>()(
       sidebarCollapsed: false,
       chapterSheetOpen: false,
       diagnosticsModalOpen: false,
-      isInspectorOpen: true,
+      isInspectorOpen: false,
       isExamSprintActive: false,
       isSpotlightOpen: false,
       isStartupActive: true,

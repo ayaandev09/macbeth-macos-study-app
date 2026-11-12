@@ -37,6 +37,12 @@ const VIEW_MODES: {
   icon: React.ReactNode;
 }[] = [
   {
+    id: "home",
+    label: "Home",
+    shortLabel: "Home",
+    icon: <Compass className="w-3.5 h-3.5" />,
+  },
+  {
     id: "focus",
     label: "Scene Bento",
     shortLabel: "Bento",
@@ -310,7 +316,7 @@ export function TopCommandBar({ onOpenWalkthrough }: TopCommandBarProps = {}) {
       <nav
         data-tour="nav-tabs"
         aria-label="Integrated Main Sections Bar"
-        className="w-full grid grid-cols-3 sm:grid-cols-6 gap-1 p-1 bg-black/60 border border-white/12 rounded-2xl shadow-inner relative max-w-full overflow-hidden"
+        className="w-full grid grid-cols-4 sm:grid-cols-7 gap-1 p-1 bg-black/60 border border-white/12 rounded-2xl shadow-inner relative max-w-full overflow-hidden"
       >
         {VIEW_MODES.map((mode) => {
           const isActive = viewMode === mode.id;

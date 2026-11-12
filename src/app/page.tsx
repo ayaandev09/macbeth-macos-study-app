@@ -7,7 +7,7 @@ import { FloatingSidebar } from "@/components/FloatingSidebar";
 import { TopCommandBar } from "@/components/TopCommandBar";
 import { WidgetBridge } from "@/components/WidgetBridge";
 import { ChapterBentoCard } from "@/components/ChapterBentoCard";
-import { StudyMiniHomepage } from "@/components/StudyMiniHomepage";
+import { HomeDashboard } from "@/components/HomeDashboard";
 import { ThemeMatrixView } from "@/components/ThemeMatrixView";
 import { LexiconDossierView } from "@/components/LexiconDossierView";
 import { RevisionCramView } from "@/components/RevisionCramView";
@@ -276,7 +276,7 @@ export default function MacbethStudyDashboardMacPage() {
             </div>
 
             {/* Mini Homepage & Live Widget Telemetry Hub */}
-            {!searchQuery.trim() && <StudyMiniHomepage />}
+            
 
             {/* Search Match Pill Bar */}
             {searchQuery.trim() && viewMode === "focus" && (
@@ -324,6 +324,8 @@ export default function MacbethStudyDashboardMacPage() {
               {/* ===============================================================
                   MODE 1: SINGLE SCENE BENTO FOCUS VIEW
                   =============================================================== */}
+              {viewMode === "home" && <HomeDashboard />}
+
               {viewMode === "focus" && (
                 <div className="space-y-5">
                   {/* Act Context Banner - 100% Full-Width Bulletproof Native Card */}

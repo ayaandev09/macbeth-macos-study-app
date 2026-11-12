@@ -54,6 +54,32 @@ const OMEN_BADGE_STYLES: Record<ChapterData["omenLevel"], string> = {
     "bg-red-500/25 text-red-200 border-red-400/50 shadow-[0_0_20px_-4px_rgba(244,63,94,0.45)]",
 };
 
+/** Hides the long analysis blocks until the student asks for them. */
+function DeepDive({ children }: { children: React.ReactNode }) {
+  const [open, setOpen] = useState(false);
+  return (
+    <div className="space-y-5">
+      <button
+        type="button"
+        onClick={() => setOpen((o) => !o)}
+        aria-expanded={open}
+        className="w-full flex items-center justify-between rounded-2xl border border-white/10 bg-white/[0.04] hover:bg-white/[0.08] px-5 py-3.5 text-left cursor-pointer transition-colors"
+      >
+        <span>
+          <span className="block text-sm font-semibold text-white">
+            {open ? "Hide deeper analysis" : "Show deeper analysis"}
+          </span>
+          <span className="block text-xs text-slate-400">
+            Summary, themes, close reading and critics
+          </span>
+        </span>
+        <span className="text-amber-300 text-lg">{open ? "−" : "+"}</span>
+      </button>
+      {open && <div className="space-y-5">{children}</div>}
+    </div>
+  );
+}
+
 export const ChapterBentoCard = React.memo(function ChapterBentoCard({
   chapter,
   isDeferred = false,
@@ -806,6 +832,7 @@ export const ChapterBentoCard = React.memo(function ChapterBentoCard({
         </section>
       )}
 
+      <DeepDive>
       {/* =====================================================================
           BENTO ROW 1: EXECUTIVE SUMMARY + SPEED-READ BULLETS + THEME TRACKER
           ===================================================================== */}
@@ -1322,6 +1349,7 @@ export const ChapterBentoCard = React.memo(function ChapterBentoCard({
           </div>
         </div>
       )}
+      </DeepDive>
     </article>
   );
 });
