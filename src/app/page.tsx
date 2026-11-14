@@ -10,7 +10,7 @@ import { WidgetBridge } from "@/components/WidgetBridge";
 import { ChapterBentoCard } from "@/components/ChapterBentoCard";
 import { HomeDashboard } from "@/components/HomeDashboard";
 import { ThemeMatrixView } from "@/components/ThemeMatrixView";
-import { LexiconDossierView } from "@/components/LexiconDossierView";
+import { SymbolsMotifsView } from "@/components/SymbolsMotifsView";
 import { RevisionCramView } from "@/components/RevisionCramView";
 import { IBPaper2StudioView } from "@/components/IBPaper2StudioView";
 import { FloatingBottomDock } from "@/components/FloatingBottomDock";
@@ -45,6 +45,7 @@ export default function MacbethStudyDashboardMacPage() {
     activeChapterId,
     setActiveChapter,
     viewMode,
+    setViewMode,
     searchQuery,
     setSearchQuery,
     activePartFilter,
@@ -507,15 +508,57 @@ export default function MacbethStudyDashboardMacPage() {
                     </div>
                   </div>
 
-                  {/* All Matching Scene Cards */}
+                  {/* All Matching Scene Cards - Executive Digest (No text dump) */}
                   {filteredChapters.length > 0 ? (
-                    filteredChapters.map((ch, idx) => (
-                      <ChapterBentoCard
-                        key={ch.id}
-                        chapter={ch}
-                        isDeferred={idx > 0}
-                      />
-                    ))
+                    <div className="space-y-4">
+                      {filteredChapters.map((ch) => {
+                        const isDone = !!completedChapters[ch.id];
+                        return (
+                          <div
+                            key={ch.id}
+                            className="liquid-glass-bento rounded-3xl p-5 border border-white/10 hover:border-amber-400/40 transition-all space-y-3"
+                          >
+                            <div className="flex flex-wrap items-center justify-between gap-2 border-b border-white/10 pb-3">
+                              <div className="flex items-center gap-2">
+                                <span className="font-mono text-xs font-bold px-2.5 py-0.5 rounded-lg bg-amber-500/20 text-amber-300 border border-amber-400/35">
+                                  Act {ch.displayCode}
+                                </span>
+                                <h3 className="text-sm sm:text-base font-bold text-white tracking-tight">
+                                  {ch.title}
+                                </h3>
+                              </div>
+                              <div className="flex items-center gap-2">
+                                <span className="text-[11px] font-mono text-slate-400">
+                                  {ch.readingTimeMinutes} min read
+                                </span>
+                                <button
+                                  onClick={() => {
+                                    setActiveChapter(ch.id);
+                                    setViewMode("focus");
+                                  }}
+                                  className="px-3 py-1 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-semibold text-xs cursor-pointer transition-colors"
+                                >
+                                  Study Scene ➔
+                                </button>
+                              </div>
+                            </div>
+
+                            <p className="text-xs sm:text-sm text-slate-200 leading-relaxed font-sans">
+                              {ch.summary}
+                            </p>
+
+                            <div className="pt-2 border-t border-white/10 flex flex-wrap items-center justify-between gap-2 text-xs">
+                              <span className="text-slate-400">
+                                <strong className="text-amber-300">Setting:</strong> {ch.setting}
+                              </span>
+                              <span className="text-slate-400 font-mono text-[11px]">
+                                Atmospheric Omen: <span className="text-rose-300 font-bold">{ch.omenLevel}</span>
+                              </span>
+                            </div>
+                          </div>
+                        );
+                      })}
+                    </div>
                   ) : (
                     <div className="liquid-glass-bento rounded-3xl p-12 text-center">
                       <SearchX className="w-8 h-8 text-rose-400 mx-auto mb-3" />
@@ -548,7 +591,7 @@ export default function MacbethStudyDashboardMacPage() {
               {/* ===============================================================
                   MODE 4: SYMBOLS, DRAMATIS PERSONAE & RHETORIC LEXICON
                   =============================================================== */}
-              {viewMode === "lexicon" && <LexiconDossierView />}
+              {viewMode === "lexicon" && <SymbolsMotifsView />}
 
               {/* ===============================================================
                   MODE 5: REVISION MATERIAL, FLASHCARDS & EXAM ESSAYS

@@ -1,19 +1,11 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useMemo } from "react";
+import { Network, Quote, Bookmark, Sparkles, Layers } from "lucide-react";
 import { THEMES_TAXONOMY, ALL_CHAPTERS, ThemeId } from "@/data";
 import { useStudyStore } from "@/store/useStudyStore";
-import { QuoteNetwork } from "@/components/QuoteNetwork";
-import {
-  Network,
-  Quote as QuoteIcon,
-  ArrowUpRight,
-  Filter,
-  Bookmark,
-  Sparkles,
-} from "lucide-react";
 
-export function ThemeMatrixView() {
+export const ThemeMatrixView: React.FC = React.memo(() => {
   const {
     activeThemeFilter,
     setActiveThemeFilter,
@@ -24,221 +16,280 @@ export function ThemeMatrixView() {
     searchQuery,
   } = useStudyStore();
 
+  const [activeTab, setActiveTab] = useState<"themes" | "heatmap" | "quotes">("themes");
+  const [selectedThemeId, setSelectedThemeId] = useState<string>("ambition");
   const [onlyBookmarked, setOnlyBookmarked] = useState(false);
-  const themesList = Object.values(THEMES_TAXONOMY);
-  const normalizedQuery = searchQuery.trim().toLowerCase();
 
-  const filteredQuotes = ALL_CHAPTERS.flatMap((chapter) =>
-    chapter.quotes
-      .filter((q) => {
-        if (onlyBookmarked && !bookmarkedQuotes[q.id]) return false;
-        const matchesTheme =
-          activeThemeFilter === "all" || q.themes.includes(activeThemeFilter);
-        const matchesSearch =
-          !normalizedQuery ||
-          q.quote.toLowerCase().includes(normalizedQuery) ||
-          q.analysis.toLowerCase().includes(normalizedQuery) ||
-          q.speaker.toLowerCase().includes(normalizedQuery) ||
-          chapter.title.toLowerCase().includes(normalizedQuery) ||
-          chapter.displayCode.toLowerCase().includes(normalizedQuery);
-        return matchesTheme && matchesSearch;
-      })
-      .map((q) => ({
+  const themesList = useMemo(() => Object.values(THEMES_TAXONOMY), []);
+  const currentTheme = themesList.find((t) => t.id === selectedThemeId) || themesList[0];
+
+  const allQuotesWithChapter = useMemo(() => {
+    return ALL_CHAPTERS.flatMap((ch) =>
+      ch.quotes.map((q) => ({
         ...q,
-        chapterId: chapter.id,
-        chapterCode: chapter.displayCode,
-        chapterTitle: chapter.title,
+        chapterId: ch.id,
+        chapterCode: ch.displayCode,
+        chapterTitle: ch.title,
       }))
-  );
-
-  const jumpToScene = (chapterId: string) => {
-    setActiveChapter(chapterId);
-    setViewMode("focus");
-    window.scrollTo(0, 0);
-  };
+    ).filter((q) => {
+      if (onlyBookmarked && !bookmarkedQuotes[q.id]) return false;
+      if (activeThemeFilter !== "all" && !q.themes.includes(activeThemeFilter)) {
+        return false;
+      }
+      if (searchQuery.trim()) {
+        const term = searchQuery.toLowerCase();
+        return (
+          q.quote.toLowerCase().includes(term) ||
+          q.analysis.toLowerCase().includes(term) ||
+          q.speaker.toLowerCase().includes(term) ||
+          q.chapterTitle.toLowerCase().includes(term)
+        );
+      }
+      return true;
+    });
+  }, [onlyBookmarked, bookmarkedQuotes, activeThemeFilter, searchQuery]);
 
   return (
-    <div className="space-y-6">
-      {/* =====================================================================
-          1. THE 8 CORE THEMES TAXONOMY BENTO GRID
-          ===================================================================== */}
-      <div className="liquid-glass-bento rounded-3xl p-6">
-        <div className="flex flex-wrap items-center justify-between gap-3 mb-5">
+    <div className="space-y-5">
+      {/* Top Segmented Navigation Bar */}
+      <div className="liquid-glass-bento rounded-3xl p-4 flex flex-wrap items-center justify-between gap-3">
+        <div className="flex items-center gap-3">
+          <div className="p-2 rounded-2xl bg-violet-500/20 text-violet-300 border border-violet-400/30">
+            <Network className="w-5 h-5 text-violet-300" />
+          </div>
           <div>
-            <div className="flex items-center gap-2">
-              <Network className="w-4 h-4 text-amber-400" />
-              <h2 className="text-lg font-bold text-white font-display">
-                8 Core Themes & Heatmap Matrix
-              </h2>
-            </div>
-            <p className="text-xs text-slate-400 mt-0.5">
-              Select any theme card below to filter the 31-scene intensity
-              matrix and master quote vault.
+            <h2 className="text-base sm:text-lg font-bold text-white tracking-tight">
+              Theme Matrix &amp; Quote Index
+            </h2>
+            <p className="text-xs text-slate-400">
+              Explore Jacobean motifs, scene intensity heatmap &amp; verified quotes
             </p>
           </div>
-
-          {activeThemeFilter !== "all" && (
-            <button
-              onClick={() => setActiveThemeFilter("all")}
-              className="liquid-glass-pill px-3 py-1.5 rounded-xl text-xs font-mono text-amber-300 flex items-center gap-1.5 cursor-pointer"
-            >
-              <Filter className="w-3.5 h-3.5" />
-              Reset Filter (Showing: {activeThemeFilter.toUpperCase()})
-            </button>
-          )}
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-3.5">
-          {themesList.map((theme) => {
-            const isSelected = activeThemeFilter === theme.id;
-            const chaptersWithTheme = ALL_CHAPTERS.filter((ch) =>
-              ch.themeTracking.some((t) => t.themeId === theme.id)
-            ).length;
-
-            return (
-              <div
-                key={theme.id}
-                onClick={() =>
-                  setActiveThemeFilter(
-                    isSelected ? "all" : (theme.id as ThemeId)
-                  )
-                }
-                className={`p-4 rounded-2xl border transition-all cursor-pointer flex flex-col justify-between ${
-                  isSelected
-                    ? "liquid-glass-pill-active border-amber-400/60"
-                    : "bg-slate-950/55 border-white/10 hover:border-white/25"
-                }`}
-              >
-                <div>
-                  <div className="flex items-center justify-between gap-2 mb-2">
-                    <span
-                      className="text-[11px] font-mono font-semibold px-2.5 py-0.5 rounded-lg border"
-                      style={{
-                        backgroundColor: theme.badgeBg,
-                        borderColor: theme.badgeBorder,
-                        color: theme.badgeText,
-                      }}
-                    >
-                      {theme.shortName}
-                    </span>
-                    <span className="font-mono text-[10px] text-slate-400">
-                      {chaptersWithTheme}/31 scenes
-                    </span>
-                  </div>
-
-                  <div className="font-mono text-[10px] uppercase tracking-wider text-amber-300/80 mb-1">
-                    {theme.shakespeareanTag}
-                  </div>
-
-                  <h3 className="text-sm font-semibold text-white mb-1.5">
-                    {theme.name}
-                  </h3>
-                  <p className="text-xs text-slate-300 leading-relaxed mb-3">
-                    {theme.description}
-                  </p>
-                </div>
-
-                <div className="pt-2.5 border-t border-white/[0.07]">
-                  <span className="font-mono text-[10px] uppercase tracking-wider text-amber-300/90 block mb-0.5">
-                    Shakespearean Mechanism
-                  </span>
-                  <p className="text-[11px] text-slate-400 leading-relaxed">
-                    {theme.coreMechanism}
-                  </p>
-                </div>
-              </div>
-            );
-          })}
+        {/* Tab Switcher */}
+        <div className="flex items-center p-1 rounded-2xl bg-black/60 border border-white/10 text-xs">
+          <button
+            onClick={() => setActiveTab("themes")}
+            className={`flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl font-semibold transition-all cursor-pointer ${
+              activeTab === "themes"
+                ? "bg-violet-500/25 text-violet-200 border border-violet-400/40 shadow-sm"
+                : "text-slate-400 hover:text-white"
+            }`}
+          >
+            <Sparkles className="w-3.5 h-3.5 text-violet-300" />
+            <span>Core Themes ({themesList.length})</span>
+          </button>
+          <button
+            onClick={() => setActiveTab("heatmap")}
+            className={`flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl font-semibold transition-all cursor-pointer ${
+              activeTab === "heatmap"
+                ? "bg-amber-500/25 text-amber-200 border border-amber-400/40 shadow-sm"
+                : "text-slate-400 hover:text-white"
+            }`}
+          >
+            <Layers className="w-3.5 h-3.5 text-amber-300" />
+            <span>Intensity Heatmap</span>
+          </button>
+          <button
+            onClick={() => setActiveTab("quotes")}
+            className={`flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl font-semibold transition-all cursor-pointer ${
+              activeTab === "quotes"
+                ? "bg-emerald-500/25 text-emerald-200 border border-emerald-400/40 shadow-sm"
+                : "text-slate-400 hover:text-white"
+            }`}
+          >
+            <Quote className="w-3.5 h-3.5 text-emerald-300" />
+            <span>Master Quotes ({allQuotesWithChapter.length})</span>
+          </button>
         </div>
       </div>
 
-      {/* =====================================================================
-          2. 31-SCENE x 8-THEME HEATMAP MATRIX
-          ===================================================================== */}
-      <div className="liquid-glass-bento rounded-3xl p-6 overflow-hidden">
-        <div className="flex items-center justify-between mb-4">
-          <div>
-            <h3 className="text-sm font-semibold uppercase tracking-wider text-white font-mono">
-              Scene-by-Scene Theme Intensity Heatmap (I.1 — V.11)
-            </h3>
-            <p className="text-xs text-slate-400 mt-0.5">
-              Click any scene row to jump directly to its Scene Bento study
-              card. Intensity rated 1 (Latent) to 5 (Climactic).
-            </p>
+      {/* ==================== TAB 1: MASTER-DETAIL THEMES ==================== */}
+      {activeTab === "themes" && (
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-4">
+          {/* Left Theme Selector Tiles (5 cols) */}
+          <div className="lg:col-span-5 space-y-2.5 max-h-[700px] overflow-y-auto pr-1">
+            {themesList.map((theme: any) => {
+              const isSelected = theme.id === selectedThemeId;
+              const chaptersCount = ALL_CHAPTERS.filter((ch) =>
+                ch.themeTracking && ch.themeTracking.some((t) => t.themeId === theme.id)
+              ).length;
+
+              return (
+                <button
+                  key={theme.id}
+                  onClick={() => setSelectedThemeId(theme.id)}
+                  className={`w-full text-left p-3.5 rounded-2xl border transition-all cursor-pointer block ${
+                    isSelected
+                      ? "glass-tint tint-violet border-violet-400/60 shadow-lg scale-[1.01]"
+                      : "bg-black/40 hover:bg-white/[0.05] border-white/10"
+                  }`}
+                >
+                  <div className="flex items-center justify-between gap-2 mb-1">
+                    <span
+                      className="text-xs font-bold px-2 py-0.5 rounded-md border"
+                      style={{
+                        backgroundColor: theme.badgeBg || "rgba(139, 92, 246, 0.15)",
+                        borderColor: theme.badgeBorder || "rgba(139, 92, 246, 0.4)",
+                        color: theme.badgeText || "#ddd6fe",
+                      }}
+                    >
+                      {theme.shortName || theme.name}
+                    </span>
+                    <span className="text-[10px] font-mono text-slate-400">
+                      {chaptersCount} Scenes
+                    </span>
+                  </div>
+                  <p className="text-[11px] text-slate-400 line-clamp-2 mt-1 leading-relaxed">
+                    {theme.description}
+                  </p>
+                </button>
+              );
+            })}
+          </div>
+
+          {/* Right In-Depth Theme Dossier & Key Quotes (7 cols) */}
+          <div className="lg:col-span-7">
+            {currentTheme && (
+              <div className="glass-tint tint-violet rounded-3xl p-6 sm:p-7 space-y-5">
+                <div className="flex items-start justify-between gap-3 border-b border-white/10 pb-4">
+                  <div>
+                    <span
+                      className="px-2.5 py-0.5 rounded-full text-xs font-bold border inline-block mb-2"
+                      style={{
+                        backgroundColor: (currentTheme as any).badgeBg || "rgba(139, 92, 246, 0.15)",
+                        borderColor: (currentTheme as any).badgeBorder || "rgba(139, 92, 246, 0.4)",
+                        color: (currentTheme as any).badgeText || "#ddd6fe",
+                      }}
+                    >
+                      {(currentTheme as any).shortName || currentTheme.name}
+                    </span>
+                    <h3 className="text-xl sm:text-2xl font-bold text-white tracking-tight">
+                      {currentTheme.name}
+                    </h3>
+                  </div>
+                  <button
+                    onClick={() => {
+                      setActiveThemeFilter(currentTheme.id as ThemeId);
+                      setActiveTab("quotes");
+                    }}
+                    className="px-3 py-1.5 rounded-xl bg-white/10 hover:bg-white/20 border border-white/15 text-xs text-white font-semibold cursor-pointer transition-all shrink-0"
+                  >
+                    View Theme Quotes ➔
+                  </button>
+                </div>
+
+                <div className="space-y-4 text-xs sm:text-sm">
+                  <div className="p-4 rounded-2xl bg-black/40 border border-white/10 space-y-1.5">
+                    <span className="text-xs font-bold text-amber-300 uppercase tracking-wider block">
+                      Core Concept &amp; Thematic Function in Macbeth
+                    </span>
+                    <p className="text-slate-200 leading-relaxed">
+                      {currentTheme.description}
+                    </p>
+                  </div>
+
+                  {(currentTheme as any).coreMechanism && (
+                    <div className="p-4 rounded-2xl bg-black/40 border border-white/10 space-y-1.5">
+                      <span className="text-xs font-bold text-rose-300 uppercase tracking-wider block">
+                        Dramatic &amp; Psychological Mechanism
+                      </span>
+                      <p className="text-slate-300 leading-relaxed">
+                        {(currentTheme as any).coreMechanism}
+                      </p>
+                    </div>
+                  )}
+
+                  {/* Active Scenes for this theme */}
+                  <div className="p-4 rounded-2xl bg-black/40 border border-white/10 space-y-2">
+                    <span className="text-xs font-bold text-sky-300 uppercase tracking-wider block">
+                      Key Manifesting Scenes
+                    </span>
+                    <div className="flex flex-wrap gap-1.5">
+                      {ALL_CHAPTERS.filter((ch) =>
+                        ch.themeTracking && ch.themeTracking.some((t) => t.themeId === currentTheme.id)
+                      ).map((ch) => (
+                        <button
+                          key={ch.id}
+                          onClick={() => {
+                            setActiveChapter(ch.id);
+                            setViewMode("focus");
+                          }}
+                          className="px-2.5 py-1 rounded-lg bg-white/5 hover:bg-white/15 border border-white/10 text-xs font-mono text-slate-300 hover:text-white cursor-pointer transition-colors"
+                        >
+                          {ch.displayCode}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
           </div>
         </div>
+      )}
 
-        <div
-          tabIndex={0}
-          role="region"
-          aria-labelledby="macbeth-heatmap-caption"
-          className="table-wrapper pb-2"
-        >
+      {/* ==================== TAB 2: SCENE X THEME HEATMAP ==================== */}
+      {activeTab === "heatmap" && (
+        <div className="liquid-glass-bento rounded-3xl p-5 sm:p-6 overflow-x-auto">
+          <div className="mb-4">
+            <h3 className="text-lg font-bold text-white">
+              Scene-by-Scene Thematic Intensity Heatmap (Act 1 ➔ Act 5)
+            </h3>
+            <p className="text-xs text-slate-400">
+              Click any scene to jump directly into its study view
+            </p>
+          </div>
+
           <table className="w-full text-left border-collapse min-w-[780px]">
-            <caption id="macbeth-heatmap-caption" className="sr-only">
-              Macbeth Scene-by-Scene Theme Intensity Heatmap across all 31
-              scenes
-            </caption>
             <thead>
-              <tr className="border-b border-white/10 text-[11px] font-mono text-slate-400 uppercase bg-slate-950/85 sticky top-0 z-10">
-                <th className="py-2.5 px-3 sticky left-0 bg-slate-950/95 z-20">
-                  Scene
-                </th>
-                {themesList.map((theme) => (
-                  <th key={theme.id} className="py-2.5 px-2 text-center">
-                    {theme.shortName}
+              <tr className="border-b border-white/15 text-[11px] font-mono uppercase text-slate-400">
+                <th className="py-2.5 px-3">Scene</th>
+                {themesList.map((t: any) => (
+                  <th key={t.id} className="py-2.5 px-2 text-center">
+                    <span style={{ color: t.badgeText || "#ddd6fe" }}>{t.shortName || t.name}</span>
                   </th>
                 ))}
               </tr>
             </thead>
-            <tbody className="divide-y divide-white/[0.06] text-xs">
+            <tbody className="divide-y divide-white/5 text-xs">
               {ALL_CHAPTERS.map((ch) => (
                 <tr
                   key={ch.id}
-                  onClick={() => jumpToScene(ch.id)}
-                  className="hover:bg-white/[0.05] transition-colors cursor-pointer group"
+                  onClick={() => {
+                    setActiveChapter(ch.id);
+                    setViewMode("focus");
+                    window.scrollTo(0, 0);
+                  }}
+                  className="hover:bg-white/[0.06] transition-colors cursor-pointer group"
                 >
-                  <th
-                    scope="row"
-                    className="py-2.5 px-3 font-medium text-slate-200 flex items-center gap-2 sticky left-0 bg-slate-950/90 group-hover:bg-slate-900/95"
-                  >
-                    <span className="font-mono text-[10px] px-1.5 py-0.5 rounded bg-white/10 text-amber-300">
+                  <td className="py-2 px-3 font-medium text-slate-200 group-hover:text-amber-300 flex items-center gap-2">
+                    <span className="font-mono font-bold text-amber-300 w-9 shrink-0">
                       {ch.displayCode}
                     </span>
-                    <span className="truncate max-w-[230px] group-hover:text-white">
-                      {ch.title.replace(/^Act \d+, Scene \d+:\s*/, "")}
-                    </span>
-                    <ArrowUpRight className="w-3.5 h-3.5 text-slate-500 opacity-0 group-hover:opacity-100 transition-opacity" />
-                  </th>
-
-                  {themesList.map((theme) => {
-                    const found = ch.themeTracking.find(
-                      (t) => t.themeId === theme.id
-                    );
-                    const score = found ? found.intensity : 0;
-
+                    <span className="truncate max-w-[220px]">{ch.title}</span>
+                  </td>
+                  {themesList.map((t) => {
+                    const found = ch.themeTracking && ch.themeTracking.find((tr) => tr.themeId === t.id);
+                    const intensity = found ? found.intensity : 0;
                     return (
-                      <td key={theme.id} className="py-2 px-2 text-center">
-                        {score > 0 ? (
+                      <td key={t.id} className="py-2 px-2 text-center">
+                        {intensity > 0 ? (
                           <span
-                            className="inline-flex items-center justify-center w-7 h-6 rounded-lg font-mono text-[11px] font-bold text-white"
+                            className="inline-flex items-center justify-center w-7 h-6 rounded-lg font-mono text-[11px] font-bold border"
                             style={{
-                              backgroundColor: `${theme.color}${
-                                score === 5
-                                  ? "66"
-                                  : score === 4
-                                    ? "4d"
-                                    : score === 3
-                                      ? "38"
-                                      : "24"
-                              }`,
-                              border: `1px solid ${theme.color}80`,
+                              backgroundColor: (t as any).badgeBg || "rgba(139, 92, 246, 0.15)",
+                              borderColor: (t as any).badgeBorder || "rgba(139, 92, 246, 0.4)",
+                              color: (t as any).badgeText || "#ddd6fe",
+                              opacity: 0.4 + intensity * 0.12,
                             }}
+                            title={found?.manifestation}
                           >
-                            {score}
+                            {intensity}
                           </span>
                         ) : (
-                          <span className="text-slate-700 font-mono">·</span>
+                          <span className="text-slate-700">·</span>
                         )}
                       </td>
                     );
@@ -248,86 +299,64 @@ export function ThemeMatrixView() {
             </tbody>
           </table>
         </div>
-      </div>
+      )}
 
-      {/* =====================================================================
-          3. MASTER QUOTE VAULT (FILTERED BY THEME & SEARCH)
-          ===================================================================== */}
-      <div className="liquid-glass-bento rounded-3xl p-6">
-        <div className="flex flex-wrap items-center justify-between gap-2 mb-4">
-          <div className="flex items-center gap-2">
-            <QuoteIcon className="w-4 h-4 text-amber-400" />
-            <h3 className="text-sm font-semibold uppercase tracking-wider text-white font-mono">
-              Master First Folio Quote Bank ({filteredQuotes.length} Matching
-              Quotes)
-            </h3>
-          </div>
-          <div className="flex items-center gap-3">
-            <button
-              onClick={() => setOnlyBookmarked(!onlyBookmarked)}
-              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-mono border cursor-pointer ${
-                onlyBookmarked
-                  ? "bg-amber-500/25 border-amber-400/50 text-amber-200"
-                  : "liquid-glass-pill text-slate-300"
-              }`}
-            >
-              <Bookmark
-                className={`w-3.5 h-3.5 ${
-                  onlyBookmarked ? "text-amber-300 fill-amber-300" : ""
+      {/* ==================== TAB 3: MASTER QUOTE VAULT ==================== */}
+      {activeTab === "quotes" && (
+        <div className="liquid-glass-bento rounded-3xl p-5 sm:p-6 space-y-4">
+          <div className="flex flex-wrap items-center justify-between gap-3 pb-3 border-b border-white/10">
+            <div>
+              <h3 className="text-lg font-bold text-white">
+                Master Quote Vault &amp; Analytical Index ({allQuotesWithChapter.length})
+              </h3>
+              <p className="text-xs text-slate-400">
+                Search, bookmark, and review First Folio quotes for Paper 2 essays
+              </p>
+            </div>
+
+            <div className="flex items-center gap-2">
+              {activeThemeFilter !== "all" && (
+                <button
+                  onClick={() => setActiveThemeFilter("all")}
+                  className="px-3 py-1 rounded-xl text-xs bg-white/10 hover:bg-white/20 text-slate-200 border border-white/10 cursor-pointer"
+                >
+                  Reset Theme Filter ({activeThemeFilter})
+                </button>
+              )}
+              <button
+                onClick={() => setOnlyBookmarked(!onlyBookmarked)}
+                className={`flex items-center gap-2 px-3.5 py-1.5 rounded-xl text-xs font-semibold border transition-all cursor-pointer ${
+                  onlyBookmarked
+                    ? "bg-amber-500/25 border-amber-400/50 text-amber-200"
+                    : "liquid-glass-pill text-slate-300 hover:text-white"
                 }`}
-              />
-              <span>Bookmarked Only</span>
-            </button>
-          </div>
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          {filteredQuotes.map((q) => {
-            const isBookmarked = !!bookmarkedQuotes[q.id];
-            return (
-              <div
-                key={q.id}
-                onClick={() => jumpToScene(q.chapterId)}
-                className="p-4 rounded-2xl bg-slate-950/60 border border-white/10 hover:border-amber-400/40 transition-all cursor-pointer flex flex-col justify-between"
               >
-                <div>
-                  <div className="flex items-center justify-between gap-2 mb-2">
-                    <div className="flex flex-wrap items-center gap-1.5">
-                      <span className="font-mono text-[10px] px-2 py-0.5 rounded-md bg-amber-500/15 text-amber-300 border border-amber-400/30">
-                        {q.chapterCode} •{" "}
-                        {q.chapterTitle.replace(/^Act \d+, Scene \d+:\s*/, "")}
+                <Bookmark
+                  className={`w-3.5 h-3.5 ${
+                    onlyBookmarked ? "text-amber-300 fill-amber-300" : ""
+                  }`}
+                />
+                <span>Bookmarks Only</span>
+              </button>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-3.5">
+            {allQuotesWithChapter.slice(0, 40).map((q) => {
+              const isBookmarked = !!bookmarkedQuotes[q.id];
+              return (
+                <div
+                  key={q.id}
+                  className="p-4 rounded-2xl bg-black/40 border border-white/10 space-y-2.5 flex flex-col justify-between"
+                >
+                  <div>
+                    <div className="flex items-center justify-between gap-2 mb-2">
+                      <span className="font-mono text-xs font-bold text-amber-300">
+                        {q.chapterCode} • {q.speaker}
                       </span>
-                      {q.actSceneLine && (
-                        <span className="font-mono text-[10px] font-bold px-1.5 py-0.5 rounded-md bg-white/10 text-white border border-white/15">
-                          Line {q.actSceneLine}
-                        </span>
-                      )}
-                    </div>
-                    <div className="flex items-center gap-1.5">
-                      <div className="flex flex-wrap gap-1">
-                        {q.themes.map((tId) => {
-                          const tMeta = THEMES_TAXONOMY[tId];
-                          return tMeta ? (
-                            <span
-                              key={tId}
-                              className="text-[10px] font-mono px-1.5 py-0.5 rounded border"
-                              style={{
-                                backgroundColor: tMeta.badgeBg,
-                                borderColor: tMeta.badgeBorder,
-                                color: tMeta.badgeText,
-                              }}
-                            >
-                              {tMeta.shortName}
-                            </span>
-                          ) : null;
-                        })}
-                      </div>
                       <button
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          toggleBookmarkQuote(q.id);
-                        }}
-                        className="p-1 rounded-lg liquid-glass-pill text-slate-300 cursor-pointer"
+                        onClick={() => toggleBookmarkQuote(q.id)}
+                        className="p-1 rounded-lg hover:bg-white/10 text-slate-400 hover:text-amber-300 cursor-pointer"
                       >
                         <Bookmark
                           className={`w-3.5 h-3.5 ${
@@ -336,104 +365,22 @@ export function ThemeMatrixView() {
                         />
                       </button>
                     </div>
+                    <blockquote className="text-xs sm:text-sm text-slate-100 italic leading-relaxed">
+                      &ldquo;{q.quote}&rdquo;
+                    </blockquote>
                   </div>
 
-                  <p className="font-serif italic text-sm lg:text-base text-amber-100 leading-relaxed mb-1.5">
-                    “{q.quote}”
-                  </p>
-                  <p className="font-mono text-[11px] text-amber-300/90 mb-2">
-                    — {q.speaker} ({q.context})
-                  </p>
-
-                  {/* Literary Techniques */}
-                  {q.literaryTechniques && q.literaryTechniques.length > 0 && (
-                    <div className="flex flex-wrap gap-1 mb-2">
-                      {q.literaryTechniques.map((tech, idx) => (
-                        <span
-                          key={idx}
-                          className="font-mono text-[9px] px-1.5 py-0.5 rounded bg-white/[0.05] text-slate-300 border border-white/10"
-                        >
-                          ✦ {tech}
-                        </span>
-                      ))}
-                    </div>
-                  )}
-                </div>
-
-                <div>
-                  <p className="text-xs text-slate-300 leading-relaxed pt-2.5 border-t border-white/[0.07] mb-2">
+                  <p className="text-[11px] text-slate-400 border-t border-white/10 pt-2 leading-relaxed">
                     {q.analysis}
                   </p>
-
-                  {/* Active Theme Connection Callout (When filtered) */}
-                  {activeThemeFilter !== "all" &&
-                    q.themeConnections?.some((tc) => tc.themeId === activeThemeFilter) && (
-                      <div className="mt-2 p-2.5 rounded-xl bg-amber-500/10 border border-amber-400/30 text-xs">
-                        <span className="font-mono text-[10px] uppercase font-bold text-amber-300 flex items-center gap-1 mb-0.5">
-                          <Sparkles className="w-3 h-3 text-amber-400" />
-                          {THEMES_TAXONOMY[activeThemeFilter]?.name} Evidence Link
-                        </span>
-                        <p className="text-amber-100/90 text-[11px] leading-relaxed">
-                          {
-                            q.themeConnections.find((tc) => tc.themeId === activeThemeFilter)
-                              ?.explanation
-                          }
-                        </p>
-                      </div>
-                    )}
-
-                  {/* Full Thematic Connections Disclosure (When viewing all themes) */}
-                  {activeThemeFilter === "all" &&
-                    q.themeConnections &&
-                    q.themeConnections.length > 0 && (
-                      <details
-                        className="mt-2 pt-2 border-t border-white/[0.06] group text-xs"
-                        onClick={(e) => e.stopPropagation()}
-                      >
-                        <summary className="font-mono text-[10px] text-amber-300/80 hover:text-amber-200 cursor-pointer list-none select-none flex items-center justify-between py-0.5">
-                          <span className="flex items-center gap-1">
-                            <Sparkles className="w-3 h-3 text-amber-400" />
-                            Theme Rationale Links ({q.themeConnections.length})
-                          </span>
-                          <span className="text-[10px] text-slate-400 group-open:rotate-180 transition-transform">
-                            ▼
-                          </span>
-                        </summary>
-                        <div className="mt-1.5 space-y-1.5 pl-0.5">
-                          {q.themeConnections.map((tc, idx) => {
-                            const tMeta = THEMES_TAXONOMY[tc.themeId];
-                            return (
-                              <div
-                                key={idx}
-                                className="p-1.5 rounded-lg bg-white/[0.03] border border-white/[0.08]"
-                              >
-                                <span
-                                  className="inline-block text-[9px] font-mono font-semibold px-1.5 py-0.5 rounded border mb-0.5"
-                                  style={{
-                                    backgroundColor: tMeta?.badgeBg,
-                                    borderColor: tMeta?.badgeBorder,
-                                    color: tMeta?.badgeText,
-                                  }}
-                                >
-                                  {tMeta?.shortName || tc.themeId.toUpperCase()}
-                                </span>
-                                <p className="text-[11px] text-slate-200 leading-relaxed">
-                                  {tc.explanation}
-                                </p>
-                              </div>
-                            );
-                          })}
-                        </div>
-                      </details>
-                    )}
                 </div>
-              </div>
-            );
-          })}
+              );
+            })}
+          </div>
         </div>
-      </div>
-
-      <QuoteNetwork />
+      )}
     </div>
   );
-}
+});
+
+ThemeMatrixView.displayName = "ThemeMatrixView";

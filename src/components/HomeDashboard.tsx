@@ -4,6 +4,7 @@ import React from "react";
 import { motion } from "framer-motion";
 import {
   LayoutGrid,
+  Gem,
   Layers,
   GraduationCap,
   Award,
@@ -29,7 +30,7 @@ const TILES: Tile[] = [
   { id: "paper2", title: "Paper 2 Studio", blurb: "Plan and write your essay", tint: "tint-rose", icon: <Award className="w-6 h-6" />, span: "" },
   { id: "matrix", title: "Themes & Quotes", blurb: "Key themes with proof", tint: "tint-violet", icon: <Network className="w-6 h-6" />, span: "" },
   { id: "revision", title: "Revise", blurb: "Flashcards and practice", tint: "tint-emerald", icon: <GraduationCap className="w-6 h-6" />, span: "" },
-  { id: "lexicon", title: "Characters & Symbols", blurb: "Who and what to remember", tint: "tint-sky", icon: <Library className="w-6 h-6" />, span: "" },
+  { id: "lexicon", title: "Symbols & Motifs", blurb: "Daggers, blood, sleep, rapt vision & prophecy", tint: "tint-sky", icon: <Gem className="w-6 h-6" />, span: "" },
   { id: "stream", title: "Quick Read", blurb: "Skim the whole play", tint: "tint-orange", icon: <Layers className="w-6 h-6" />, span: "sm:col-span-2" },
 ];
 
